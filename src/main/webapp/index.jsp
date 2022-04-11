@@ -17,7 +17,7 @@
 
     <form action="CheckLogin" method="POST">
         Username: <input type="text" name="username" required>
-        Password: <input type="password" name="password" required>
+        Password: <input type="text" name="password" required>
 
         <input type="submit" value="Login">
 <%--        <p th:if="${loginErrorMsg} != null" th:text="${loginErrorMsg}"></p>--%>

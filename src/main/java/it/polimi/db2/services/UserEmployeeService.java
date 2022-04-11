@@ -9,6 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Stateless
@@ -28,22 +29,22 @@ public class UserEmployeeService {
 
 
     public UserEmployee checkCredentials(String usrn, String pwd) throws CredentialsException, NonUniqueResultException {
-        List <UserEmployee>uList = null;
+
+        List <UserEmployee>uList = new ArrayList<>();
 
         try {
-            uList = this.em.createNamedQuery("UserEmployee.checkCredentials", UserEmployee.class)
+            uList = em.createNamedQuery("UserEmployee.checkCredentials", UserEmployee.class)
                     .setParameter(1, usrn)
                     .setParameter(2, pwd)
                     .getResultList();
 
         } catch (PersistenceException var5) {
-            throw new CredentialsException("Could not verify credentals");
+            throw new CredentialsException("Could not verify credentials");
         }
 
         if (uList.isEmpty()) {
             return null;
         } else if (uList.size() == 1) {
-
             return uList.get(0);
         } else {
             throw new NonUniqueResultException("More than one user registered with same credentials");

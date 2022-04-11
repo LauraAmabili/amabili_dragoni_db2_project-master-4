@@ -5,19 +5,16 @@ import java.io.Serializable;
 
 
 @Entity
-// @Table( name = "UserEmployee", schema = "database2" )
-@NamedQuery(
-        name = "UserEmployee.checkCredentials",
-        query = "SELECT t FROM UserEmployee t  WHERE t.username = ?1 and t.password = ?2"
-)
+@Table(name = "UserEmployee", schema = "database2")
+@NamedQuery( name = "UserEmployee.checkCredentials",  query = "SELECT t FROM UserEmployee t  WHERE t.username = ?1 and t.password = ?2" )
 public class UserEmployee implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @Column(name = "username", nullable = false, length = 45)
+    @Column(name = "username")
     private String username;
 
-    @Column(name = "password", nullable = false, length = 45)
+    @Column(name = "password")
     private String password;
 
 

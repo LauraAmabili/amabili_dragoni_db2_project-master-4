@@ -25,7 +25,6 @@ import java.io.IOException;
 
 @WebServlet("/CheckLogin")
 public class CheckLogin extends HttpServlet {
-
     private static final long serialVersionUID = 1L;
 
     private TemplateEngine templateEngine;
@@ -33,7 +32,10 @@ public class CheckLogin extends HttpServlet {
     @EJB(name = "it.polimi.db2.services/UserEmployeeService")
     private UserEmployeeService usrEmpService;
 
-    public CheckLogin(){super();}
+
+    public CheckLogin(){
+        super();
+    }
 
     public void init() {
         ServletContext servletContext = getServletContext();
