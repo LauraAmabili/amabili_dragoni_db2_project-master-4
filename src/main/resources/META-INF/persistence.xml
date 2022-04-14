@@ -9,6 +9,7 @@
         <jta-data-source>database2</jta-data-source>
 
         <class>it.polimi.db2.entities.UserEmployee</class>
+        <class>it.polimi.db2.entities.UserCustomer</class>
 
 
 
