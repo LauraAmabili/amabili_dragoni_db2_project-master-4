@@ -39,7 +39,7 @@ public class UserEmployeeService {
                     .getResultList();
 
         } catch (PersistenceException var5) {
-            throw new CredentialsException("Could not verify credentials");
+            throw new CredentialsException("Could not verify credentials for user");
         }
 
         if (uList.isEmpty()) {

@@ -13,14 +13,26 @@
 
 <div class="form-style-5">
 
-    <h2>LOG IN</h2>
+    <h2>LOG IN EMPLOYEE</h2>
 
     <form action="CheckLogin" method="POST">
         Username: <input type="text" name="username" required>
         Password: <input type="text" name="password" required>
 
         <input type="submit" value="Login">
+
 <%--        <p th:if="${loginErrorMsg} != null" th:text="${loginErrorMsg}"></p>--%>
+    </form>
+
+    <h2>LOG IN CUSTOMER</h2>
+
+    <form action="CheckLoginCustomer" method="POST">
+        Username: <input type="text" name="username" required>
+        Password: <input type="text" name="password" required>
+
+        <input type="submit" value="Login">
+
+        <%--        <p th:if="${loginErrorMsg} != null" th:text="${loginErrorMsg}"></p>--%>
     </form>
 </div>
 </html>
