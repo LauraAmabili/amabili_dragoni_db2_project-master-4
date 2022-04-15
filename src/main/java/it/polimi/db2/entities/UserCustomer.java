@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "UserCustomer", schema = "database2")
-@NamedQuery( name = "UserCustomer.checkCredentials",  query = "SELECT t FROM UserEmployee t  WHERE t.username = ?1 and t.password = ?2" )
+@NamedQuery( name = "UserCustomer.checkCredentials",  query = "SELECT t FROM UserCustomer t  WHERE t.username = ?1 and t.password = ?2" )
 public class UserCustomer implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -21,15 +21,16 @@ public class UserCustomer implements Serializable {
     private String email;
 
     @Column(name = "solvent")
-    private int solvent = 1;
+    private int solvent;
 
     public UserCustomer(){
     }
 
-    public UserCustomer(String username, String password){
+    public UserCustomer(String username, String password, String email){
         this.username = username;
         this.password = password;
         this.email = email;
+        this.solvent = 1;
     }
 
 

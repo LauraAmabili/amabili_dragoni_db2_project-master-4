@@ -28,7 +28,7 @@ public class CheckLoginCustomer extends HttpServlet {
 
     private TemplateEngine templateEngine;
 
-    @EJB(name = "it.polimi.db2.services/UserCustomerService")
+    @EJB(name = "it/polimi/db2/services/UserCustomerService")
     private UserCustomerService usrCustomerService;
 
     public CheckLoginCustomer(){
@@ -104,6 +104,7 @@ public class CheckLoginCustomer extends HttpServlet {
 //            }
             request.getSession().setAttribute("user", user);
             // request.getSession().setAttribute("queryService", qService);
+            //path = getServletContext().getContextPath() + "/home-page";
             path = getServletContext().getContextPath() + "/home-page";
             response.sendRedirect(path);
         }
