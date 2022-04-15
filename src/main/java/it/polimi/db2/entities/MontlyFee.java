@@ -18,21 +18,21 @@ public class MontlyFee implements Serializable {
     private int id;
 
     @Column(name = "12MonthPrice")
-    private int TwelveMonthPrice;
+    private float TwelveMonthPrice;
 
     @Column(name = "24MonthPrice")
-    private int TwentyFourMonthPrice;
+    private float TwentyFourMonthPrice;
 
     @Column(name = "36Monthprice")
-    private int ThirtySixMonthPrice;
+    private float ThirtySixMonthPrice;
 
     @OneToMany(mappedBy = "packageFees")
     private List<ServicePackage> servicePackageList;
 
-    public MontlyFee(){
+    public MontlyFee() {
     }
 
-    public MontlyFee(int id, int Twelve, int TwentyFour, int ThirtySix){
+    public MontlyFee(int id, int Twelve, int TwentyFour, int ThirtySix) {
         this.id = id;
         this.TwelveMonthPrice = Twelve;
         this.TwentyFourMonthPrice = TwentyFour;
@@ -47,27 +47,35 @@ public class MontlyFee implements Serializable {
         this.id = id;
     }
 
-    public int getTwelveMonthPrice() {
+    public float getTwelveMonthPrice() {
         return TwelveMonthPrice;
     }
 
-    public void setTwelveMonthPrice(int twelveMonthPrice) {
+    public void setTwelveMonthPrice(float twelveMonthPrice) {
         TwelveMonthPrice = twelveMonthPrice;
     }
 
-    public int getTwentyFourMonthPrice() {
+    public float getTwentyFourMonthPrice() {
         return TwentyFourMonthPrice;
     }
 
-    public void setTwentyFourMonthPrice(int twentyFourMonthPrice) {
+    public void setTwentyFourMonthPrice(float twentyFourMonthPrice) {
         TwentyFourMonthPrice = twentyFourMonthPrice;
     }
 
-    public int getThirtySixMonthPrice() {
+    public float getThirtySixMonthPrice() {
         return ThirtySixMonthPrice;
     }
 
-    public void setThirtySixMonthPrice(int thirtySixMonthPrice) {
+    public void setThirtySixMonthPrice(float thirtySixMonthPrice) {
         ThirtySixMonthPrice = thirtySixMonthPrice;
+    }
+
+    public List<ServicePackage> getServicePackageList() {
+        return servicePackageList;
+    }
+
+    public void setServicePackageList(List<ServicePackage> servicePackageList) {
+        this.servicePackageList = servicePackageList;
     }
 }
