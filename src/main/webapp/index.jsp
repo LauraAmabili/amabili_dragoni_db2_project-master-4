@@ -15,7 +15,7 @@
 
     <h2>LOG IN EMPLOYEE</h2>
 
-    <form action="CheckLogin" method="POST">
+    <form action="CheckLoginEmployee" method="POST">
         Username: <input type="text" name="username" required>
         Password: <input type="text" name="password" required>
 

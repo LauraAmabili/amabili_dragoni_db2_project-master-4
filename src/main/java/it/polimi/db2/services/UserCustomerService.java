@@ -27,15 +27,12 @@ public class UserCustomerService {
     }
 
     public UserCustomer checkCredentials(String usrn, String pwd) throws CredentialsException, NonUniqueResultException {
-
         List<UserCustomer> uList = new ArrayList<>();
-
         try {
             uList = em.createNamedQuery("UserCustomer.checkCredentials", UserCustomer.class)
                     .setParameter(1, usrn)
                     .setParameter(2, pwd)
                     .getResultList();
-
         } catch (PersistenceException var5) {
             throw new CredentialsException("Could not verify credentials for customer");
         }

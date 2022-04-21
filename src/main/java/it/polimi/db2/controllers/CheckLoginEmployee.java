@@ -23,8 +23,8 @@ import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import java.io.IOException;
 
-@WebServlet("/CheckLogin")
-public class CheckLogin extends HttpServlet {
+@WebServlet("/CheckLoginEmployee")
+public class CheckLoginEmployee extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     private TemplateEngine templateEngine;
@@ -33,7 +33,7 @@ public class CheckLogin extends HttpServlet {
     private UserEmployeeService usrEmpService;
 
 
-    public CheckLogin(){
+    public CheckLoginEmployee(){
         super();
     }
 
@@ -105,7 +105,7 @@ public class CheckLogin extends HttpServlet {
 //            }
             request.getSession().setAttribute("user", user);
             // request.getSession().setAttribute("queryService", qService);
-            path = getServletContext().getContextPath() + "/hello-servlet";
+            path = getServletContext().getContextPath() + "/home-page-employee";
             response.sendRedirect(path);
         }
     }
