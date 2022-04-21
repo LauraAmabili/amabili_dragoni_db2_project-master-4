@@ -2,8 +2,10 @@ package it.polimi.db2.controllers;
 
 
 import it.polimi.db2.entities.ServicePackage;
+import it.polimi.db2.entities.UserEmployee;
 import it.polimi.db2.exceptions.CredentialsException;
 import it.polimi.db2.services.ServicePackageService;
+import it.polimi.db2.services.UserEmployeeService;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -30,6 +32,8 @@ public class HomePageEmployee extends HttpServlet {
     private TemplateEngine templateEngine;
     @EJB(name = "services/ServicePackageService")
     private ServicePackageService sps;
+    @EJB(name = "services/UserEmployeeService")
+    private UserEmployeeService usrEmpService;
 
     public void init() throws ServletException {
         ServletContext servletContext = getServletContext();
@@ -39,8 +43,9 @@ public class HomePageEmployee extends HttpServlet {
         this.templateEngine.setTemplateResolver(templateResolver);
         templateResolver.setSuffix(".html");
     }
+
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String result = "Login worked for Employee";
         String result2 = "Page with packages";
         List<ServicePackage> sp = null;
@@ -56,17 +61,18 @@ public class HomePageEmployee extends HttpServlet {
         //out.println(result);
         // out.println(result2);
 
+        if(req.getSession(false)!=null  &&  req.getSession(false).getAttribute("user")!=null) {
+            //update of object user to make sure is the current one
+            UserEmployee employee = usrEmpService.findUserById((UserEmployee) req.getSession().getAttribute("user"));
+            req.getSession(false).setAttribute("employee", employee);
+            ctx.setVariable("loggedEmp", employee);
+        }
 
         ctx.setVariable("packageList", sp);
+
         // variabile in HTML di nome packageList perchè sto assegnano alla variabile sp
         templateEngine.process("/WEB-INF/HomePageEmployee.html", ctx, resp.getWriter());
 
-
-    }
-
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        doPost(req, resp);
 
 
 

@@ -7,6 +7,8 @@ import java.io.Serializable;
 @Entity
 @Table(name = "UserEmployee", schema = "database2")
 @NamedQuery( name = "UserEmployee.checkCredentials",  query = "SELECT t FROM UserEmployee t  WHERE t.username = ?1 and t.password = ?2" )
+@NamedQuery( name = "UserEmployee.findUserById",  query = "SELECT t FROM UserEmployee t  WHERE t.username = ?1" )
+
 public class UserEmployee implements Serializable {
     private static final long serialVersionUID = 1L;
 
