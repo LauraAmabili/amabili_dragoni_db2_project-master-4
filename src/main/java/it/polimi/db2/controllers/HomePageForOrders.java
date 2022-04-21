@@ -16,16 +16,16 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.Produces;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.DriverManager;
 import java.util.List;
 
-import static java.lang.System.out;
+
+
+// this page should show to the client all the packets with monthly fee annd optional products
+// after you choose your package + optional product + validity period you go to create order where you have the overview
 
 @WebServlet(name = "homePage", value = "/home-page")
-public class HomePage extends HttpServlet {
+public class HomePageForOrders extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private TemplateEngine templateEngine;
     @EJB(name = "services/ServicePackageService")
@@ -41,8 +41,7 @@ public class HomePage extends HttpServlet {
     }
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String result = "Login worked for Customer";
-        String result2 = "Page with packages";
+
         List<ServicePackage> sp = null;
         try {
             sp = sps.showPackages();
@@ -58,8 +57,10 @@ public class HomePage extends HttpServlet {
 
 
         ctx.setVariable("packageList", sp);
+        // ctx.setVariable("periods", sp);
         // variabile in HTML di nome packageList perchè sto assegnano alla variabile sp
-        templateEngine.process("/WEB-INF/HomePage.html", ctx, resp.getWriter());
+        templateEngine.process("/WEB-INF/HomePageForOrders.html", ctx, resp.getWriter());
+
 
 
     }
