@@ -10,28 +10,65 @@
 <body>
 <p style="text-align: right;"><strong><td th:text="${loggedEmp.username}"></td></strong></p>
 <p style="text-align: justify;">&nbsp;</p>
-<h2 style="text-align: justify;"><span style="color: #ff0000;"><strong>Create Optional Product</strong></span></h2>
-<h4 style="text-align: justify;">NAME</h4>
-<p><strong>MONTLY FEE</strong></p>
+<h2 style="text-align: justify;"><span style="color: #ff0000;"><strong>CREATE NEW SERVICE</strong></span></h2>
 
-<!--<table  class="styled-table">-->
-<!--    <tr>-->
-<!--        <th>Service Package</th>-->
-<!--        <th>Fixed phone</th>-->
-<!--    </tr>-->
-<!--    <tbody>-->
-<!--    <tr th:each="sp : ${packageList}">-->
-<!--        <td th:text="${sp.packageName }"></td>-->
+<label for="serviceTypeSelector">Select type of service you want to create:</label>
+<select id="serviceTypeSelector">
+    <option value="fixedPhone">Fixed Phone</option>
+    <option value="mobilePhone">Mobile Phone</option>
+    <option value="fixedInternet">Fixed Internet</option>
+    <option value="mobileInternet">Mobile Internet</option>
+</select>
 
-<!--        <td>-->
-<!--            <span th:if="${sp.fixedPhoneNumber != null}" th:text="${sp.fixedPhoneNumber}"> </span>-->
-<!--            <span th:unless="${sp.fixedPhoneNumber != null}">  </span>-->
-<!--        </td>-->
+<div id="fixedPhone" class="services" style="display:none">
+    <p></p>
+    Name: <input type="text" name="fixedPhoneName" required>
+</div>
+<div id="mobilePhone" class="services" style="display:none">
+    <p></p>
+    Name: <input type="text" name="mobilePhoneName" required>
+    <p></p>
+    Number of minutes Included: <input type="text" name="minutesNum" required>
+    <p></p>
+    Fee for extra minutes: <input type="text" name="extraMinFee" required> €/GB
+    <p></p>
+    Number of SMS Included: <input type="text" name="smsNum" required>
+    <p></p>
+    Fee for extra SMS: <input type="text" name="extraSmsFee" required> €/GB
+</div>
+<div id="fixedInternet" class="services" style="display:none">
+    <p></p>
+    Name: <input type="text" name="fixedInternetName" required>
+    <p></p>
+    Number of GB Included: <input type="text" name="gigaNum" required>
+    <p></p>
+    Fee for extra GB: <input type="text" name="extraFees" required> €/GB
+</div>
+<div id="mobileInternet" class="services" style="display:none">
+    <p></p>
+    Name: <input type="text" name="mobileInternetName" required>
+    <p></p>
+    Number of GB Included: <input type="text" name="gigaNum" required>
+    <p></p>
+    Fee for extra GB: <input type="text" name="extraFees" required> €/GB
+    <p></p>
+</div>
 
-<!--    </tr>-->
-<!--    </tbody>-->
-<!--</table>-->
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" ></script>
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
+<script type="text/javascript">
+    $(function() {
+        $('#serviceTypeSelector').change(function(){
+            $('.services').hide();
+            $('#' + $(this).val()).show();
+        });
+    });
+</script>
+</form>
+
+
 </body>
-
-
 </html>
+
+
