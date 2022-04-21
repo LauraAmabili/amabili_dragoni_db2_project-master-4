@@ -17,7 +17,7 @@
             <property name="hibernate.connection.driver_class" value="com.mysql.cj.jdbc.Driver"/>
             <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/database2"/>
             <property name="hibernate.connection.user" value="root"/>
-            <property name="hibernate.connection.password" value="Restiamoacasa20"/>
+            <property name="hibernate.connection.password" value=""/>
             <property name="hibernate.show_url" value="true"/>
         </properties>
 

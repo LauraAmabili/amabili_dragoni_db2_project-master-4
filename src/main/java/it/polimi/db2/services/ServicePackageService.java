@@ -20,10 +20,7 @@ public class ServicePackageService {
     @PersistenceContext( unitName = "databaseEJB" )
     private EntityManager em;
 
-    public ServicePackageService() {
-
-    }
-
+    public ServicePackageService() { }
 
     public ServicePackage findServicePackageById(String servicePackageName) throws CredentialsException {
 
@@ -39,16 +36,12 @@ public class ServicePackageService {
     }
 
     public List<ServicePackage> showPackages() throws CredentialsException, NonUniqueResultException {
-
         List<ServicePackage> uList = new ArrayList<>();
-
         try {
             uList = em.createNamedQuery("ServicePackage.showPackages", ServicePackage.class).getResultList();
-
         } catch (PersistenceException var5) {
             throw new CredentialsException("Packages Error");
         }
-
         if (uList.isEmpty()) {
             return null;
         } else {

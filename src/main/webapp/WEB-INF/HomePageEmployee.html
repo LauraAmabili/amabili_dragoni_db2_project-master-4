@@ -1,0 +1,37 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/" >
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" media="all"
+          href="../css/style.css" th:href="@{/css/style.css}" />
+</head>
+<body>
+<p style="text-align: right;"><strong><td th:text="${loggedEmp.username}"></td></strong></p>
+<p style="text-align: justify;">&nbsp;</p>
+<h2 style="text-align: justify;"><span style="color: #ff0000;"><strong>Create Optional Product</strong></span></h2>
+<h4 style="text-align: justify;">NAME</h4>
+<p><strong>MONTLY FEE</strong></p>
+
+<!--<table  class="styled-table">-->
+<!--    <tr>-->
+<!--        <th>Service Package</th>-->
+<!--        <th>Fixed phone</th>-->
+<!--    </tr>-->
+<!--    <tbody>-->
+<!--    <tr th:each="sp : ${packageList}">-->
+<!--        <td th:text="${sp.packageName }"></td>-->
+
+<!--        <td>-->
+<!--            <span th:if="${sp.fixedPhoneNumber != null}" th:text="${sp.fixedPhoneNumber}"> </span>-->
+<!--            <span th:unless="${sp.fixedPhoneNumber != null}">  </span>-->
+<!--        </td>-->
+
+<!--    </tr>-->
+<!--    </tbody>-->
+<!--</table>-->
+</body>
+
+
+</html>

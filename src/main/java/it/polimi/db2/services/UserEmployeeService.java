@@ -23,21 +23,19 @@ public class UserEmployeeService {
 
     }
 
-    public UserEmployee findBy(int employeeId) {
-        return em.find(UserEmployee.class, employeeId);
+    public UserEmployee findUserById(UserEmployee emp) {
+        String username = emp.getUsername();
+        List<UserEmployee> usrs = em.createNamedQuery("UserEmployee.findUserById", UserEmployee.class).setParameter(1, username).getResultList();
+        return usrs.get(0);
     }
 
-
     public UserEmployee checkCredentials(String usrn, String pwd) throws CredentialsException, NonUniqueResultException {
-
         List <UserEmployee>uList = new ArrayList<>();
-
         try {
             uList = em.createNamedQuery("UserEmployee.checkCredentials", UserEmployee.class)
                     .setParameter(1, usrn)
                     .setParameter(2, pwd)
                     .getResultList();
-
         } catch (PersistenceException var5) {
             throw new CredentialsException("Could not verify credentials for user");
         }
@@ -51,5 +49,6 @@ public class UserEmployeeService {
         }
 
     }
+
 
 }
