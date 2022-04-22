@@ -14,12 +14,16 @@
 
 <label for="serviceTypeSelector">Select type of service you want to create:</label>
 <select id="serviceTypeSelector">
+    <option value=" "></option>
     <option value="fixedPhone">Fixed Phone</option>
     <option value="mobilePhone">Mobile Phone</option>
     <option value="fixedInternet">Fixed Internet</option>
     <option value="mobileInternet">Mobile Internet</option>
 </select>
 
+<div id=" " class="services" style="display:none">
+    <p></p>
+</div>
 <div id="fixedPhone" class="services" style="display:none">
     <p></p>
     Name: <input type="text" name="fixedPhoneName" required>
@@ -30,11 +34,11 @@
     <p></p>
     Number of minutes Included: <input type="text" name="minutesNum" required>
     <p></p>
-    Fee for extra minutes: <input type="text" name="extraMinFee" required> €/GB
+    Fee for extra minutes: <input type="text" name="extraMinFee" required> &euro;/GB
     <p></p>
     Number of SMS Included: <input type="text" name="smsNum" required>
     <p></p>
-    Fee for extra SMS: <input type="text" name="extraSmsFee" required> €/GB
+    Fee for extra SMS: <input type="text" name="extraSmsFee" required> &euro;/GB
 </div>
 <div id="fixedInternet" class="services" style="display:none">
     <p></p>
@@ -42,7 +46,7 @@
     <p></p>
     Number of GB Included: <input type="text" name="gigaNum" required>
     <p></p>
-    Fee for extra GB: <input type="text" name="extraFees" required> €/GB
+    Fee for extra GB: <input type="text" name="extraFees" required> &euro;/GB
 </div>
 <div id="mobileInternet" class="services" style="display:none">
     <p></p>
@@ -50,7 +54,7 @@
     <p></p>
     Number of GB Included: <input type="text" name="gigaNum" required>
     <p></p>
-    Fee for extra GB: <input type="text" name="extraFees" required> €/GB
+    Fee for extra GB: <input type="text" name="extraFees" required> &euro;/GB
     <p></p>
 </div>
 
