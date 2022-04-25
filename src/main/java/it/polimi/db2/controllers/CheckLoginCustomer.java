@@ -87,25 +87,11 @@ public class CheckLoginCustomer extends HttpServlet {
             templateEngine.process(path, ctx, response.getWriter());
         } else {
 
-//            QueryService qService = null;
-//            try {
-//                /*
-//                 * We need one distinct EJB for each user. Get the Initial Context for the JNDI
-//                 * lookup for a local EJB. Note that the path may be different in different EJB
-//                 * environments. In IntelliJ use: ic.lookup(
-//                 * "java:/openejb/local/ArtifactFileNameWeb/ArtifactNameWeb/QueryServiceLocalBean"
-//                 * );
-//                 */
-//                InitialContext ic = new InitialContext();
-//                // Retrieve the EJB using JNDI lookup
-//                qService = (QueryService) ic.lookup("java:/openejb/local/QueryServiceLocalBean");
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
+//
             request.getSession().setAttribute("user", user);
             // request.getSession().setAttribute("queryService", qService);
             //path = getServletContext().getContextPath() + "/home-page";
-            path = getServletContext().getContextPath() + "/home-page";
+            path = getServletContext().getContextPath() + "/home-page-customer";
             response.sendRedirect(path);
         }
     }

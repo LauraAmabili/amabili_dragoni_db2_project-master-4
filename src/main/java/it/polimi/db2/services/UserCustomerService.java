@@ -2,6 +2,7 @@ package it.polimi.db2.services;
 
 
 import it.polimi.db2.entities.UserCustomer;
+import it.polimi.db2.entities.UserEmployee;
 import it.polimi.db2.exceptions.CredentialsException;
 
 import javax.ejb.Stateless;
@@ -22,8 +23,11 @@ public class UserCustomerService {
     public UserCustomerService() {
 
     }
-    public UserCustomer findBy(int customerId) {
-        return em.find(UserCustomer.class, customerId);
+    public UserCustomer findCustomerById(UserCustomer customer) {
+        String username = customer.getUsername();
+        List<UserCustomer> usrs = em.createNamedQuery("UserCustomer.findCustomerById", UserCustomer.class).setParameter(1, username).getResultList();
+        return usrs.get(0);
+
     }
 
     public UserCustomer checkCredentials(String usrn, String pwd) throws CredentialsException, NonUniqueResultException {

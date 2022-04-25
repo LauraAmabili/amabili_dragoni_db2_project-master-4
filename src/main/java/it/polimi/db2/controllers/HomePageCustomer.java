@@ -2,8 +2,10 @@ package it.polimi.db2.controllers;
 
 
 import it.polimi.db2.entities.ServicePackage;
+import it.polimi.db2.entities.UserCustomer;
 import it.polimi.db2.exceptions.CredentialsException;
 import it.polimi.db2.services.ServicePackageService;
+import it.polimi.db2.services.UserCustomerService;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -24,12 +26,14 @@ import java.util.List;
 // this page should show to the client all the packets with monthly fee annd optional products
 // after you choose your package + optional product + validity period you go to create order where you have the overview
 
-@WebServlet(name = "homePage", value = "/home-page")
-public class HomePageForOrders extends HttpServlet {
+@WebServlet(name = "homePage", value = "/home-page-customer")
+public class HomePageCustomer extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private TemplateEngine templateEngine;
     @EJB(name = "services/ServicePackageService")
     private ServicePackageService sps;
+    @EJB(name = "services/UserCustomerService")
+    private UserCustomerService userCustomerService;
 
     public void init() throws ServletException {
         ServletContext servletContext = getServletContext();
@@ -54,13 +58,16 @@ public class HomePageForOrders extends HttpServlet {
         // out.print(sp);
         //out.println(result);
         // out.println(result2);
+        if(req.getSession(false)!=null  &&  req.getSession(false).getAttribute("user")!=null) {
+            //update of object user to make sure is the current one
+            UserCustomer customer = userCustomerService.findCustomerById((UserCustomer) req.getSession().getAttribute("user"));
+            req.getSession(false).setAttribute("customer", customer);
+            ctx.setVariable("loggedCustomer", customer);
+        }
 
 
         ctx.setVariable("packageList", sp);
-        // ctx.setVariable("periods", sp);
-        // variabile in HTML di nome packageList perchè sto assegnano alla variabile sp
-        templateEngine.process("/WEB-INF/HomePageForOrders.html", ctx, resp.getWriter());
-
+        templateEngine.process("/WEB-INF/HomePageForCustomer.html", ctx, resp.getWriter());
 
 
     }
