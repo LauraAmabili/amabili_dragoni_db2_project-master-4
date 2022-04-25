@@ -28,6 +28,17 @@ public class MobilePhoneService implements Serializable {
     @Column(name = "extraSmsFee")
     private float extraSmsFee;
 
+    public MobilePhoneService(String name, int minutesNum, int smsNum, float extraMinFee, float extraSmsFee) {
+        this.name = name;
+        this.minutesNum = minutesNum;
+        this.smsNum = smsNum;
+        this.extraMinFee = extraMinFee;
+        this.extraSmsFee = extraSmsFee;
+    }
+
+    public MobilePhoneService() {
+    }
+
 
     public String getName() {
         return name;

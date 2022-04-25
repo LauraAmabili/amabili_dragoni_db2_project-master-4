@@ -24,38 +24,45 @@ public class InternetService implements Serializable {
 
     @Column(name = "fixedInternet")
     private int fixedInternet;
-    // TODO i think this should be boolean? non mi ricordo,  fare check
 
 
+
+
+
+    //constructors
+    public InternetService(String name, int gigaNum, float extraFees, int fixedInternet) {
+        this.name = name;
+        this.gigaNum = gigaNum;
+        this.extraFees = extraFees;
+        this.fixedInternet = fixedInternet;
+    }
+    public InternetService() {}
+
+    // getter and setter
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
-
     public int getGigaNum() {
         return gigaNum;
     }
-
     public void setGigaNum(int gigaNum) {
         this.gigaNum = gigaNum;
     }
-
     public float getExtraFees() {
         return extraFees;
     }
-
     public void setExtraFees(float extraFees) {
         this.extraFees = extraFees;
     }
-
     public int getFixedInternet() {
         return fixedInternet;
     }
-
     public void setFixedInternet(int fixedInternet) {
         this.fixedInternet = fixedInternet;
     }
+
+
 }

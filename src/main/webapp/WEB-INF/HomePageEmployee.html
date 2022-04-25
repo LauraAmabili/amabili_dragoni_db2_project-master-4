@@ -15,22 +15,21 @@
 <label for="serviceTypeSelector">Select type of service you want to create:</label>
 <select id="serviceTypeSelector">
     <option value=" "></option>
-    <option value="fixedPhone">Fixed Phone</option>
     <option value="mobilePhone">Mobile Phone</option>
     <option value="fixedInternet">Fixed Internet</option>
     <option value="mobileInternet">Mobile Internet</option>
 </select>
 
+
 <div id=" " class="services" style="display:none">
     <p></p>
 </div>
-<div id="fixedPhone" class="services" style="display:none">
-    <p></p>
-    Name: <input type="text" name="fixedPhoneName" required>
+
 </div>
 <div id="mobilePhone" class="services" style="display:none">
+    <form method="POST" action="create-service">
     <p></p>
-    Name: <input type="text" name="mobilePhoneName" required>
+    Name: <input type="text" name="name" required>
     <p></p>
     Number of minutes Included: <input type="text" name="minutesNum" required>
     <p></p>
@@ -39,23 +38,33 @@
     Number of SMS Included: <input type="text" name="smsNum" required>
     <p></p>
     Fee for extra SMS: <input type="text" name="extraSmsFee" required> &euro;/GB
+
+        <input type="submit" value="Create Service">
+    </form>
 </div>
 <div id="fixedInternet" class="services" style="display:none">
+    <form method="POST" action="create-service">
     <p></p>
-    Name: <input type="text" name="fixedInternetName" required>
+    Name: <input type="text" name="name" required>
     <p></p>
     Number of GB Included: <input type="text" name="gigaNum" required>
     <p></p>
     Fee for extra GB: <input type="text" name="extraFees" required> &euro;/GB
+
+        <input type="submit" value="Create Service">
+    </form>
 </div>
 <div id="mobileInternet" class="services" style="display:none">
+    <form method="POST" action="create-service">
     <p></p>
-    Name: <input type="text" name="mobileInternetName" required>
+    Name: <input type="text" name="name" required>
     <p></p>
     Number of GB Included: <input type="text" name="gigaNum" required>
     <p></p>
     Fee for extra GB: <input type="text" name="extraFees" required> &euro;/GB
     <p></p>
+        <input type="submit" value="Create Service">
+    </form>
 </div>
 
 
@@ -69,7 +78,7 @@
         });
     });
 </script>
-</form>
+
 
 
 </body>

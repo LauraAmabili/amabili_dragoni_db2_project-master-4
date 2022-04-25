@@ -1,15 +1,15 @@
 package it.polimi.db2.controllers;
 
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.WebContext;
+import org.thymeleaf.templatemode.TemplateMode;
+import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import it.polimi.db2.entities.ServicePackage;
 import it.polimi.db2.entities.UserEmployee;
 import it.polimi.db2.exceptions.CredentialsException;
 import it.polimi.db2.services.ServicePackageService;
 import it.polimi.db2.services.UserEmployeeService;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.WebContext;
-import org.thymeleaf.templatemode.TemplateMode;
-import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import javax.ejb.EJB;
 import javax.servlet.ServletContext;
@@ -18,10 +18,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.Produces;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.DriverManager;
 import java.util.List;
 
 import static java.lang.System.out;
@@ -56,10 +53,6 @@ public class HomePageEmployee extends HttpServlet {
         }
 
         final WebContext ctx = new WebContext(req, resp, this.getServletContext(), req.getLocale());
-        //PrintWriter out = resp.getWriter();
-        // out.print(sp);
-        //out.println(result);
-        // out.println(result2);
 
         if(req.getSession(false)!=null  &&  req.getSession(false).getAttribute("user")!=null) {
             //update of object user to make sure is the current one
