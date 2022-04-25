@@ -9,6 +9,7 @@ import java.util.List;
 @Entity
 @Table(name = "ServicePackage", schema = "database2")
 @NamedQuery(name = "ServicePackage.showPackages", query = "SELECT sp from ServicePackage sp")
+@NamedQuery(name = "ServicePackage.findServicePackageById", query = "SELECT sp FROM ServicePackage sp WHERE sp.PackageName = :name")
 public class ServicePackage implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -26,6 +27,7 @@ public class ServicePackage implements Serializable {
     private MontlyFee packageFees;
 
 
+
     public ServicePackage() {
 
     }
@@ -36,7 +38,13 @@ public class ServicePackage implements Serializable {
        this.packageFees = packageFees;
    }
 
+    public MontlyFee getPackageFees() {
+        return packageFees;
+    }
 
+    public void setPackageFees(MontlyFee packageFees) {
+        this.packageFees = packageFees;
+    }
 
     public String getPackageName() {
         return PackageName;

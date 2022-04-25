@@ -1,0 +1,26 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/" >
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" media="all"
+          href="../css/style.css" th:href="@{/css/style.css}" />
+</head>
+<body>
+<td th:text="${loggedCustomer.username}"></td>
+<th>Available Service Packages</th>
+<tr th:each="sp : ${packageList}">
+    <td th:text="${sp.packageName }"></td>
+<div class="form-style-4">
+
+</div>
+    <div class="form-style-4">
+        <form method="POST" action="buy-service">
+            <input type="submit" value="BUY SERVICE">
+        </form>
+    </div>
+</body>
+
+
+</html>

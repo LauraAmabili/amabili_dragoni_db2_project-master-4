@@ -2,8 +2,10 @@ package it.polimi.db2.controllers;
 
 
 import it.polimi.db2.entities.ServicePackage;
+import it.polimi.db2.entities.UserCustomer;
 import it.polimi.db2.exceptions.CredentialsException;
 import it.polimi.db2.services.ServicePackageService;
+import it.polimi.db2.services.UserCustomerService;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -16,20 +18,22 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.Produces;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.DriverManager;
 import java.util.List;
 
-import static java.lang.System.out;
 
-@WebServlet(name = "homePage", value = "/home-page")
-public class HomePage extends HttpServlet {
+
+// this page should show to the client all the packets with monthly fee annd optional products
+// after you choose your package + optional product + validity period you go to create order where you have the overview
+
+@WebServlet(name = "homePage", value = "/home-page-customer")
+public class HomePageCustomer extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private TemplateEngine templateEngine;
     @EJB(name = "services/ServicePackageService")
     private ServicePackageService sps;
+    @EJB(name = "services/UserCustomerService")
+    private UserCustomerService userCustomerService;
 
     public void init() throws ServletException {
         ServletContext servletContext = getServletContext();
@@ -41,8 +45,7 @@ public class HomePage extends HttpServlet {
     }
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String result = "Login worked for Customer";
-        String result2 = "Page with packages";
+
         List<ServicePackage> sp = null;
         try {
             sp = sps.showPackages();
@@ -55,11 +58,16 @@ public class HomePage extends HttpServlet {
         // out.print(sp);
         //out.println(result);
         // out.println(result2);
+        if(req.getSession(false)!=null  &&  req.getSession(false).getAttribute("user")!=null) {
+            //update of object user to make sure is the current one
+            UserCustomer customer = userCustomerService.findCustomerById((UserCustomer) req.getSession().getAttribute("user"));
+            req.getSession(false).setAttribute("customer", customer);
+            ctx.setVariable("loggedCustomer", customer);
+        }
 
 
         ctx.setVariable("packageList", sp);
-        // variabile in HTML di nome packageList perchè sto assegnano alla variabile sp
-        templateEngine.process("/WEB-INF/HomePage.html", ctx, resp.getWriter());
+        templateEngine.process("/WEB-INF/HomePageForCustomer.html", ctx, resp.getWriter());
 
 
     }

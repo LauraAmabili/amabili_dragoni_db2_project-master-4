@@ -1,11 +1,8 @@
 package it.polimi.db2.controllers;
 
-import com.sun.xml.bind.v2.TODO;
 import it.polimi.db2.entities.UserCustomer;
-import it.polimi.db2.entities.UserEmployee;
 import it.polimi.db2.exceptions.CredentialsException;
 import it.polimi.db2.services.UserCustomerService;
-import it.polimi.db2.services.UserEmployeeService;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
