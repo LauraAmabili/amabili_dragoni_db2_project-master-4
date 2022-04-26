@@ -12,8 +12,9 @@
 <p style="text-align: justify;">&nbsp;</p>
 <h2 style="text-align: justify;"><span style="color: #ff0000;"><strong>CREATE NEW SERVICE</strong></span></h2>
 
+
 <label for="serviceTypeSelector">Select type of service you want to create:</label>
-<select id="serviceTypeSelector">
+<select id="serviceTypeSelector" name = "serviceType">
     <option value=" "></option>
     <option value="mobilePhone">Mobile Phone</option>
     <option value="fixedInternet">Fixed Internet</option>
@@ -27,7 +28,7 @@
 
 </div>
 <div id="mobilePhone" class="services" style="display:none">
-    <form method="POST" action="create-service">
+    <form method="POST" action="create-mobile-phone-service">
     <p></p>
     Name: <input type="text" name="name" required>
     <p></p>
@@ -43,7 +44,7 @@
     </form>
 </div>
 <div id="fixedInternet" class="services" style="display:none">
-    <form method="POST" action="create-service">
+    <form method="POST" action="create-fixed-internet-service">
     <p></p>
     Name: <input type="text" name="name" required>
     <p></p>
@@ -55,7 +56,7 @@
     </form>
 </div>
 <div id="mobileInternet" class="services" style="display:none">
-    <form method="POST" action="create-service">
+    <form method="POST" action="create-mobile-internet-service">
     <p></p>
     Name: <input type="text" name="name" required>
     <p></p>
@@ -78,6 +79,8 @@
         });
     });
 </script>
+
+
 
 
 
