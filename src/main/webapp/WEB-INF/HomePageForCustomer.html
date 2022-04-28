@@ -10,17 +10,57 @@
 <body>
 <td th:text="${loggedCustomer.username}"></td>
 <th>Available Service Packages</th>
-<tr th:each="sp : ${packageList}">
-    <td th:text="${sp.packageName }"></td>
-<div class="form-style-4">
+<table  class="styled-table">
+    <tr>
+        <th>Service Package</th>
+        <th>Fixed phone</th>
+        <th>12 month price</th>
+        <th>24 month price</th>
+        <th>36 month price</th>
 
+    </tr>
+    <tbody>
+    <tr th:each="sp : ${packageList}">
+        <td th:text="${sp.packageName}"></td>
+
+        <td>
+            <span th:if="${sp.fixedPhoneNumber != null}" th:text="${sp.fixedPhoneNumber}"> </span>
+            <span th:unless="${sp.fixedPhoneNumber != null}">  </span>
+        </td>
+
+
+        <td>
+            <ul th:if="${sp.packageFees != null}" th:each="vp : ${sp.packageFees}">
+                <li th:text="${sp.packageFees.twelveMonthPrice } + ' euro/month for ' + ${sp.packageFees.twelveMonthPrice} + ' months'"></li>
+            </ul>
+        </td>
+        <td>
+            <ul th:if="${sp.packageFees != null}" th:each="vp : ${sp.packageFees}">
+                <li th:text="${sp.packageFees.twentyFourMonthPrice } + ' euro/month for ' + ${sp.packageFees.twentyFourMonthPrice} + ' months'"></li>
+            </ul>
+        </td>
+        <td>
+            <ul th:if="${sp.packageFees != null}" th:each="vp : ${sp.packageFees}">
+                <li th:text="${sp.packageFees.thirtySixMonthPrice } + ' euro/month for ' + ${sp.packageFees.thirtySixMonthPrice} + ' months'"></li>
+            </ul>
+        </td>
+    </tr>
+    </tbody>
+
+
+
+</table>
+
+<div class="form-style-4">
 </div>
+</body>
+
     <div class="form-style-4">
         <form method="POST" action="buy-service">
             <input type="submit" value="BUY SERVICE">
         </form>
     </div>
-</body>
+
 
 
 </html>
