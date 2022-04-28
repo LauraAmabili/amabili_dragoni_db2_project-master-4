@@ -77,7 +77,7 @@ public class CheckLoginCustomer extends HttpServlet {
         // show login page with error message
         String path;
         if (user == null) {
-            ctx.setVariable("errorMsg", "Incorrect username or password");
+            ctx.setVariable("loginErrorMsgCust", "Incorrect username or password");
             path = "/index.html";
             templateEngine.process(path, ctx, response.getWriter());
         } else {

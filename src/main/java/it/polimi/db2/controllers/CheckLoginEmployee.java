@@ -60,11 +60,12 @@ public class CheckLoginEmployee extends HttpServlet {
             pwd = StringEscapeUtils.escapeJava(request.getParameter("password"));
 
             if (usrn == null || pwd == null || usrn.isEmpty() || pwd.isEmpty()) {
-                throw new Exception("Missing or empty credential value");
+                throw new CredentialsException("Missing or empty credential value");
             }
 
-        } catch (Exception e) {
+        } catch (CredentialsException e) {
             // for debugging only e.printStackTrace();
+            ctx.setVariable("loginErrorMsg", e.getMessage());
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing credential value");
             return;
         }
@@ -83,28 +84,11 @@ public class CheckLoginEmployee extends HttpServlet {
 
         String path;
         if (user == null) {
-            ctx.setVariable("errorMsg", "Incorrect username or password");
+            ctx.setVariable("loginErrorMsgEmp", "Incorrect username or password");
             path = "/index.html";
             templateEngine.process(path, ctx, response.getWriter());
         } else {
-
-//            QueryService qService = null;
-//            try {
-//                /*
-//                 * We need one distinct EJB for each user. Get the Initial Context for the JNDI
-//                 * lookup for a local EJB. Note that the path may be different in different EJB
-//                 * environments. In IntelliJ use: ic.lookup(
-//                 * "java:/openejb/local/ArtifactFileNameWeb/ArtifactNameWeb/QueryServiceLocalBean"
-//                 * );
-//                 */
-//                InitialContext ic = new InitialContext();
-//                // Retrieve the EJB using JNDI lookup
-//                qService = (QueryService) ic.lookup("java:/openejb/local/QueryServiceLocalBean");
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
             request.getSession().setAttribute("user", user);
-            // request.getSession().setAttribute("queryService", qService);
             path = getServletContext().getContextPath() + "/home-page-employee";
             response.sendRedirect(path);
         }
