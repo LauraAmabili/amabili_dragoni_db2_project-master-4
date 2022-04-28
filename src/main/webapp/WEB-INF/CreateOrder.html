@@ -7,6 +7,22 @@
           href="../css/style.css" th:href="@{/css/style.css}" />
 </head>
 <body>
+
 <h1> Buy a service </h1>
-<p> Select a service package and the available options</p>
+<div class="form-style-5">
+    <form method="POST" action="package-selected">
+        <label>Choose a service package:</label>
+        <label>
+            <select name="servicePackageName">
+                <option th:each="sp : ${packageList}" th:value="${sp.packageName }" th:text="${sp.packageName}" > </option>
+            </select>
+        </label>
+        <input type="submit" name="OnServicePackageSelection">
+
+
+    </form>
+</div>
+
+
+
 </body>

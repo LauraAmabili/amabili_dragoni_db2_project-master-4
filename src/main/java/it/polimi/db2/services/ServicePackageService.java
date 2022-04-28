@@ -25,14 +25,14 @@ public class ServicePackageService {
     public ServicePackage findServicePackageById(String servicePackageName) throws CredentialsException {
 
 
-        ServicePackage sp = null;
+        List<ServicePackage> sp;
         try {
-            sp = (ServicePackage) em.createNamedQuery("ServicePackage.findServicePackageById", ServicePackage.class).getResultList();
+            sp = em.createNamedQuery("ServicePackage.findServicePackageById", ServicePackage.class).setParameter("name",servicePackageName).getResultList();
 
         } catch (PersistenceException var5) {
             throw new CredentialsException("Packages Error");
         }
-        return sp;
+        return sp.get(0);
     }
 
     public List<ServicePackage> showPackages() throws CredentialsException, NonUniqueResultException {
