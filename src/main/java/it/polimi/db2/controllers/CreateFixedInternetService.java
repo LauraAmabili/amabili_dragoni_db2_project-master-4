@@ -84,7 +84,7 @@ public class CreateFixedInternetService extends HttpServlet {
         float extraGigaFees = parseFloat(extraGigaFeesString);
 
         sService.addNewInternetService(serviceName, gigaNum, extraGigaFees, fixed);
-        ctx.setVariable("OK", "Service Correctly inserted!");
+        ctx.setVariable("OK", "Service " + serviceName + " Correctly inserted!");
         path = "/WEB-INF/HomePageEmployee.html";
         templateEngine.process(path, ctx, response.getWriter());
 

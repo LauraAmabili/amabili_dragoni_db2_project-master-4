@@ -89,7 +89,7 @@ public class CreateMobilePhoneService extends HttpServlet {
         float extraSmsFee = parseFloat(extraSmsFeesString);
 
         sService.addNewMobilePhoneService(serviceName, minutesNum, smsNum, extraMinFee, extraSmsFee);
-        ctx.setVariable("OK", "Service Correctly inserted!");
+        ctx.setVariable("OK", "Service " + serviceName + " Correctly inserted!");
         path = "/WEB-INF/HomePageEmployee.html";
         templateEngine.process(path, ctx, response.getWriter());
 

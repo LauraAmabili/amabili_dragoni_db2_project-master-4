@@ -80,12 +80,22 @@
 </script>
 
 
+
 <p th:if="${wrongValues} != null" th:text="${wrongValues}"style="color: #ff0000;"></p>
 <p th:if="${nameNotUnique} != null" th:text="${nameNotUnique}"style="color: #ff0000;"></p>
 <p th:if="${OK} != null" th:text="${OK}"style="color: #ff0000;"></p>
 
+<pre>&nbsp;</pre>
+<form method="POST" action="create-optional-product-service">
+<h2 style="text-align: justify;"><span style="color: #ff0000;"><strong>CREATE NEW OPTIONAL PRODUCT</strong></span></h2>
+<p>Name: <input name="name" required="" type="text" /></p>
+<p>Price per Month: <input name="monthlyFee" required="" type="text" /></p>
+<input type="submit" value="Create Optional Product">
+</form>
+<p th:if="${wrongValuesOP} != null" th:text="${wrongValuesOP}"style="color: #ff0000;"></p>
+<p th:if="${nameNotUniqueOP} != null" th:text="${nameNotUniqueOP}"style="color: #ff0000;"></p>
 
-
+<p th:if="${OKOP} != null" th:text="${OKOP}"style="color: #ff0000;"></p>
 
 
 
