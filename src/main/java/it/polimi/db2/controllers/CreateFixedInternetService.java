@@ -64,7 +64,7 @@ public class CreateFixedInternetService extends HttpServlet {
         // take input parameters and check unique name
         String serviceName = StringEscapeUtils.escapeJava(request.getParameter("name"));
         if (sService.internetServiceAlreadyExists(serviceName)) {
-            ctx.setVariable("nameNotUnique", "You have chosen a name that already exists!");
+            ctx.setVariable("nameNotUnique", "You have chosen a name that already exists for an Internet Service!");
             path = "/WEB-INF/HomePageEmployee.html";
             templateEngine.process(path, ctx, response.getWriter());
             return;
@@ -100,7 +100,7 @@ public class CreateFixedInternetService extends HttpServlet {
         int gigaNum = parseInt(gigaNumString);
         float extraGigaFees = parseFloat(extraGigaFeesString);
         sService.addNewInternetService(serviceName, gigaNum, extraGigaFees, fixed);
-        ctx.setVariable("wrongInt", "Service Correctly inserted!");
+        ctx.setVariable("OK", "Service Correctly inserted!");
         path = "/WEB-INF/HomePageEmployee.html";
         templateEngine.process(path, ctx, response.getWriter());
 

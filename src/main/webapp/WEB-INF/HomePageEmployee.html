@@ -78,9 +78,11 @@
         });
     });
 </script>
+
 <p th:if="${nameNotUnique} != null" th:text="${nameNotUnique}"style="color: #ff0000;"></p>
 <p th:if="${wrongGigaNum} != null" th:text="${wrongGigaNum}"style="color: #ff0000;"></p>
 <p th:if="${wrongGigaFees} != null" th:text="${wrongGigaFees}"style="color: #ff0000;"></p>
+<p th:if="${OK} != null" th:text="${OK}"style="color: #ff0000;"></p>
 
 
 
