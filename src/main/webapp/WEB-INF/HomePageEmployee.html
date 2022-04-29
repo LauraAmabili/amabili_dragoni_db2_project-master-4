@@ -48,7 +48,7 @@
     Name: <input type="text" name="name" required>
     <p></p>
     Number of GB Included: <input type="text" name="gigaNum" required>
-    <p></p>
+        <p></p>
     Fee for extra GB: <input type="text" name="extraFees" required> &euro;/GB
 
         <input type="submit" value="Create Service">
@@ -78,6 +78,7 @@
         });
     });
 </script>
+<p th:if="${wrongInt} != null" th:text="${wrongInt}"style="color: #ff0000;"></p>
 
 
 
