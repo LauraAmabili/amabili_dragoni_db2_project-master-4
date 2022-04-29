@@ -40,4 +40,10 @@ public class ServicesService {
         if (internetServices.isEmpty()) return false;
         else return true;
     }
+
+    public Boolean mobilePhoneServiceAlreadyExists(String name){
+        List<MobilePhoneService> mobilePhoneServices = em.createNamedQuery("MobilePhoneService.findMobilePhoneServiceById", MobilePhoneService.class).setParameter(1, name).getResultList();
+        if (mobilePhoneServices.isEmpty()) return false;
+        else return true;
+    }
 }

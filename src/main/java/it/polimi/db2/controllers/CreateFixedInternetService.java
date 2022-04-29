@@ -2,7 +2,6 @@ package it.polimi.db2.controllers;
 
 
 import it.polimi.db2.entities.UserEmployee;
-import it.polimi.db2.services.InternetServiceService;
 import it.polimi.db2.services.ServicesService;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.thymeleaf.TemplateEngine;
@@ -32,9 +31,6 @@ public class CreateFixedInternetService extends HttpServlet {
 
     @EJB(name = "it.polimi.db2.services/InternetServiceService")
     private ServicesService sService;
-
-    @EJB(name = "it.polimi.db2.services/InternetServiceService")
-    private InternetServiceService internetServiceService;
 
     public CreateFixedInternetService() {
         super();
@@ -77,21 +73,8 @@ public class CreateFixedInternetService extends HttpServlet {
         Boolean rightGigaFees = extraGigaFeesString.matches("[+-]?([0-9]*[.])?[0-9]+");
 
 
-        if (!rightGigaFees && !rightGigaNum) {
-            ctx.setVariable("wrongGigaFees", "Insert an integer for GB and a price GB fees!");
-            path = "/WEB-INF/HomePageEmployee.html";
-            templateEngine.process(path, ctx, response.getWriter());
-            return;
-        }
-
-        if (!rightGigaFees) {
-            ctx.setVariable("wrongGigaFees", "Insert a price for GB fees!");
-            path = "/WEB-INF/HomePageEmployee.html";
-            templateEngine.process(path, ctx, response.getWriter());
-            return;
-        }
-        if (!rightGigaNum) {
-            ctx.setVariable("wrongGigaNum", "Insert an integer for GB!");
+        if (!rightGigaFees || !rightGigaNum) {
+            ctx.setVariable("wrongValues", "Please insert correct values!");
             path = "/WEB-INF/HomePageEmployee.html";
             templateEngine.process(path, ctx, response.getWriter());
             return;
@@ -99,6 +82,7 @@ public class CreateFixedInternetService extends HttpServlet {
 
         int gigaNum = parseInt(gigaNumString);
         float extraGigaFees = parseFloat(extraGigaFeesString);
+
         sService.addNewInternetService(serviceName, gigaNum, extraGigaFees, fixed);
         ctx.setVariable("OK", "Service Correctly inserted!");
         path = "/WEB-INF/HomePageEmployee.html";

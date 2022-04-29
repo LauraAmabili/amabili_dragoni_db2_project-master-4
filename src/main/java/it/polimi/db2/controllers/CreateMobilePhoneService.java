@@ -1,6 +1,8 @@
 package it.polimi.db2.controllers;
 
+import it.polimi.db2.entities.UserEmployee;
 import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
@@ -25,29 +27,74 @@ import static java.lang.Integer.parseInt;
 public class CreateMobilePhoneService extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
+    private TemplateEngine templateEngine;
+
     @EJB(name = "it.polimi.db2.services/InternetServiceService")
     private ServicesService sService;
-
 
     public CreateMobilePhoneService(){
         super();
     }
 
+    public void init() {
+        ServletContext servletContext = getServletContext();
+        ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(servletContext);
+        templateResolver.setTemplateMode(TemplateMode.HTML);
+        this.templateEngine = new TemplateEngine();
+        this.templateEngine.setTemplateResolver(templateResolver);
+        templateResolver.setSuffix(".html");
+    }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        String name = StringEscapeUtils.escapeJava(request.getParameter("name"));
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        ServletContext servletContext = getServletContext();
 
-        int minutesNum = parseInt(StringEscapeUtils.escapeJava(request.getParameter("minutesNum")));
-        float extraMinFee = parseFloat(StringEscapeUtils.escapeJava(request.getParameter("extraMinFee")));
-        int smsNum = parseInt(StringEscapeUtils.escapeJava(request.getParameter("smsNum")));
-        float extraSmsFee = parseFloat(StringEscapeUtils.escapeJava(request.getParameter("extraSmsFee")));
-        sService.addNewMobilePhoneService(name, minutesNum, smsNum, extraMinFee, extraSmsFee);
+        final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
+        String path;
+
+        // take the username from the session and set it for the new session
+        UserEmployee employee = (UserEmployee) request.getSession(false).getAttribute("employee");
+        request.getSession(false).setAttribute("employee", employee);
+        ctx.setVariable("loggedEmp", employee);
+
+        // take input parameters and check unique name
+        String serviceName = StringEscapeUtils.escapeJava(request.getParameter("name"));
+        if (sService.mobilePhoneServiceAlreadyExists(serviceName)) {
+            ctx.setVariable("nameNotUnique", "You have chosen a name that already exists for a Mobile Phone Service!");
+            path = "/WEB-INF/HomePageEmployee.html";
+            templateEngine.process(path, ctx, response.getWriter());
+            return;
+        }
+
+        String minutesNumString = StringEscapeUtils.escapeJava(request.getParameter("minutesNum"));
+        String extraMinutesFeesString = StringEscapeUtils.escapeJava(request.getParameter("extraMinFee"));
+        Boolean rightMinutesNum = minutesNumString.matches("[0-9]+");
+        Boolean rightMinutesFees = extraMinutesFeesString.matches("[+-]?([0-9]*[.])?[0-9]+");
+
+        String smsNumString = StringEscapeUtils.escapeJava(request.getParameter("smsNum"));
+        String extraSmsFeesString = StringEscapeUtils.escapeJava(request.getParameter("extraSmsFee"));
+        Boolean rightSmsNum = minutesNumString.matches("[0-9]+");
+        Boolean rightSmsFees = extraMinutesFeesString.matches("[+-]?([0-9]*[.])?[0-9]+");
+
+        if (!rightMinutesFees || !rightSmsFees || !rightSmsNum || !rightMinutesNum) {
+            ctx.setVariable("wrongValues", "Please insert correct values!");
+            path = "/WEB-INF/HomePageEmployee.html";
+            templateEngine.process(path, ctx, response.getWriter());
+            return;
+        }
 
 
-        String ctxpath = request.getServletContext().getContextPath();
-        String path = ctxpath + "/home-page-employee";
-        response.sendRedirect(path);
+        int minutesNum = parseInt(minutesNumString);
+        float extraMinFee = parseFloat(extraMinutesFeesString);
+        int smsNum = parseInt(smsNumString);
+        float extraSmsFee = parseFloat(extraSmsFeesString);
+
+        sService.addNewMobilePhoneService(serviceName, minutesNum, smsNum, extraMinFee, extraSmsFee);
+        ctx.setVariable("OK", "Service Correctly inserted!");
+        path = "/WEB-INF/HomePageEmployee.html";
+        templateEngine.process(path, ctx, response.getWriter());
+
+
+
 
     }
 
