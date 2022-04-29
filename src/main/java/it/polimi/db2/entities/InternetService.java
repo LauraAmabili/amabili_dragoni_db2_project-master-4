@@ -1,14 +1,13 @@
 package it.polimi.db2.entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 
 
 @Entity
 @Table(name = "InternetService", schema = "database2")
+@NamedQuery( name = "InternetService.findInternetServiceById",  query = "SELECT t FROM InternetService t  WHERE t.name = ?1" )
+
 public class InternetService implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -24,8 +23,6 @@ public class InternetService implements Serializable {
 
     @Column(name = "fixedInternet")
     private int fixedInternet;
-
-
 
 
 

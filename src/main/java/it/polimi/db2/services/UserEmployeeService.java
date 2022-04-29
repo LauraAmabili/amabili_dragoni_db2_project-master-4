@@ -19,9 +19,7 @@ public class UserEmployeeService {
     @PersistenceContext( unitName = "databaseEJB" )
     private EntityManager em;
 
-    public UserEmployeeService() {
-
-    }
+    public UserEmployeeService() {}
 
     public UserEmployee findUserById(UserEmployee emp) {
         String username = emp.getUsername();

@@ -6,6 +6,7 @@ import it.polimi.db2.entities.MobilePhoneService;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.List;
 
 @Stateless
 public class ServicesService {
@@ -32,5 +33,11 @@ public class ServicesService {
         newMP.setExtraMinFee(extraMinFee);
         newMP.setExtraSmsFee(extraSmsFee);
         em.persist(newMP);
+    }
+
+    public Boolean internetServiceAlreadyExists(String name){
+        List<InternetService> internetServices = em.createNamedQuery("InternetService.findInternetServiceById", InternetService.class).setParameter(1, name).getResultList();
+        if (internetServices.isEmpty()) return false;
+        else return true;
     }
 }

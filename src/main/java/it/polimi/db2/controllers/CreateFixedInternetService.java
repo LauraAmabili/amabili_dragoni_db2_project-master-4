@@ -1,10 +1,9 @@
 package it.polimi.db2.controllers;
 
-import it.polimi.db2.entities.UserCustomer;
+
 import it.polimi.db2.entities.UserEmployee;
-import it.polimi.db2.exceptions.WrongIntException;
+import it.polimi.db2.services.InternetServiceService;
 import it.polimi.db2.services.ServicesService;
-import it.polimi.db2.services.UserEmployeeService;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
@@ -33,9 +32,11 @@ public class CreateFixedInternetService extends HttpServlet {
 
     @EJB(name = "it.polimi.db2.services/InternetServiceService")
     private ServicesService sService;
-    private UserEmployeeService userEmployeeService;
 
-    public CreateFixedInternetService(){
+    @EJB(name = "it.polimi.db2.services/InternetServiceService")
+    private InternetServiceService internetServiceService;
+
+    public CreateFixedInternetService() {
         super();
     }
 
@@ -53,42 +54,58 @@ public class CreateFixedInternetService extends HttpServlet {
 
         ServletContext servletContext = getServletContext();
         final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
+        String path;
 
-        // take the username
+        // take the username from the session and set it for the new session
         UserEmployee employee = (UserEmployee) request.getSession(false).getAttribute("employee");
         request.getSession(false).setAttribute("employee", employee);
         ctx.setVariable("loggedEmp", employee);
 
-
+        // take input parameters and check unique name
         String serviceName = StringEscapeUtils.escapeJava(request.getParameter("name"));
+        if (sService.internetServiceAlreadyExists(serviceName)) {
+            ctx.setVariable("nameNotUnique", "You have chosen a name that already exists!");
+            path = "/WEB-INF/HomePageEmployee.html";
+            templateEngine.process(path, ctx, response.getWriter());
+            return;
+        }
+
         String gigaNumString = StringEscapeUtils.escapeJava(request.getParameter("gigaNum"));
         String extraGigaFeesString = StringEscapeUtils.escapeJava(request.getParameter("extraFees"));
 
-        String path;
-        if (gigaNumString.matches("[0-9]+") && extraGigaFeesString.matches("[+-]?([0-9]*[.])?[0-9]+")) {
-            int gigaNum = parseInt(gigaNumString);
-            float extraGigaFees = parseFloat(extraGigaFeesString);
-            sService.addNewInternetService(serviceName, gigaNum, extraGigaFees, fixed);
-            ctx.setVariable("wrongInt", "Service Correctly inserted!");
+        Boolean rightGigaNum = gigaNumString.matches("[0-9]+");
+        Boolean rightGigaFees = extraGigaFeesString.matches("[+-]?([0-9]*[.])?[0-9]+");
+
+
+        if (!rightGigaFees && !rightGigaNum) {
+            ctx.setVariable("wrongGigaFees", "Insert an integer for GB and a price GB fees!");
             path = "/WEB-INF/HomePageEmployee.html";
             templateEngine.process(path, ctx, response.getWriter());
-        } else if (!gigaNumString.matches("[0-9]+")){
-            ctx.setVariable("wrongInt", "Insert a number for GB!");
-            path = "/WEB-INF/HomePageEmployee.html";
-            templateEngine.process(path, ctx, response.getWriter());
-        } else if(!extraGigaFeesString.matches("[+-]?([0-9]*[.])?[0-9]+")){
-            ctx.setVariable("wrongInt", "Insert a number for GB fees!");
-            path = "/WEB-INF/HomePageEmployee.html";
-            templateEngine.process(path, ctx, response.getWriter());
-        } else if (!gigaNumString.matches("[0-9]+") && !extraGigaFeesString.matches("[+-]?([0-9]*[.])?[0-9]+")){
-            ctx.setVariable("wrongInt", "Insert a number for GB and GB fees!");
-            path = "/WEB-INF/HomePageEmployee.html";
-            templateEngine.process(path, ctx, response.getWriter());
+            return;
         }
+
+        if (!rightGigaFees) {
+            ctx.setVariable("wrongGigaFees", "Insert a price for GB fees!");
+            path = "/WEB-INF/HomePageEmployee.html";
+            templateEngine.process(path, ctx, response.getWriter());
+            return;
+        }
+        if (!rightGigaNum) {
+            ctx.setVariable("wrongGigaNum", "Insert an integer for GB!");
+            path = "/WEB-INF/HomePageEmployee.html";
+            templateEngine.process(path, ctx, response.getWriter());
+            return;
+        }
+
+        int gigaNum = parseInt(gigaNumString);
+        float extraGigaFees = parseFloat(extraGigaFeesString);
+        sService.addNewInternetService(serviceName, gigaNum, extraGigaFees, fixed);
+        ctx.setVariable("wrongInt", "Service Correctly inserted!");
+        path = "/WEB-INF/HomePageEmployee.html";
+        templateEngine.process(path, ctx, response.getWriter());
+
     }
 
-    // TODO gestire eccezioni id =
-    //problema ora nel nome del looged emp
 
 }
 
