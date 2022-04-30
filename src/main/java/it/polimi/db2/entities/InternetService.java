@@ -8,6 +8,7 @@ import java.io.Serializable;
 @Table(name = "InternetService", schema = "database2")
 @NamedQuery( name = "InternetService.findInternetServiceById",  query = "SELECT t FROM InternetService t  WHERE t.name = ?1" )
 @NamedQuery( name = "InternetService.getAllFixedInternetService",  query = "SELECT t FROM InternetService t  WHERE t.fixedInternet = 1" )
+@NamedQuery( name = "InternetService.getAllMobileInternetService",  query = "SELECT t FROM InternetService t  WHERE t.fixedInternet = 0" )
 
 
 public class InternetService implements Serializable {

@@ -1,7 +1,10 @@
 package it.polimi.db2.controllers;
 
 import it.polimi.db2.entities.InternetService;
+import it.polimi.db2.entities.MobilePhoneService;
+import it.polimi.db2.entities.OptionalProduct;
 import it.polimi.db2.entities.UserEmployee;
+import it.polimi.db2.services.OptionalProductService;
 import it.polimi.db2.services.ServicesService;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.thymeleaf.TemplateEngine;
@@ -30,9 +33,11 @@ public class CreateMobileInternetService extends HttpServlet {
     private static final int fixed = 0;
     private TemplateEngine templateEngine;
 
-    @EJB(name = "it.polimi.db2.services/InternetServiceService")
+    @EJB(name = "it.polimi.db2.services/ServicesService")
     private ServicesService sService;
 
+    @EJB(name = "it.polimi.db2.services/OptionalProductService")
+    private OptionalProductService opService;
 
     public CreateMobileInternetService() {
         super();
@@ -60,8 +65,12 @@ public class CreateMobileInternetService extends HttpServlet {
         // take input parameters and check unique name
         String serviceName = StringEscapeUtils.escapeJava(request.getParameter("name"));
         if (sService.internetServiceAlreadyExists(serviceName)) {
-            List<InternetService> fixedInternetServices = sService.getAllFixedInternetService();
+            List<InternetService> fixedInternetServices = sService.getAllFixedInternetServices();
             ctx.setVariable("fixedInternetServices", fixedInternetServices);
+            List<InternetService> mobileInternetServices = sService.getAllMobileInternetServices();
+            ctx.setVariable("mobileInternetServices", mobileInternetServices);
+            List<MobilePhoneService> mobilePhoneServices = sService.getAllMobilePhoneServices();
+            ctx.setVariable("mobilePhoneServices", mobilePhoneServices);
             ctx.setVariable("nameNotUnique", "You have chosen a name that already exists for an Internet Service!");
             path = "/WEB-INF/HomePageEmployee.html";
             templateEngine.process(path, ctx, response.getWriter());
@@ -76,8 +85,14 @@ public class CreateMobileInternetService extends HttpServlet {
 
 
         if (!rightGigaFees || !rightGigaNum) {
-            List<InternetService> fixedInternetServices = sService.getAllFixedInternetService();
+            List<InternetService> fixedInternetServices = sService.getAllFixedInternetServices();
             ctx.setVariable("fixedInternetServices", fixedInternetServices);
+            List<InternetService> mobileInternetServices = sService.getAllMobileInternetServices();
+            ctx.setVariable("mobileInternetServices", mobileInternetServices);
+            List<MobilePhoneService> mobilePhoneServices = sService.getAllMobilePhoneServices();
+            ctx.setVariable("mobilePhoneServices", mobilePhoneServices);
+            List<OptionalProduct> optionalProducts = opService.getAllOptionalProducts();
+            ctx.setVariable("optionalProducts", optionalProducts);
             ctx.setVariable("wrongValues", "Please insert correct values!");
             path = "/WEB-INF/HomePageEmployee.html";
             templateEngine.process(path, ctx, response.getWriter());
@@ -88,8 +103,14 @@ public class CreateMobileInternetService extends HttpServlet {
         float extraGigaFees = parseFloat(extraGigaFeesString);
         sService.addNewInternetService(serviceName, gigaNum, extraGigaFees, fixed);
 
-        List<InternetService> fixedInternetServices = sService.getAllFixedInternetService();
+        List<InternetService> fixedInternetServices = sService.getAllFixedInternetServices();
         ctx.setVariable("fixedInternetServices", fixedInternetServices);
+        List<InternetService> mobileInternetServices = sService.getAllMobileInternetServices();
+        ctx.setVariable("mobileInternetServices", mobileInternetServices);
+        List<MobilePhoneService> mobilePhoneServices = sService.getAllMobilePhoneServices();
+        ctx.setVariable("mobilePhoneServices", mobilePhoneServices);
+        List<OptionalProduct> optionalProducts = opService.getAllOptionalProducts();
+        ctx.setVariable("optionalProducts", optionalProducts);
 
         ctx.setVariable("OK", "Service " + serviceName + " Correctly inserted!");
         path = "/WEB-INF/HomePageEmployee.html";

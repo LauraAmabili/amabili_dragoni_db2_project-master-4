@@ -1,7 +1,11 @@
 package it.polimi.db2.controllers;
 
+import it.polimi.db2.entities.InternetService;
+import it.polimi.db2.entities.MobilePhoneService;
+import it.polimi.db2.entities.OptionalProduct;
 import it.polimi.db2.entities.UserEmployee;
 import it.polimi.db2.services.OptionalProductService;
+import it.polimi.db2.services.ServicesService;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
@@ -16,6 +20,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 import static java.lang.Float.parseFloat;
 
@@ -25,9 +30,14 @@ public class CreateOptionalProduct extends HttpServlet {
     private TemplateEngine templateEngine;
 
     @EJB(name = "it.polimi.db2.services/OptionalProductService")
-    private OptionalProductService optionalProductService;
+    private OptionalProductService opService;
 
-    public CreateOptionalProduct(){ super(); }
+    @EJB(name = "it.polimi.db2.services/ServicesService")
+    private ServicesService sService;
+
+    public CreateOptionalProduct() {
+        super();
+    }
 
     public void init() {
         ServletContext servletContext = getServletContext();
@@ -50,7 +60,15 @@ public class CreateOptionalProduct extends HttpServlet {
 
         // take input parameters and check unique name
         String optionalProductName = StringEscapeUtils.escapeJava(request.getParameter("name"));
-        if (optionalProductService.optionalProductAlreadyExists(optionalProductName)) {
+        if (opService.optionalProductAlreadyExists(optionalProductName)) {
+            List<InternetService> fixedInternetServices = sService.getAllFixedInternetServices();
+            ctx.setVariable("fixedInternetServices", fixedInternetServices);
+            List<InternetService> mobileInternetServices = sService.getAllMobileInternetServices();
+            ctx.setVariable("mobileInternetServices", mobileInternetServices);
+            List<MobilePhoneService> mobilePhoneServices = sService.getAllMobilePhoneServices();
+            ctx.setVariable("mobilePhoneServices", mobilePhoneServices);
+            List<OptionalProduct> optionalProducts = opService.getAllOptionalProducts();
+            ctx.setVariable("optionalProducts", optionalProducts);
             ctx.setVariable("nameNotUniqueOP", "You have chosen a name that already exists for an Optional Product!");
             path = "/WEB-INF/HomePageEmployee.html";
             templateEngine.process(path, ctx, response.getWriter());
@@ -60,7 +78,15 @@ public class CreateOptionalProduct extends HttpServlet {
         String monthlyFeeString = StringEscapeUtils.escapeJava(request.getParameter("monthlyFee"));
         Boolean rightMonthlyFee = monthlyFeeString.matches("[+-]?([0-9]*[.])?[0-9]+");
 
-        if(!rightMonthlyFee) {
+        if (!rightMonthlyFee) {
+            List<InternetService> fixedInternetServices = sService.getAllFixedInternetServices();
+            ctx.setVariable("fixedInternetServices", fixedInternetServices);
+            List<InternetService> mobileInternetServices = sService.getAllMobileInternetServices();
+            ctx.setVariable("mobileInternetServices", mobileInternetServices);
+            List<MobilePhoneService> mobilePhoneServices = sService.getAllMobilePhoneServices();
+            ctx.setVariable("mobilePhoneServices", mobilePhoneServices);
+            List<OptionalProduct> optionalProducts = opService.getAllOptionalProducts();
+            ctx.setVariable("optionalProducts", optionalProducts);
             ctx.setVariable("wrongValuesOP", "Please insert correct values!");
             path = "/WEB-INF/HomePageEmployee.html";
             templateEngine.process(path, ctx, response.getWriter());
@@ -68,11 +94,19 @@ public class CreateOptionalProduct extends HttpServlet {
         }
 
         float monthlyFee = parseFloat(monthlyFeeString);
-        optionalProductService.addNewOptionalProduct(optionalProductName, monthlyFee);
+        opService.addNewOptionalProduct(optionalProductName, monthlyFee);
+        List<InternetService> fixedInternetServices = sService.getAllFixedInternetServices();
+        ctx.setVariable("fixedInternetServices", fixedInternetServices);
+        List<InternetService> mobileInternetServices = sService.getAllMobileInternetServices();
+        ctx.setVariable("mobileInternetServices", mobileInternetServices);
+        List<MobilePhoneService> mobilePhoneServices = sService.getAllMobilePhoneServices();
+        ctx.setVariable("mobilePhoneServices", mobilePhoneServices);
+        List<OptionalProduct> optionalProducts = opService.getAllOptionalProducts();
+        ctx.setVariable("optionalProducts", optionalProducts);
         ctx.setVariable("OKOP", "Optional Product " + optionalProductName + " Correctly inserted!");
         path = "/WEB-INF/HomePageEmployee.html";
         templateEngine.process(path, ctx, response.getWriter());
 
     }
 
-    }
+}

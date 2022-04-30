@@ -29,4 +29,9 @@ public class OptionalProductService {
         else return true;
     }
 
+    public List<OptionalProduct> getAllOptionalProducts(){
+        List<OptionalProduct> optionalProducts = em.createNamedQuery("OptionalProduct.getAllOptionalProducts", OptionalProduct.class).getResultList();
+        return optionalProducts;
+    }
+
 }

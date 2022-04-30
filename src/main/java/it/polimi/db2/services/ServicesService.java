@@ -47,8 +47,18 @@ public class ServicesService {
         else return true;
     }
 
-    public List<InternetService> getAllFixedInternetService(){
+    public List<InternetService> getAllFixedInternetServices(){
         List<InternetService> fixedInternetServices = em.createNamedQuery("InternetService.getAllFixedInternetService", InternetService.class).getResultList();
         return fixedInternetServices;
+    }
+
+    public List<InternetService> getAllMobileInternetServices(){
+        List<InternetService> mobileInternetServices = em.createNamedQuery("InternetService.getAllMobileInternetService", InternetService.class).getResultList();
+        return mobileInternetServices;
+    }
+
+    public List<MobilePhoneService> getAllMobilePhoneServices(){
+        List<MobilePhoneService> mobilePhoneServices = em.createNamedQuery("MobilePhoneService.getAllMobilePhoneServices").getResultList();
+        return mobilePhoneServices;
     }
 }

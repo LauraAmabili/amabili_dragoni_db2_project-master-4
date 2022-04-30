@@ -25,6 +25,30 @@
         <th style="height: 18px; width: 172.3125px;">Fees for extra GB</th>
     </tr>
     </tbody>
+    <tr th:each="mis : ${mobileInternetServices}">
+        <td th:text="${mis.name}"></td>
+
+        <td>
+            <span th:if="${mis.gigaNum != null}" th:text="${mis.gigaNum}"> </span>
+            <span th:unless="${mis.gigaNum != null}">  </span>
+        </td>
+
+        <td>
+            <span th:if="${mis.extraFees != null}" th:text="${mis.extraFees}"> </span>
+            <span th:unless="${mis.extraFees != null}">  </span>
+        </td>
+
+</table>
+
+<p style="color: #ff0000;"><strong><span style="color: #000000;">Select Fixed Internet Service(s) you want to add</span></strong></p>
+<table class="styled-table" style="height: 38px; width: 577px; border-style: dotted;">
+    <tbody>
+    <tr style="height: 18px;">
+        <th style="height: 18px; width: 233.421875px;">Name</th>
+        <th style="height: 18px; width: 149.28125px;">Number of GB</th>
+        <th style="height: 18px; width: 172.3125px;">Fees for extra GB</th>
+    </tr>
+    </tbody>
     <tr th:each="fis : ${fixedInternetServices}">
         <td th:text="${fis.name}"></td>
 
@@ -37,10 +61,59 @@
             <span th:if="${fis.extraFees != null}" th:text="${fis.extraFees}"> </span>
             <span th:unless="${fis.extraFees != null}">  </span>
         </td>
+</table>
+
+<p style="color: #ff0000;"><strong><span style="color: #000000;">Select Mobile Phone(s) you want to add</span></strong></p>
+<table class="styled-table" style="height: 38px; width: 577px; border-style: dotted;">
+    <tbody>
+    <tr style="height: 18px;">
+        <th style="height: 18px; width: 276.90625px;">Name</th>
+        <th style="height: 18px; width: 164.546875px;">Number of Minutes</th>
+        <th style="height: 18px; width: 165.546875px;">Fees for extra Minutes</th>
+        <th style="height: 18px; width: 147.5px;">Number of SMS</th>
+        <th style="height: 18px; width: 158.53125px;">Fees for extra SMS</th>
+    </tr>
+    </tbody>
+    <tr th:each="mps : ${mobilePhoneServices}">
+        <td th:text="${mps.name}"></td>
+        <td>
+            <span th:if="${mps.minutesNum != null}" th:text="${mps.minutesNum}"> </span>
+            <span th:unless="${mps.minutesNum != null}">  </span>
+        </td>
+
+        <td>
+            <span th:if="${mps.extraMinFee != null}" th:text="${mps.extraMinFee}"> </span>
+            <span th:unless="${mps.extraMinFee != null}">  </span>
+        </td>
+        <td>
+            <span th:if="${mps.smsNum != null}" th:text="${mps.smsNum}"> </span>
+            <span th:unless="${mps.smsNum != null}">  </span>
+        </td>
+
+        <td>
+            <span th:if="${mps.extraSmsFee != null}" th:text="${mps.extraSmsFee}"> </span>
+            <span th:unless="${mps.extraSmsFee != null}">  </span>
+        </td>
+</table>
+
+<p style="color: #ff0000;"><strong><span style="color: #000000;">Select the Optional Product(s) you want to add</span></strong></p>
+<table class="styled-table" style="height: 38px; width: 577px; border-style: dotted;">
+    <tbody>
+    <tr style="height: 18px;">
+        <th style="height: 18px; width: 276.90625px;">Name</th>
+        <th style="height: 18px; width: 164.546875px;">Price per month</th>
+    </tr>
+    </tbody>
+    <tr th:each="op : ${optionalProducts}">
+        <td th:text="${op.name}"></td>
+        <td>
+            <span th:if="${op.monthlyFee != null}" th:text="${op.monthlyFee}"> </span>
+            <span th:unless="${op.monthlyFee != null}">  </span>
+        </td>
+
 
 </table>
-<p style="color: #ff0000;"><strong><span style="color: #000000;">Select Fixed Internet Service(s) you want to add</span></strong></p>
-<p style="color: #ff0000;"><strong><span style="color: #000000;">Select Mobile Phone(s) you want to add</span></strong></p>
+
 
 <!-- CREATE SERVICE -->
 <h2 style="text-align: justify;"><span style="color: #0000ff;"><strong>CREATE NEW SERVICE</strong></span></h2>
