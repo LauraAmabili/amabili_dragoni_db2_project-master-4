@@ -54,10 +54,6 @@ public class HomePageCustomer extends HttpServlet {
         }
 
         final WebContext ctx = new WebContext(req, resp, this.getServletContext(), req.getLocale());
-        //PrintWriter out = resp.getWriter();
-        // out.print(sp);
-        //out.println(result);
-        // out.println(result2);
         if(req.getSession(false)!=null  &&  req.getSession(false).getAttribute("user")!=null) {
             //update of object user to make sure is the current one
             UserCustomer customer = userCustomerService.findCustomerById((UserCustomer) req.getSession().getAttribute("user"));

@@ -8,11 +8,42 @@
           href="../css/style.css" th:href="@{/css/style.css}" />
 </head>
 <body>
+
 <p style="text-align: right;"><strong><td th:text="${loggedEmp.username}"></td></strong></p>
 <p style="text-align: justify;">&nbsp;</p>
-<h2 style="text-align: justify;"><span style="color: #ff0000;"><strong>CREATE NEW SERVICE</strong></span></h2>
 
+<!-- CREATE SERVICE PACKAGE -->
+<p style="text-align: right;"><strong>&nbsp;</strong></p>
+<h2 style="text-align: justify;"><span style="color: #ff0000;"><strong>CREATE NEW SERVICE PACKAGE</strong></span></h2>
+<p style="color: #ff0000;"><span style="color: #000000;">Name:</span>&nbsp;<input name="name" required="" type="text" />&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<span style="color: #000000;"><input id="fixedPhone" checked="checked" name="drone" type="radio" value="fixedPhone" /> <strong>Fixed Phone</strong>&nbsp;</span></p>
+<p style="color: #ff0000;"><strong><span style="color: #000000;">Select Mobile Internet Service(s) you want to add </span></strong></p>
+<table class="styled-table" style="height: 38px; width: 577px; border-style: dotted;">
+    <tbody>
+    <tr style="height: 18px;">
+        <th style="height: 18px; width: 233.421875px;">Name</th>
+        <th style="height: 18px; width: 149.28125px;">Number of GB</th>
+        <th style="height: 18px; width: 172.3125px;">Fees for extra GB</th>
+    </tr>
+    </tbody>
+    <tr th:each="fis : ${fixedInternetServices}">
+        <td th:text="${fis.name}"></td>
 
+        <td>
+            <span th:if="${fis.gigaNum != null}" th:text="${fis.gigaNum}"> </span>
+            <span th:unless="${fis.gigaNum != null}">  </span>
+        </td>
+
+        <td>
+            <span th:if="${fis.extraFees != null}" th:text="${fis.extraFees}"> </span>
+            <span th:unless="${fis.extraFees != null}">  </span>
+        </td>
+
+</table>
+<p style="color: #ff0000;"><strong><span style="color: #000000;">Select Fixed Internet Service(s) you want to add</span></strong></p>
+<p style="color: #ff0000;"><strong><span style="color: #000000;">Select Mobile Phone(s) you want to add</span></strong></p>
+
+<!-- CREATE SERVICE -->
+<h2 style="text-align: justify;"><span style="color: #0000ff;"><strong>CREATE NEW SERVICE</strong></span></h2>
 <label for="serviceTypeSelector">Select type of service you want to create:</label>
 <select id="serviceTypeSelector" name = "serviceType">
     <option value=" "></option>
@@ -20,12 +51,9 @@
     <option value="fixedInternet">Fixed Internet</option>
     <option value="mobileInternet">Mobile Internet</option>
 </select>
-
-
 <div id=" " class="services" style="display:none">
     <p></p>
 </div>
-
 <div id="mobilePhone" class="services" style="display:none">
     <form method="POST" action="create-mobile-phone-service">
     <p></p>
@@ -38,7 +66,6 @@
     Number of SMS Included: <input type="text" name="smsNum" required>
     <p></p>
     Fee for extra SMS: <input type="text" name="extraSmsFee" required> &euro;/GB
-
         <input type="submit" value="Create Service">
     </form>
 </div>
@@ -67,7 +94,6 @@
     </form>
 </div>
 
-
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" ></script>
 <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
 <script type="text/javascript">
@@ -79,16 +105,16 @@
     });
 </script>
 
-
-
 <p th:if="${wrongValues} != null" th:text="${wrongValues}"style="color: #ff0000;"></p>
 <p th:if="${nameNotUnique} != null" th:text="${nameNotUnique}"style="color: #ff0000;"></p>
 <p th:if="${OK} != null" th:text="${OK}"style="color: #ff0000;"></p>
 
+
+<!-- CREATE OPTIONAL PRODUCT -->
 <pre>&nbsp;</pre>
 <form method="POST" action="create-optional-product-service">
-<h2 style="text-align: justify;"><span style="color: #ff0000;"><strong>CREATE NEW OPTIONAL PRODUCT</strong></span></h2>
-<p>Name: <input name="name" required="" type="text" /></p>
+    <h2 style="text-align: justify;"><span style="color: #0000ff;"><strong>CREATE NEW OPTIONAL PRODUCT</strong></span></h2>
+    <p>Name: <input name="name" required="" type="text" /></p>
 <p>Price per Month: <input name="monthlyFee" required="" type="text" /></p>
 <input type="submit" value="Create Optional Product">
 </form>

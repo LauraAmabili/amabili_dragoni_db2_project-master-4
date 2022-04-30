@@ -1,5 +1,6 @@
 package it.polimi.db2.controllers;
 
+import it.polimi.db2.entities.InternetService;
 import it.polimi.db2.entities.UserEmployee;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 
 import static java.lang.Float.parseFloat;
@@ -59,6 +61,8 @@ public class CreateMobilePhoneService extends HttpServlet {
         // take input parameters and check unique name
         String serviceName = StringEscapeUtils.escapeJava(request.getParameter("name"));
         if (sService.mobilePhoneServiceAlreadyExists(serviceName)) {
+            List<InternetService> fixedInternetServices = sService.getAllFixedInternetService();
+            ctx.setVariable("fixedInternetServices", fixedInternetServices);
             ctx.setVariable("nameNotUnique", "You have chosen a name that already exists for a Mobile Phone Service!");
             path = "/WEB-INF/HomePageEmployee.html";
             templateEngine.process(path, ctx, response.getWriter());
@@ -76,6 +80,8 @@ public class CreateMobilePhoneService extends HttpServlet {
         Boolean rightSmsFees = extraMinutesFeesString.matches("[+-]?([0-9]*[.])?[0-9]+");
 
         if (!rightMinutesFees || !rightSmsFees || !rightSmsNum || !rightMinutesNum) {
+            List<InternetService> fixedInternetServices = sService.getAllFixedInternetService();
+            ctx.setVariable("fixedInternetServices", fixedInternetServices);
             ctx.setVariable("wrongValues", "Please insert correct values!");
             path = "/WEB-INF/HomePageEmployee.html";
             templateEngine.process(path, ctx, response.getWriter());
@@ -89,6 +95,9 @@ public class CreateMobilePhoneService extends HttpServlet {
         float extraSmsFee = parseFloat(extraSmsFeesString);
 
         sService.addNewMobilePhoneService(serviceName, minutesNum, smsNum, extraMinFee, extraSmsFee);
+
+        List<InternetService> fixedInternetServices = sService.getAllFixedInternetService();
+        ctx.setVariable("fixedInternetServices", fixedInternetServices);
         ctx.setVariable("OK", "Service " + serviceName + " Correctly inserted!");
         path = "/WEB-INF/HomePageEmployee.html";
         templateEngine.process(path, ctx, response.getWriter());

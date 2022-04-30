@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import it.polimi.db2.entities.InternetService;
+import it.polimi.db2.services.ServicesService;
 import org.apache.commons.lang.StringEscapeUtils;
 
 import it.polimi.db2.entities.UserEmployee;
@@ -22,12 +24,17 @@ import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import java.io.IOException;
+import java.util.List;
 
 @WebServlet("/CheckLoginEmployee")
 public class CheckLoginEmployee extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
+    @EJB(name = "it.polimi.db2.services/InternetServiceService")
+    private ServicesService sService;
+
     private TemplateEngine templateEngine;
+
 
     @EJB(name = "it.polimi.db2.services/UserEmployeeService")
     private UserEmployeeService usrEmpService;
@@ -88,9 +95,12 @@ public class CheckLoginEmployee extends HttpServlet {
             path = "/index.html";
             templateEngine.process(path, ctx, response.getWriter());
         } else {
-            request.getSession().setAttribute("user", user);
-            path = getServletContext().getContextPath() + "/home-page-employee";
-            response.sendRedirect(path);
+            List<InternetService> fixedInternetServices = sService.getAllFixedInternetService();
+            ctx.setVariable("fixedInternetServices", fixedInternetServices);
+            ctx.setVariable("loggedEmp", user);
+            request.getSession().setAttribute("employee", user);
+            templateEngine.process("/WEB-INF/HomePageEmployee.html", ctx, response.getWriter());
+
         }
     }
 }

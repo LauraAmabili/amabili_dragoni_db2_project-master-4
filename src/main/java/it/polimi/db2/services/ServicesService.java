@@ -46,4 +46,9 @@ public class ServicesService {
         if (mobilePhoneServices.isEmpty()) return false;
         else return true;
     }
+
+    public List<InternetService> getAllFixedInternetService(){
+        List<InternetService> fixedInternetServices = em.createNamedQuery("InternetService.getAllFixedInternetService", InternetService.class).getResultList();
+        return fixedInternetServices;
+    }
 }

@@ -1,6 +1,7 @@
 package it.polimi.db2.controllers;
 
 
+import it.polimi.db2.entities.InternetService;
 import it.polimi.db2.entities.UserEmployee;
 import it.polimi.db2.services.ServicesService;
 import org.apache.commons.lang.StringEscapeUtils;
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 
 import static java.lang.Float.parseFloat;
@@ -60,6 +62,8 @@ public class CreateFixedInternetService extends HttpServlet {
         // take input parameters and check unique name
         String serviceName = StringEscapeUtils.escapeJava(request.getParameter("name"));
         if (sService.internetServiceAlreadyExists(serviceName)) {
+            List<InternetService> fixedInternetServices = sService.getAllFixedInternetService();
+            ctx.setVariable("fixedInternetServices", fixedInternetServices);
             ctx.setVariable("nameNotUnique", "You have chosen a name that already exists for an Internet Service!");
             path = "/WEB-INF/HomePageEmployee.html";
             templateEngine.process(path, ctx, response.getWriter());
@@ -74,6 +78,8 @@ public class CreateFixedInternetService extends HttpServlet {
 
 
         if (!rightGigaFees || !rightGigaNum) {
+            List<InternetService> fixedInternetServices = sService.getAllFixedInternetService();
+            ctx.setVariable("fixedInternetServices", fixedInternetServices);
             ctx.setVariable("wrongValues", "Please insert correct values!");
             path = "/WEB-INF/HomePageEmployee.html";
             templateEngine.process(path, ctx, response.getWriter());
@@ -84,6 +90,10 @@ public class CreateFixedInternetService extends HttpServlet {
         float extraGigaFees = parseFloat(extraGigaFeesString);
 
         sService.addNewInternetService(serviceName, gigaNum, extraGigaFees, fixed);
+
+        List<InternetService> fixedInternetServices = sService.getAllFixedInternetService();
+        ctx.setVariable("fixedInternetServices", fixedInternetServices);
+
         ctx.setVariable("OK", "Service " + serviceName + " Correctly inserted!");
         path = "/WEB-INF/HomePageEmployee.html";
         templateEngine.process(path, ctx, response.getWriter());
