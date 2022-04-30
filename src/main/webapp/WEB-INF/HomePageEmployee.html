@@ -13,9 +13,16 @@
 <p style="text-align: justify;">&nbsp;</p>
 
 <!-- CREATE SERVICE PACKAGE -->
+<form method="POST" action="create-service-package">
 <p style="text-align: right;"><strong>&nbsp;</strong></p>
 <h2 style="text-align: justify;"><span style="color: #ff0000;"><strong>CREATE NEW SERVICE PACKAGE</strong></span></h2>
-<p style="color: #ff0000;"><span style="color: #000000;">Name:</span>&nbsp;<input name="name" required="" type="text" />&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<span style="color: #000000;"><input id="fixedPhone" checked="checked" name="drone" type="radio" value="fixedPhone" /> <strong>Fixed Phone</strong>&nbsp;</span></p>
+    <p style="color: #ff0000;">
+        <span style="color: #000000;">Name:</span>&nbsp;
+        <input name="name" required="" type="text" />&nbsp; &nbsp; &nbsp;
+        <input id="fixedPhoneService" checked="checked" name="scales" type="checkbox" />
+        <span style="color: #000000;">Fixed Phone <label for="fixedPhoneService"> </label>
+        </span>
+    </p>
 <p style="color: #ff0000;"><strong><span style="color: #000000;">Select Mobile Internet Service(s) you want to add </span></strong></p>
 <table class="styled-table" style="height: 38px; width: 577px; border-style: dotted;">
     <tbody>
@@ -25,9 +32,8 @@
         <th style="height: 18px; width: 172.3125px;">Fees for extra GB</th>
     </tr>
     </tbody>
-    <tr th:each="mis : ${mobileInternetServices}">
+    <tr th:each="mis : ${mobileInternetServices}">s
         <td th:text="${mis.name}"></td>
-
         <td>
             <span th:if="${mis.gigaNum != null}" th:text="${mis.gigaNum}"> </span>
             <span th:unless="${mis.gigaNum != null}">  </span>
@@ -37,7 +43,8 @@
             <span th:if="${mis.extraFees != null}" th:text="${mis.extraFees}"> </span>
             <span th:unless="${mis.extraFees != null}">  </span>
         </td>
-
+        <td>
+            <input id="mobileInternetService" type="checkbox" name="check" value="2">
 </table>
 
 <p style="color: #ff0000;"><strong><span style="color: #000000;">Select Fixed Internet Service(s) you want to add</span></strong></p>
@@ -61,6 +68,11 @@
             <span th:if="${fis.extraFees != null}" th:text="${fis.extraFees}"> </span>
             <span th:unless="${fis.extraFees != null}">  </span>
         </td>
+        <td>
+            <input id="fixedInternetService" type="checkbox" name="check" value="2"> <label for="fixedInternetService"></label>
+
+        <td>
+
 </table>
 
 <p style="color: #ff0000;"><strong><span style="color: #000000;">Select Mobile Phone(s) you want to add</span></strong></p>
@@ -89,11 +101,13 @@
             <span th:if="${mps.smsNum != null}" th:text="${mps.smsNum}"> </span>
             <span th:unless="${mps.smsNum != null}">  </span>
         </td>
-
         <td>
             <span th:if="${mps.extraSmsFee != null}" th:text="${mps.extraSmsFee}"> </span>
             <span th:unless="${mps.extraSmsFee != null}">  </span>
         </td>
+        <td>
+            <input id="mobilePhoneService" type="checkbox" name="check" value="2" /> <label for="mobilePhoneService"></label>
+        <td>
 </table>
 
 <p style="color: #ff0000;"><strong><span style="color: #000000;">Select the Optional Product(s) you want to add</span></strong></p>
@@ -110,10 +124,13 @@
             <span th:if="${op.monthlyFee != null}" th:text="${op.monthlyFee}"> </span>
             <span th:unless="${op.monthlyFee != null}">  </span>
         </td>
+        <td>
+            <input id="optionalProductService" type="checkbox" name="check" value="2" /> <label for="optionalProductService"></label>
+        <td>
 
 
 </table>
-
+</form>
 
 <!-- CREATE SERVICE -->
 <h2 style="text-align: justify;"><span style="color: #0000ff;"><strong>CREATE NEW SERVICE</strong></span></h2>
