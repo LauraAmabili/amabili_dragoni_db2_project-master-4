@@ -1,5 +1,6 @@
 package it.polimi.db2.controllers;
 
+import it.polimi.db2.entities.UserEmployee;
 import it.polimi.db2.services.ServicesService;
 import org.apache.commons.lang.StringEscapeUtils;
 
@@ -40,6 +41,8 @@ public class CreateFixedInternetService extends HttpServlet {
         String ctxpath = request.getServletContext().getContextPath();
         String path = ctxpath + "/home-page-employee";
         response.sendRedirect(path);
+
+
     }
 
 }
