@@ -5,14 +5,12 @@ import it.polimi.db2.entities.MobilePhoneService;
 import it.polimi.db2.entities.OptionalProduct;
 import it.polimi.db2.entities.UserEmployee;
 import it.polimi.db2.services.OptionalProductService;
+import it.polimi.db2.services.ServicesService;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
-
-import it.polimi.db2.services.ServicesService;
-import org.apache.commons.lang.StringEscapeUtils;
-
 
 import javax.ejb.EJB;
 import javax.servlet.ServletContext;
@@ -24,23 +22,20 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-
 import static java.lang.Float.parseFloat;
-import static java.lang.Integer.parseInt;
 
-@WebServlet("/create-mobile-phone-service")
-public class CreateMobilePhoneService extends HttpServlet {
+@WebServlet("/create-optional-product-service")
+public class CreateOptionalProduct extends HttpServlet {
     private static final long serialVersionUID = 1L;
-
     private TemplateEngine templateEngine;
-
-    @EJB(name = "it.polimi.db2.services/ServicesService")
-    private ServicesService sService;
 
     @EJB(name = "it.polimi.db2.services/OptionalProductService")
     private OptionalProductService opService;
 
-    public CreateMobilePhoneService(){
+    @EJB(name = "it.polimi.db2.services/ServicesService")
+    private ServicesService sService;
+
+    public CreateOptionalProduct() {
         super();
     }
 
@@ -55,7 +50,6 @@ public class CreateMobilePhoneService extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServletContext servletContext = getServletContext();
-
         final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
         String path;
 
@@ -65,8 +59,8 @@ public class CreateMobilePhoneService extends HttpServlet {
         ctx.setVariable("loggedEmp", employee);
 
         // take input parameters and check unique name
-        String serviceName = StringEscapeUtils.escapeJava(request.getParameter("name"));
-        if (sService.mobilePhoneServiceAlreadyExists(serviceName)) {
+        String optionalProductName = StringEscapeUtils.escapeJava(request.getParameter("name"));
+        if (opService.optionalProductAlreadyExists(optionalProductName)) {
             List<InternetService> fixedInternetServices = sService.getAllFixedInternetServices();
             ctx.setVariable("fixedInternetServices", fixedInternetServices);
             List<InternetService> mobileInternetServices = sService.getAllMobileInternetServices();
@@ -75,23 +69,16 @@ public class CreateMobilePhoneService extends HttpServlet {
             ctx.setVariable("mobilePhoneServices", mobilePhoneServices);
             List<OptionalProduct> optionalProducts = opService.getAllOptionalProducts();
             ctx.setVariable("optionalProducts", optionalProducts);
-            ctx.setVariable("nameNotUnique", "You have chosen a name that already exists for a Mobile Phone Service!");
+            ctx.setVariable("nameNotUniqueOP", "You have chosen a name that already exists for an Optional Product!");
             path = "/WEB-INF/HomePageEmployee.html";
             templateEngine.process(path, ctx, response.getWriter());
             return;
         }
 
-        String minutesNumString = StringEscapeUtils.escapeJava(request.getParameter("minutesNum"));
-        String extraMinutesFeesString = StringEscapeUtils.escapeJava(request.getParameter("extraMinFee"));
-        Boolean rightMinutesNum = minutesNumString.matches("[0-9]+");
-        Boolean rightMinutesFees = extraMinutesFeesString.matches("[+-]?([0-9]*[.])?[0-9]+");
+        String monthlyFeeString = StringEscapeUtils.escapeJava(request.getParameter("monthlyFee"));
+        Boolean rightMonthlyFee = monthlyFeeString.matches("[+-]?([0-9]*[.])?[0-9]+");
 
-        String smsNumString = StringEscapeUtils.escapeJava(request.getParameter("smsNum"));
-        String extraSmsFeesString = StringEscapeUtils.escapeJava(request.getParameter("extraSmsFee"));
-        Boolean rightSmsNum = minutesNumString.matches("[0-9]+");
-        Boolean rightSmsFees = extraMinutesFeesString.matches("[+-]?([0-9]*[.])?[0-9]+");
-
-        if (!rightMinutesFees || !rightSmsFees || !rightSmsNum || !rightMinutesNum) {
+        if (!rightMonthlyFee) {
             List<InternetService> fixedInternetServices = sService.getAllFixedInternetServices();
             ctx.setVariable("fixedInternetServices", fixedInternetServices);
             List<InternetService> mobileInternetServices = sService.getAllMobileInternetServices();
@@ -100,20 +87,14 @@ public class CreateMobilePhoneService extends HttpServlet {
             ctx.setVariable("mobilePhoneServices", mobilePhoneServices);
             List<OptionalProduct> optionalProducts = opService.getAllOptionalProducts();
             ctx.setVariable("optionalProducts", optionalProducts);
-            ctx.setVariable("wrongValues", "Please insert correct values!");
+            ctx.setVariable("wrongValuesOP", "Please insert correct values!");
             path = "/WEB-INF/HomePageEmployee.html";
             templateEngine.process(path, ctx, response.getWriter());
             return;
         }
 
-
-        int minutesNum = parseInt(minutesNumString);
-        float extraMinFee = parseFloat(extraMinutesFeesString);
-        int smsNum = parseInt(smsNumString);
-        float extraSmsFee = parseFloat(extraSmsFeesString);
-
-        sService.addNewMobilePhoneService(serviceName, minutesNum, smsNum, extraMinFee, extraSmsFee);
-
+        float monthlyFee = parseFloat(monthlyFeeString);
+        opService.addNewOptionalProduct(optionalProductName, monthlyFee);
         List<InternetService> fixedInternetServices = sService.getAllFixedInternetServices();
         ctx.setVariable("fixedInternetServices", fixedInternetServices);
         List<InternetService> mobileInternetServices = sService.getAllMobileInternetServices();
@@ -122,15 +103,10 @@ public class CreateMobilePhoneService extends HttpServlet {
         ctx.setVariable("mobilePhoneServices", mobilePhoneServices);
         List<OptionalProduct> optionalProducts = opService.getAllOptionalProducts();
         ctx.setVariable("optionalProducts", optionalProducts);
-        ctx.setVariable("OK", "Service " + serviceName + " Correctly inserted!");
+        ctx.setVariable("OKOP", "Optional Product " + optionalProductName + " Correctly inserted!");
         path = "/WEB-INF/HomePageEmployee.html";
         templateEngine.process(path, ctx, response.getWriter());
-
-
-
 
     }
 
 }
-
-

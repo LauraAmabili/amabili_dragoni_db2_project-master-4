@@ -1,14 +1,14 @@
 package it.polimi.db2.entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 
 
 @Entity
 @Table(name = "MobilePhoneService", schema = "database2")
+@NamedQuery( name = "MobilePhoneService.findMobilePhoneServiceById",  query = "SELECT t FROM MobilePhoneService t  WHERE t.name = ?1" )
+@NamedQuery( name = "MobilePhoneService.getAllMobilePhoneServices",  query = "SELECT t FROM MobilePhoneService t" )
+
 public class MobilePhoneService implements Serializable {
     private static final long serialVersionUID = 1L;
 

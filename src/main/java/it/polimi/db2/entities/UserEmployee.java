@@ -20,8 +20,7 @@ public class UserEmployee implements Serializable {
     private String password;
 
 
-    public UserEmployee(){
-    }
+    public UserEmployee(){}
 
     public UserEmployee(String username, String password){
         this.username = username;

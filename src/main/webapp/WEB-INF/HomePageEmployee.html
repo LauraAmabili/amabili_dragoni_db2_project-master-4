@@ -8,11 +8,128 @@
           href="../css/style.css" th:href="@{/css/style.css}" />
 </head>
 <body>
+
 <p style="text-align: right;"><strong><td th:text="${loggedEmp.username}"></td></strong></p>
 <p style="text-align: justify;">&nbsp;</p>
-<h2 style="text-align: justify;"><span style="color: #ff0000;"><strong>CREATE NEW SERVICE</strong></span></h2>
+
+<!-- CREATE SERVICE PACKAGE -->
+<form method="POST" action="create-service-package">
+<p style="text-align: right;"><strong>&nbsp;</strong></p>
+    <p style="text-align: center;">&nbsp;</p>
+    <h2 style="text-align: justify;"><span style="color: #ff0000;"><strong>CREATE NEW SERVICE PACKAGE</strong></span></h2>
+    <p style="color: #ff0000;"><span style="color: #000000;">Name:</span>&nbsp; <input name="name" required="" type="text" />&nbsp; &nbsp; &nbsp; <input id="fixedPhoneService" checked="checked" name="scales" type="checkbox" /> <span style="color: #000000;">Fixed Phone <label for="fixedPhoneService"> </label> </span></p>
+    <p style="color: #ff0000; text-align: center;"><input style="background-color: #ccffcc; border-color: #008000;" type="submit" value=" Create Service Package" /></p>
+<p style="color: #ff0000;"><strong><span style="color: #000000;">Select Mobile Internet Service(s) you want to add </span></strong></p>
+<table class="styled-table" style="height: 38px; width: 577px; border-style: dotted;">
+    <tbody>
+    <tr style="height: 18px;">
+        <th style="height: 18px; width: 233.421875px;">Name</th>
+        <th style="height: 18px; width: 149.28125px;">Number of GB</th>
+        <th style="height: 18px; width: 172.3125px;">Fees for extra GB</th>
+    </tr>
+    </tbody>
+    <tr th:each="mis : ${mobileInternetServices}">s
+        <td th:text="${mis.name}"></td>
+        <td>
+            <span th:if="${mis.gigaNum != null}" th:text="${mis.gigaNum}"> </span>
+            <span th:unless="${mis.gigaNum != null}">  </span>
+        </td>
+
+        <td>
+            <span th:if="${mis.extraFees != null}" th:text="${mis.extraFees}"> </span>
+            <span th:unless="${mis.extraFees != null}">  </span>
+        </td>
+        <td>
+            <input id="mobileInternetService" type="checkbox" name="check" value="2">
+</table>
+
+<p style="color: #ff0000;"><strong><span style="color: #000000;">Select Fixed Internet Service(s) you want to add</span></strong></p>
+<table class="styled-table" style="height: 38px; width: 577px; border-style: dotted;">
+    <tbody>
+    <tr style="height: 18px;">
+        <th style="height: 18px; width: 233.421875px;">Name</th>
+        <th style="height: 18px; width: 149.28125px;">Number of GB</th>
+        <th style="height: 18px; width: 172.3125px;">Fees for extra GB</th>
+    </tr>
+    </tbody>
+    <tr th:each="fis : ${fixedInternetServices}">
+        <td th:text="${fis.name}"></td>
+
+        <td>
+            <span th:if="${fis.gigaNum != null}" th:text="${fis.gigaNum}"> </span>
+            <span th:unless="${fis.gigaNum != null}">  </span>
+        </td>
+
+        <td>
+            <span th:if="${fis.extraFees != null}" th:text="${fis.extraFees}"> </span>
+            <span th:unless="${fis.extraFees != null}">  </span>
+        </td>
+        <td>
+            <input id="fixedInternetService" type="checkbox" name="check" value="2"> <label for="fixedInternetService"></label>
+
+        <td>
+
+</table>
+
+<p style="color: #ff0000;"><strong><span style="color: #000000;">Select Mobile Phone(s) you want to add</span></strong></p>
+<table class="styled-table" style="height: 38px; width: 577px; border-style: dotted;">
+    <tbody>
+    <tr style="height: 18px;">
+        <th style="height: 18px; width: 276.90625px;">Name</th>
+        <th style="height: 18px; width: 164.546875px;">Number of Minutes</th>
+        <th style="height: 18px; width: 165.546875px;">Fees for extra Minutes</th>
+        <th style="height: 18px; width: 147.5px;">Number of SMS</th>
+        <th style="height: 18px; width: 158.53125px;">Fees for extra SMS</th>
+    </tr>
+    </tbody>
+    <tr th:each="mps : ${mobilePhoneServices}">
+        <td th:text="${mps.name}"></td>
+        <td>
+            <span th:if="${mps.minutesNum != null}" th:text="${mps.minutesNum}"> </span>
+            <span th:unless="${mps.minutesNum != null}">  </span>
+        </td>
+
+        <td>
+            <span th:if="${mps.extraMinFee != null}" th:text="${mps.extraMinFee}"> </span>
+            <span th:unless="${mps.extraMinFee != null}">  </span>
+        </td>
+        <td>
+            <span th:if="${mps.smsNum != null}" th:text="${mps.smsNum}"> </span>
+            <span th:unless="${mps.smsNum != null}">  </span>
+        </td>
+        <td>
+            <span th:if="${mps.extraSmsFee != null}" th:text="${mps.extraSmsFee}"> </span>
+            <span th:unless="${mps.extraSmsFee != null}">  </span>
+        </td>
+        <td>
+            <input id="mobilePhoneService" type="checkbox" name="check" value="2" /> <label for="mobilePhoneService"></label>
+        <td>
+</table>
+
+<p style="color: #ff0000;"><strong><span style="color: #000000;">Select the Optional Product(s) you want to add</span></strong></p>
+<table class="styled-table" style="height: 38px; width: 577px; border-style: dotted;">
+    <tbody>
+    <tr style="height: 18px;">
+        <th style="height: 18px; width: 276.90625px;">Name</th>
+        <th style="height: 18px; width: 164.546875px;">Price per month</th>
+    </tr>
+    </tbody>
+    <tr th:each="op : ${optionalProducts}">
+        <td th:text="${op.name}"></td>
+        <td>
+            <span th:if="${op.monthlyFee != null}" th:text="${op.monthlyFee}"> </span>
+            <span th:unless="${op.monthlyFee != null}">  </span>
+        </td>
+        <td>
+            <input id="optionalProductService" type="checkbox" name="check" value="2" /> <label for="optionalProductService"></label>
+        <td>
 
 
+</table>
+</form>
+
+<!-- CREATE SERVICE -->
+<h2 style="text-align: justify;"><span style="color: #0000ff;"><strong>CREATE NEW SERVICE</strong></span></h2>
 <label for="serviceTypeSelector">Select type of service you want to create:</label>
 <select id="serviceTypeSelector" name = "serviceType">
     <option value=" "></option>
@@ -20,12 +137,9 @@
     <option value="fixedInternet">Fixed Internet</option>
     <option value="mobileInternet">Mobile Internet</option>
 </select>
-
-
 <div id=" " class="services" style="display:none">
     <p></p>
 </div>
-
 <div id="mobilePhone" class="services" style="display:none">
     <form method="POST" action="create-mobile-phone-service">
     <p></p>
@@ -38,7 +152,6 @@
     Number of SMS Included: <input type="text" name="smsNum" required>
     <p></p>
     Fee for extra SMS: <input type="text" name="extraSmsFee" required> &euro;/GB
-
         <input type="submit" value="Create Service">
     </form>
 </div>
@@ -48,7 +161,7 @@
     Name: <input type="text" name="name" required>
     <p></p>
     Number of GB Included: <input type="text" name="gigaNum" required>
-    <p></p>
+        <p></p>
     Fee for extra GB: <input type="text" name="extraFees" required> &euro;/GB
 
         <input type="submit" value="Create Service">
@@ -67,7 +180,6 @@
     </form>
 </div>
 
-
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" ></script>
 <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
 <script type="text/javascript">
@@ -79,8 +191,23 @@
     });
 </script>
 
+<p th:if="${wrongValues} != null" th:text="${wrongValues}"style="color: #ff0000;"></p>
+<p th:if="${nameNotUnique} != null" th:text="${nameNotUnique}"style="color: #ff0000;"></p>
+<p th:if="${OK} != null" th:text="${OK}"style="color: #ff0000;"></p>
 
 
+<!-- CREATE OPTIONAL PRODUCT -->
+<pre>&nbsp;</pre>
+<form method="POST" action="create-optional-product-service">
+    <h2 style="text-align: justify;"><span style="color: #0000ff;"><strong>CREATE NEW OPTIONAL PRODUCT</strong></span></h2>
+    <p>Name: <input name="name" required="" type="text" /></p>
+<p>Price per Month: <input name="monthlyFee" required="" type="text" /></p>
+<input type="submit" value="Create Optional Product">
+</form>
+<p th:if="${wrongValuesOP} != null" th:text="${wrongValuesOP}"style="color: #ff0000;"></p>
+<p th:if="${nameNotUniqueOP} != null" th:text="${nameNotUniqueOP}"style="color: #ff0000;"></p>
+
+<p th:if="${OKOP} != null" th:text="${OKOP}"style="color: #ff0000;"></p>
 
 
 

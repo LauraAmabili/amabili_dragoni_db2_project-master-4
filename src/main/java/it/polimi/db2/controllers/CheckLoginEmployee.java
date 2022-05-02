@@ -2,15 +2,18 @@ package it.polimi.db2.controllers;
 
 
 import javax.ejb.EJB;
-import javax.naming.InitialContext;
 import javax.persistence.NonUniqueResultException;
 import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import it.polimi.db2.entities.InternetService;
+import it.polimi.db2.entities.MobilePhoneService;
+import it.polimi.db2.entities.OptionalProduct;
+import it.polimi.db2.services.OptionalProductService;
+import it.polimi.db2.services.ServicesService;
 import org.apache.commons.lang.StringEscapeUtils;
 
 import it.polimi.db2.entities.UserEmployee;
@@ -22,12 +25,20 @@ import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import java.io.IOException;
+import java.util.List;
 
 @WebServlet("/CheckLoginEmployee")
 public class CheckLoginEmployee extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
+    @EJB(name = "it.polimi.db2.services/ServicesService")
+    private ServicesService sService;
+
+    @EJB(name = "it.polimi.db2.services/OptionalProductService")
+    private OptionalProductService opService;
+
     private TemplateEngine templateEngine;
+
 
     @EJB(name = "it.polimi.db2.services/UserEmployeeService")
     private UserEmployeeService usrEmpService;
@@ -88,9 +99,18 @@ public class CheckLoginEmployee extends HttpServlet {
             path = "/index.html";
             templateEngine.process(path, ctx, response.getWriter());
         } else {
-            request.getSession().setAttribute("user", user);
-            path = getServletContext().getContextPath() + "/home-page-employee";
-            response.sendRedirect(path);
+            List<InternetService> fixedInternetServices = sService.getAllFixedInternetServices();
+            ctx.setVariable("fixedInternetServices", fixedInternetServices);
+            List<InternetService> mobileInternetServices = sService.getAllMobileInternetServices();
+            ctx.setVariable("mobileInternetServices", mobileInternetServices);
+            List<MobilePhoneService> mobilePhoneServices = sService.getAllMobilePhoneServices();
+            ctx.setVariable("mobilePhoneServices", mobilePhoneServices);
+            List<OptionalProduct> optionalProducts = opService.getAllOptionalProducts();
+            ctx.setVariable("optionalProducts", optionalProducts);
+            ctx.setVariable("loggedEmp", user);
+            request.getSession().setAttribute("employee", user);
+            templateEngine.process("/WEB-INF/HomePageEmployee.html", ctx, response.getWriter());
+
         }
     }
 }
