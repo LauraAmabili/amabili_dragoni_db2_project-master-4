@@ -21,11 +21,22 @@
     </h2>
     <p style="color: #ff0000;"><span style="color: #000000;">
         Name:</span>&nbsp; <input name="name" required="" type="text" />&nbsp; &nbsp; &nbsp;
-        <input id="fixedPhoneService" checked="checked" name="scales" type="checkbox" /> <span style="color: #000000;">Fixed Phone</span></p>
-    <p style="color: #ff0000;"><span style="color: #000000;">
-        Price: <input name="extraMinFee" required="" type="text" /> &euro;/GB.
-        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;
-    </span><input style="background-color: #ccffcc; border-color: #008000;" name="createServicePkg" type="submit" value=" Create Service Package" /></p>
+    <input  type="checkbox" name="fixedPhone" value="fixedInternetIn">
+        <span style="color: #000000;">Fixed Phone</span>
+    </p>
+    <p th:if="${namePkgNotUnique} != null" th:text="${namePkgNotUnique}"style="color: #ff0000;"></p>
+    <p th:if="${wrongValuesPkg} != null" th:text="${wrongValuesPkg}"style="color: #ff0000;"></p>
+    <p style="color: #ff0000;">
+        <span style="color: #000000;">
+            Price for 12 months: <input name="pkgPrice12" required="" type="text" /> &euro;/GB
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            Price for 24 months: <input name="pkgPrice24" required="" type="text" /> &euro;/GB
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            Price for 36 months: <input name="pkgPrice36" required="" type="text" /> &euro;/GB
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;
+        </span>
+        <input style="background-color: #ccffcc; border-color: #008000;" name="createServicePkg" type="submit" value=" Create Service Package" />
+    </p>
 
     <p style="color: #ff0000;"><strong><span style="color: #000000;">Select Mobile Internet Service(s) you want to add </span></strong></p>
     <table class="styled-table" style="height: 38px; width: 577px; border-style: dotted;">

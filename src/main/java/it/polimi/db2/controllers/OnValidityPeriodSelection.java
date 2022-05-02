@@ -1,13 +1,7 @@
 package it.polimi.db2.controllers;
 
 
-import it.polimi.db2.entities.MontlyFee;
-import it.polimi.db2.entities.Orders;
 import it.polimi.db2.entities.ServicePackage;
-import it.polimi.db2.entities.UserCustomer;
-import it.polimi.db2.exceptions.CredentialsException;
-import it.polimi.db2.exceptions.ServicePackageException;
-import it.polimi.db2.services.OrderService;
 import it.polimi.db2.services.ServicePackageService;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.thymeleaf.TemplateEngine;
@@ -23,9 +17,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 
-import static java.lang.Float.parseFloat;
 import static java.lang.Integer.parseInt;
 
 @WebServlet("/period-selected")
