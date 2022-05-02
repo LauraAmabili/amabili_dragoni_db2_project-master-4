@@ -29,15 +29,12 @@ public class Orders implements Serializable {
     @Column(name = "OrderDateTime")
     private java.util.Date OrderDateTime;
 
-
     @Column(name = "TotalCost")
     private float TotalCost;
-
 
     @ManyToOne
     @JoinColumn(name="userOrder", referencedColumnName="username")
     private UserCustomer userOrder;
-
 
 
     @ManyToOne
@@ -75,6 +72,14 @@ public class Orders implements Serializable {
 
     public void setValidityPeriodMonth(int validityPeriodMonth) {
         ValidityPeriodMonth = validityPeriodMonth;
+    }
+
+    public ServicePackage getOrderedService() {
+        return orderedService;
+    }
+
+    public void setOrderedService(ServicePackage orderedService) {
+        this.orderedService = orderedService;
     }
 
     public int getValid() {

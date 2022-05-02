@@ -8,21 +8,37 @@
 </head>
 <body>
 
+
 <h1> Buy a service </h1>
+
+
+
 <div class="form-style-5">
     <form method="POST" action="package-selected">
-        <label>Choose a service package:</label>
-        <label>
-            <select name="servicePackageName">
-                <option th:each="sp : ${packageList}" th:value="${sp.packageName }" th:text="${sp.packageName}" > </option>
+        <label for="servicePackagess">Choose a service package:</label>
+            <select id="servicePackagess" name="servicePackageName">
+                <option th:each="sp : ${packageList}" th:value="${sp.packageName }" th:text="${sp.packageName}">
+                </option>
             </select>
-        </label>
         <input type="submit" name="OnServicePackageSelection">
-
-
     </form>
 </div>
 
 
 
+<td th:text="${servicePackageChosenCTX.packageName}"></td>
+<td>
+    <span th:if="${servicePackageChosenCTX.fixedPhoneNumber != null}" th:text="${servicePackageChosenCTX.fixedPhoneNumber}"> </span>
+    <span th:unless="${servicePackageChosenCTX.fixedPhoneNumber != null}">
+
+            </span>
+</td>
+
+
+
+
+
 </body>
+</html>
+
+

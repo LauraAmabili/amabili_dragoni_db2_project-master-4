@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Complete your order</title>
+</head>
+<body>
+
+
+<p> Service package chosen: </p>
+<span th:if="${servicePackageChosenCTX != null}" th:text="${servicePackageChosenCTX}"> </span>
+
+
+
+<div class="form-style-5">
+    <form method="POST" action="period-selected">
+        <label for="validityPeriod">Choose a validity period:</label>
+        <select th:if= "${servicePackageChosenCTX != null}" name="validityPeriod" id="validityPeriod">
+            <option  th:if="${servicePackageChosenCTX != null}" th:each="vp : ${servicePackageChosenCTX.packageFees}" th:value="12"
+                     th:text="${servicePackageChosenCTX.packageFees.twelveMonthPrice} + ' euro/month for ' + ' 12 months'"></option>
+            <option  th:if="${servicePackageChosenCTX != null}" th:each="vp : ${servicePackageChosenCTX.packageFees}" th:value="24"
+                     th:text="${servicePackageChosenCTX.packageFees.twentyFourMonthPrice} + ' euro/month for ' + ' 24 months'"></option>
+            <option  th:if="${servicePackageChosenCTX != null}" th:each="vp : ${servicePackageChosenCTX.packageFees}" th:value="36"
+                     th:text="${servicePackageChosenCTX.packageFees.thirtySixMonthPrice} + ' euro/month for ' + ' 36 months'"></option>
+        </select>
+        <input type="submit" value="validity period" name="OnValidityPeriodSelection">
+    </form>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

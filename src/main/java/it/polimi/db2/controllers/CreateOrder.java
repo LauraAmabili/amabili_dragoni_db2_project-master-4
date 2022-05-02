@@ -1,6 +1,6 @@
 package it.polimi.db2.controllers;
 
-
+import it.polimi.db2.entities.MontlyFee;
 import it.polimi.db2.entities.Orders;
 import it.polimi.db2.entities.ServicePackage;
 import it.polimi.db2.entities.UserCustomer;
@@ -8,6 +8,7 @@ import it.polimi.db2.exceptions.CredentialsException;
 import it.polimi.db2.exceptions.ServicePackageException;
 import it.polimi.db2.services.OrderService;
 import it.polimi.db2.services.ServicePackageService;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -23,15 +24,17 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-//@WebServlet(name = "buyService", value = "/buy-service")
-@WebServlet("/package-selected")
-public class OnServicePackageSelection extends HttpServlet {
+import static java.lang.Float.parseFloat;
+import static java.lang.Integer.parseInt;
+
+@WebServlet("/create-order")
+public class CreateOrder extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private TemplateEngine templateEngine;
     @EJB(name = "services/ServicePackageService")
     private ServicePackageService spService;
 
-    public OnServicePackageSelection(){
+    public CreateOrder(){
         super();
     }
 
@@ -46,32 +49,23 @@ public class OnServicePackageSelection extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-
         final WebContext ctx = new WebContext(req, resp, this.getServletContext(), req.getLocale());
 
-        ServicePackage servicePackage = new ServicePackage();
+
         if(req.getSession(false)!=null  &&  req.getSession(false).getAttribute("user")!=null) {
             //update of object user to make sure is the current one
-            try {
-
-                String name = req.getParameter("servicePackageName");
-                servicePackage = spService.findServicePackageById(name);
-            } catch(CredentialsException e){
-                try {
-                    throw new ServicePackageException("find Message by Id didn't work");
-                } catch (ServicePackageException ex) {
-                    ex.printStackTrace();
-                }
 
 
-            }
+            Orders order = new Orders();
+            ServicePackage servicePackage = (ServicePackage) req.getSession(false).getAttribute("servicePackageChosen");
+            int validityPeriod = (int) req.getSession(false).getAttribute("chosenValidityPeriod");
+            order.setOrderedService(servicePackage);
+            order.setValidityPeriodMonth((int) validityPeriod);
 
-
-            req.getSession(false).setAttribute("servicePackageChosen", servicePackage);
-            ctx.setVariable("servicePackageChosenCTX", servicePackage);
-            templateEngine.process("/WEB-INF/AdditionalInformation.html", ctx, resp.getWriter());
+            ctx.setVariable("monthlyFeeChosen", validityPeriod);
+            ctx.setVariable("Order", order);
+            templateEngine.process("/WEB-INF/ConfirmationPage.html", ctx, resp.getWriter());
         }
-
     }
 
     @Override
