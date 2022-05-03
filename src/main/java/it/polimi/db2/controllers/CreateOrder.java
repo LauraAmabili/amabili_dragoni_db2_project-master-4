@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 import static java.lang.Float.parseFloat;
@@ -52,15 +53,22 @@ public class CreateOrder extends HttpServlet {
         final WebContext ctx = new WebContext(req, resp, this.getServletContext(), req.getLocale());
 
 
+        String optionalProductList[];
         if(req.getSession(false)!=null  &&  req.getSession(false).getAttribute("user")!=null) {
             //update of object user to make sure is the current one
-
 
             Orders order = new Orders();
             ServicePackage servicePackage = (ServicePackage) req.getSession(false).getAttribute("servicePackageChosen");
             int validityPeriod = (int) req.getSession(false).getAttribute("chosenValidityPeriod");
+            optionalProductList =((req.getParameterValues("optionalProducts")));
             order.setOrderedService(servicePackage);
             order.setValidityPeriodMonth((int) validityPeriod);
+
+            order.setOrderDateTime(new Date());
+
+
+
+
 
             ctx.setVariable("monthlyFeeChosen", validityPeriod);
             ctx.setVariable("Order", order);
