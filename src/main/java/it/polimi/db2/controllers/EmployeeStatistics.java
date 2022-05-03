@@ -1,14 +1,10 @@
 package it.polimi.db2.controllers;
 
-import it.polimi.db2.entities.OptionalProduct;
 import it.polimi.db2.entities.Order;
 import it.polimi.db2.entities.ServicePackage;
 import it.polimi.db2.entities.UserEmployee;
 import it.polimi.db2.exceptions.CredentialsException;
-import it.polimi.db2.services.OptionalProductService;
-import it.polimi.db2.services.OrderService;
-import it.polimi.db2.services.ServicePackageService;
-import it.polimi.db2.services.UserCustomerService;
+import it.polimi.db2.services.*;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -41,6 +37,9 @@ public class EmployeeStatistics extends HttpServlet {
     @EJB(name = "it/polimi/db2/services/OptionalProductService")
     private OptionalProductService opService;
 
+    @EJB(name = "it/polimi/db2/services/OptionalOrderedService")
+    private OptionalOrderedService ooService;
+
 
     public EmployeeStatistics() {
         super();
@@ -68,6 +67,7 @@ public class EmployeeStatistics extends HttpServlet {
         HashMap<String, Integer> salesPerPackage = new HashMap<String, Integer>();
         HashMap<String, List<Integer>> salesPkgValidityPeriod = new HashMap<String, List<Integer>>();
         HashMap<String, HashMap<String, Integer>> salesOp = new HashMap<String, HashMap<String, Integer>>();
+        HashMap<String, Float> avgOptionalSalesPerPackage = new HashMap<String, Float>();
 
         try {
             List<ServicePackage> servicePackages = spService.showPackages();
@@ -112,20 +112,21 @@ public class EmployeeStatistics extends HttpServlet {
 
                 // avg number of optional products selected with each service package by customers
 
-
                 // total order for the service package
-                int totSales = orderService.getNumberOfSalesByServicePkg(sp);
+                float totSales = orderService.getNumberOfSalesByServicePkg(sp);
 
-                // for each order, number of optional products selected
-
-                // orders of that sp
                 List<Order> spOrders = orderService.getServicePackageOrders(sp);
+                // for each order, number of optional products selected
+                List<Integer> opNum = new ArrayList<>();
                 spOrders.forEach(o -> {
-
+                    opNum.add(ooService.numberOfOrderOptionalProduct(o.getOrderId()));
                 });
 
+                float totOpNum = opNum.stream().mapToInt(i -> i).sum();
 
 
+                if (totSales != 0) { avgOptionalSalesPerPackage.put(sp.getPackageName(), totOpNum/totSales); }
+                else {avgOptionalSalesPerPackage.put(sp.getPackageName(), (float)0); }
 
             });
         } catch (CredentialsException e) {
@@ -136,6 +137,7 @@ public class EmployeeStatistics extends HttpServlet {
         ctx.setVariable("salesPerPackage", salesPerPackage);
         ctx.setVariable("salesPerPackageValidityPeriod", salesPkgValidityPeriod);
         ctx.setVariable("salesPkgOp", salesOp);
+        ctx.setVariable("avgOptionalSalesPerPackage", avgOptionalSalesPerPackage);
 
         templateEngine.process("/WEB-INF/EmployeeStatisticsPage.html", ctx, response.getWriter());
 

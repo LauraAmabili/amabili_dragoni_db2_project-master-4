@@ -25,6 +25,11 @@ public class OptionalOrderedService {
         em.persist(optionalOrdered);
     }
 
+    public int numberOfOrderOptionalProduct(int orderId) {
+        List<OptionalOrdered> opNum = em.createNamedQuery("OptionalOrder.getOrderOptionalProducts", OptionalOrdered.class).setParameter("orderId", orderId).getResultList();
+        return opNum.size();
+    }
+
 
 
 

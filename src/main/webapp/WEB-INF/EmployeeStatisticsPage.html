@@ -22,8 +22,7 @@
                                 :
                                 <span style="color: #000000;"><span th:text="${spp.getValue()}"> </span></span>
                                 sales
-
-                        </li>
+                            </li>
                     </ul>
                 </li>
 
@@ -69,6 +68,19 @@
                             <p></p>
                         </ul>
                     </li>
+                </li>
+
+                <li>
+                    <h3><strong><span style="color: #0000ff;">Average number of optional products sold together with each service package </span></strong></h3>
+                    <ul>
+                        <tr th:each="avg : ${avgOptionalSalesPerPackage}">
+                            <li>
+                                <b><span style="color: #000000;"><span style="text-decoration: underline;" th:text="${avg.getKey()}"> </span></span></b>
+                                :
+                                <span style="color: #000000;"><span th:text="${avg.getValue()}"> </span></span>
+                                sales
+                            </li>
+                    </ul>
                 </li>
 
 

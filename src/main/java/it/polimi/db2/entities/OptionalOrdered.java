@@ -10,7 +10,7 @@ import java.io.Serializable;
 @IdClass(OptionalOrderedId.class)
 @Table(name = "OptionalOrdered", schema = "database2")
 // query that returns the ordered optional product associated to a given order
-@NamedQuery(name = "Order.getOrderOptionalProducts", query = "SELECT o from Order o where o.orderId = :orderId")
+@NamedQuery(name = "OptionalOrder.getOrderOptionalProducts", query = "SELECT o from OptionalOrdered o where o.order = :orderId")
 
 public class OptionalOrdered implements Serializable {
     private static final long serialVersionUID = 1L;
