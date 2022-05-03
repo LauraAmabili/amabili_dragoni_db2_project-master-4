@@ -57,6 +57,15 @@ public class ServicesService {
         else return true;
     }
 
+    public InternetService getInternetServiceById(String name){
+        List<InternetService> internetServices = em.createNamedQuery("InternetService.findInternetServiceById", InternetService.class).setParameter(1, name).getResultList();
+        return internetServices.get(0);
+    }
+    public MobilePhoneService getMobilePhoneServiceById(String name){
+        List<MobilePhoneService> mobilePhoneServices = em.createNamedQuery("MobilePhoneService.findMobilePhoneServiceById", MobilePhoneService.class).setParameter(1, name).getResultList();
+        return mobilePhoneServices.get(0);
+    }
+
     public Boolean mobilePhoneServiceAlreadyExists(String name){
         List<MobilePhoneService> mobilePhoneServices = em.createNamedQuery("MobilePhoneService.findMobilePhoneServiceById", MobilePhoneService.class).setParameter(1, name).getResultList();
         if (mobilePhoneServices.isEmpty()) return false;

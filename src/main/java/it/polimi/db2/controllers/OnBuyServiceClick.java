@@ -57,7 +57,7 @@ public class OnBuyServiceClick extends HttpServlet {
 
 
 
-        templateEngine.process("/WEB-INF/CreateOrder.html", ctx, resp.getWriter());
+        templateEngine.process("/WEB-INF/BuyService.html", ctx, resp.getWriter());
 
     }
 

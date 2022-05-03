@@ -1,11 +1,7 @@
 package it.polimi.db2.services;
 
 
-import it.polimi.db2.entities.OptionalProduct;
-import it.polimi.db2.entities.MonthlyFee;
-import it.polimi.db2.entities.ServicePackage;
-import it.polimi.db2.entities.ServicePackageOptional;
-import it.polimi.db2.entities.UserCustomer;
+import it.polimi.db2.entities.*;
 import it.polimi.db2.exceptions.CredentialsException;
 
 import javax.ejb.Stateless;
@@ -54,6 +50,46 @@ public class ServicePackageService {
     }
 
 
+    public List<String> showInternetServices(ServicePackage servicePackage) throws CredentialsException, NonUniqueResultException {
+        List<String> uList;
+        try {
+            uList = em.createNamedQuery("PkgServiceInternet.findServicePackageInternetService", String.class).setParameter("name",servicePackage.getPackageName()).getResultList();
+        } catch (PersistenceException var5) {
+            throw new CredentialsException("Optional Products Error");
+        }
+        if (uList.isEmpty()) {
+            return null;
+        } else {
+            return uList;
+        }
+    }
+
+    public List<String> showMobilePhoneServices(ServicePackage servicePackage) throws CredentialsException, NonUniqueResultException {
+        List<String> uList;
+        try {
+            uList = em.createNamedQuery("PkgServicePhone.findServicePackagePhoneService", String.class).setParameter("name",servicePackage.getPackageName()).getResultList();
+        } catch (PersistenceException var5) {
+            throw new CredentialsException("Optional Products Error");
+        }
+        if (uList.isEmpty()) {
+            return null;
+        } else {
+            return uList;
+        }
+    }
+    public List<String> showOptionalProducts(ServicePackage servicePackage) throws CredentialsException, NonUniqueResultException {
+        List<String> uList;
+        try {
+            uList = em.createNamedQuery("ServicePackageOptional.findServicePackageOptionalProducts", String.class).setParameter("name",servicePackage.getPackageName()).getResultList();
+        } catch (PersistenceException var5) {
+            throw new CredentialsException("Optional Products Error");
+        }
+        if (uList.isEmpty()) {
+            return null;
+        } else {
+            return uList;
+        }
+    }
 
     public Boolean servicePackageAlreadyExists(String pkgName){
         List<ServicePackage> servicePackages = em.createNamedQuery("ServicePackage.findServicePackageById", ServicePackage.class).setParameter("name", pkgName ).getResultList();
@@ -66,6 +102,22 @@ public class ServicePackageService {
         newSP.setFixedPhoneNumber(fixedPhone);
         newSP.setPackageFees(packageFee);
         em.persist(newSP);
+    }
+
+    public float costPerMonth(int validityPeriod, ServicePackage sp){
+        float pricePerMonth = 0;
+        float total = 0;
+        if(validityPeriod == 12){
+            pricePerMonth = sp.getPackageFees().getTwelveMonthPrice();
+        } else if(validityPeriod == 24){
+            pricePerMonth = sp.getPackageFees().getTwentyFourMonthPrice();
+        } else if(validityPeriod == 36){
+            pricePerMonth = sp.getPackageFees().getThirtySixMonthPrice();
+        }
+        total = pricePerMonth* validityPeriod;
+
+        return total;
+
     }
 
 }

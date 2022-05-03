@@ -8,12 +8,15 @@
           href="../css/style.css" th:href="@{/css/style.css}" />
 </head>
 <body>
+<div style="position: absolute; top: 0; right: 0; width: 100px; text-align:right;">
 <td th:text="${loggedCustomer.username}"></td>
+</div>
 <th>Available Service Packages</th>
 <table  class="styled-table">
     <tr>
         <th>Service Package</th>
         <th>Fixed phone</th>
+        <th>Mobile phone</th>
         <th>12 month price</th>
         <th>24 month price</th>
         <th>36 month price</th>
@@ -23,9 +26,11 @@
         <td th:text="${sp.packageName}"></td>
 
         <td>
-            <span th:if="${sp.fixedPhoneNumber != null}" th:text="${sp.fixedPhoneNumber}"> </span>
+            <span th:if="${sp.fixedPhoneNumber == 1 }" th:text="'Fixed phone number is activated'"> </span>
             <span th:unless="${sp.fixedPhoneNumber != null}">  </span>
         </td>
+
+
 
 
         <td>

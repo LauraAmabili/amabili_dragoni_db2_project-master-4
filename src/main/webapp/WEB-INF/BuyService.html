@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/" >
+<head>
+    <meta charset="UTF-8">
+    <title>Choose a service to buy</title>
+    <link rel="stylesheet" type="text/css" media="all"
+          href="../css/style.css" th:href="@{/css/style.css}" />
+</head>
+<body>
+
+
+<h1> Buy a service </h1>
+
+
+
+<div class="form-style-5">
+    <form method="POST" action="package-selected">
+        <label for="servicePackagess">Choose a service package:</label>
+            <select id="servicePackagess" name="servicePackageName" >
+                <option th:each="sp : ${packageList}" th:value="${sp.packageName }" th:text="${sp.packageName}">
+                </option>
+
+            </select>
+        <input type="submit" name="OnServicePackageSelection">
+    </form>
+
+
+    <span th:if="${servicePackageChosenCTX != null}" th:text="'Service Package chosen: '+ ${servicePackageChosenCTX.packageName}"> </span>
+    <p>&nbsp;</p>
+
+
+    <tbody>
+    <tr th:each="is : ${internetServices}">
+
+
+        <td>
+            <span th:if="${is.fixedInternet == 1 }" th:text="'Fixed Internet: '"> </span>
+            <span th:if="${is.fixedInternet == 0 }" th:text="'Mobile Internet: '"> </span>
+        <td th:text="${is.name}"></td>
+        </td>
+
+        <td>
+                <li  th:text="'Name:  ' + ${is.name}"></li>
+        </td>
+        <td>
+                <li th:text="'Number of GB Included:  ' + ${is.gigaNum}"></li>
+
+        </td>
+
+        <td>
+            <li th:text="'Fee for extra FB' + ${is.extraFees}"></li>
+
+        </td>
+    </tr>
+    </tbody>
+
+
+
+    <tbody>
+    <tr th:each="mp : ${mobilePhoneServices}">
+        <td th:text="'Mobile Phone: '+ ${mp.name}"></td>
+
+        <td>
+            <li  th:text="'Name:  ' + ${mp.name}"></li>
+        </td>
+        <td>
+            <li th:text="'Number of minutes Included:  ' + ${mp.minutesNum}"></li>
+
+        </td>
+        <td>
+            <li th:text="'fee for extra minutes :  ' + ${mp.extraMinFee}"></li>
+        </td>
+        <td>
+            <li th:text="'Number of SMS Included:  ' + ${mp.smsNum}"></li>
+
+        </td>
+        <td>
+            <li th:text="'Fee for extra SMS: ' + ${mp.extraSmsFee}"></li>
+
+        </td>
+    </tr>
+    </tbody>
+
+
+
+
+
+</body>
+</html>
+
+
