@@ -8,9 +8,11 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "Orders", schema = "database2")
-@NamedQuery(name = "Orders.getAllOrders", query = "SELECT order from Orders order")
-public class Orders implements Serializable {
+@Table(name = "Order", schema = "database2")
+@NamedQuery(name = "Orders.getAllOrders", query = "SELECT order from Order order")
+@NamedQuery(name = "Order.getServicePkgOrders", query = "SELECT o from Order o where o.orderedService = :servicePkgId")
+
+public class Order implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -36,25 +38,24 @@ public class Orders implements Serializable {
     @JoinColumn(name="userOrder", referencedColumnName="username")
     private UserCustomer userOrder;
 
-
     @ManyToOne
     @JoinColumn(name="orderedService", referencedColumnName="PackageName")
     private ServicePackage orderedService;
 
 
-    public Orders() {
+    public Order() {
 
     }
 
 
-    public Orders(int orderId, int validityPeriodMonth, int valid, Date dateStart, Date orderDateTime, float totalCost, UserCustomer userOrder) {
+    public Order(int orderId, int validityPeriodMonth, int valid, Date dateStart, Date orderDateTime, float totalCost, UserCustomer userOrder) {
         this.orderId = orderId;
         ValidityPeriodMonth = validityPeriodMonth;
         Valid = valid;
         DateStart = dateStart;
         OrderDateTime = orderDateTime;
         TotalCost = totalCost;
-        this.userOrder = userOrder;
+       // this.userOrder = userOrder;
     }
 
 
@@ -74,13 +75,7 @@ public class Orders implements Serializable {
         ValidityPeriodMonth = validityPeriodMonth;
     }
 
-    public ServicePackage getOrderedService() {
-        return orderedService;
-    }
 
-    public void setOrderedService(ServicePackage orderedService) {
-        this.orderedService = orderedService;
-    }
 
     public int getValid() {
         return Valid;
@@ -120,5 +115,13 @@ public class Orders implements Serializable {
 
     public void setUserOrder(UserCustomer userOrder) {
         this.userOrder = userOrder;
+    }
+
+    public ServicePackage getOrderedService() {
+        return orderedService;
+    }
+
+    public void setOrderedService(ServicePackage orderedService) {
+        this.orderedService = orderedService;
     }
 }

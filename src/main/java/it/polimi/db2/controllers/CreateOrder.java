@@ -1,6 +1,6 @@
 package it.polimi.db2.controllers;
 
-import it.polimi.db2.entities.Orders;
+import it.polimi.db2.entities.Order;
 import it.polimi.db2.entities.ServicePackage;
 import it.polimi.db2.entities.UserCustomer;
 import it.polimi.db2.exceptions.CredentialsException;
@@ -60,7 +60,8 @@ public class CreateOrder extends HttpServlet {
         if(req.getSession(false)!=null  &&  req.getSession(false).getAttribute("user")!=null) {
             //update of object user to make sure is the current one
 
-            Orders order = new Orders();
+
+            Order order = new Order();
             ServicePackage servicePackage = (ServicePackage) req.getSession(false).getAttribute("servicePackageChosen");
             int validityPeriod = (int) req.getSession(false).getAttribute("chosenValidityPeriod");
             optionalProductList =((req.getParameterValues("optionalProducts")));

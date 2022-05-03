@@ -3,7 +3,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org/" >
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Home Page Employee</title>
     <link rel="stylesheet" type="text/css" media="all"
           href="../css/style.css" th:href="@{/css/style.css}" />
 </head>
@@ -231,7 +231,9 @@
 
 <p th:if="${OKOP} != null" th:text="${OKOP}"style="color: #ff0000;"></p>
 
-
+<form method="POST" action="go-to-statistics">
+    <button type="submit">See Statistics</button>
+</form>
 
 </body>
 </html>

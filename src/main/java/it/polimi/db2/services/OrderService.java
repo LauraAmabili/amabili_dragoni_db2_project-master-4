@@ -48,7 +48,7 @@ public class OrderService {
         order.setValidityPeriodMonth(validityPeriodMonth);
         order.setDateStart(dateStart);
         order.setOrderDateTime(orderDateTime);
-        order.setTotalCost(totalCost);
+        order.setTotalCost(20);
         order.setUserOrder(userOrder);
         order.setOrderedService(servicePackage);
         em.persist(order);
