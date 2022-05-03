@@ -77,4 +77,9 @@ public class OrderService {
         List<Order> ordersOp = em.createNamedQuery("Order.getServicePkgOrdersWithOptionalProducts", Order.class).setParameter("servicePkg", sp).setParameter("optionalProduct", optionalProduct).getResultList();
         return ordersOp.size();
     }
+
+    public List<Order> getServicePackageOrders (ServicePackage sp) {
+        List <Order> orders = em.createNamedQuery("Order.getServicePkgOrders", Order.class).setParameter("servicePkg", sp).getResultList();
+        return orders;
+    }
 }

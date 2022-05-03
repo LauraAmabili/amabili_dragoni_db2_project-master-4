@@ -1,6 +1,7 @@
 package it.polimi.db2.controllers;
 
 import it.polimi.db2.entities.OptionalProduct;
+import it.polimi.db2.entities.Order;
 import it.polimi.db2.entities.ServicePackage;
 import it.polimi.db2.entities.UserEmployee;
 import it.polimi.db2.exceptions.CredentialsException;
@@ -110,6 +111,18 @@ public class EmployeeStatistics extends HttpServlet {
                 }
 
                 // avg number of optional products selected with each service package by customers
+
+
+                // total order for the service package
+                int totSales = orderService.getNumberOfSalesByServicePkg(sp);
+
+                // for each order, number of optional products selected
+
+                // orders of that sp
+                List<Order> spOrders = orderService.getServicePackageOrders(sp);
+                spOrders.forEach(o -> {
+
+                });
 
 
 
