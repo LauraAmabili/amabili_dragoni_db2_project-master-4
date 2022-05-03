@@ -49,8 +49,6 @@ public class OrderService {
         return size;
     }
 
-    public void createOrder(int orderId, int validityPeriodMonth, int valid, Date dateStart, Date orderDateTime, float totalCost, UserCustomer userOrder) throws CredentialsException, NonUniqueResultException {
-
     public void createOrder(int validityPeriodMonth, Date dateStart, Date orderDateTime, float totalCost, UserCustomer userOrder) throws CredentialsException, NonUniqueResultException {
         Order order = new Order();
         order.setValidityPeriodMonth(validityPeriodMonth);
