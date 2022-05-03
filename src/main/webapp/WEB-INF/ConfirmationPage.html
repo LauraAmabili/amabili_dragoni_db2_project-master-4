@@ -13,7 +13,8 @@
     <p>&nbsp;</p>
     <span th:if="${servicePackageChosenCTX != null}" th:text="'Service Package Chosen: '+${servicePackageChosenCTX.packageName}"> </span>
     <p>&nbsp;</p>
-    <span th:if="${optionalProductsCTX != null}"  th:text="'Optional products chosen:'"> </span>
+    <span th:if="${optionalProductsCTX.isEmpty()}"  th:text="'No optional products chosen'"> </span>
+    <span th:if="${!optionalProductsCTX.isEmpty()}"  th:text="'Optional products chosen:'"> </span>
     <span th:if="${optionalProductsCTX != null}"  th:each="op : ${optionalProductsCTX}" th:text="${op.name}"></span>
     <p>&nbsp;</p>
     <span th:if="${Order != null}"  th:text="'Total Cost:' + ${Order.getTotalCost()}"> </span>

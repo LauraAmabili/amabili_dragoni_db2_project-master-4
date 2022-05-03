@@ -59,22 +59,17 @@ public class OnAdditionalInfoSubmit extends HttpServlet {
 
 
         ServicePackage servicePackage;
+        servicePackage = (ServicePackage) req.getSession(false).getAttribute("servicePackageChosen");
         UserCustomer user = (UserCustomer) req.getSession(false).getAttribute("user");
 
-
-        servicePackage = (ServicePackage) req.getSession(false).getAttribute("servicePackageChosen");
-        int validityPeriod = 0;
+        int validityPeriod = 0; 
 
         String optionalProductList[];
         List<OptionalProduct> optionalProducts = new ArrayList<>();
-        if (req.getSession(false) != null && req.getSession(false).getAttribute("user") != null) {
+        if(req.getSession(false)!=null  &&  req.getSession(false).getAttribute("user")!=null) {
             //update of object user to make sure is the current one
 
-
-            optionalProductList = ((req.getParameterValues("optionalProducts")));
-
-
-            optionalProductList = ((req.getParameterValues("optionalProducts")));
+            optionalProductList =((req.getParameterValues("optionalProducts")));
             validityPeriod = parseInt(StringEscapeUtils.escapeJava(req.getParameter("validityPeriod")));
 
             if (optionalProductList != null) {
@@ -82,16 +77,13 @@ public class OnAdditionalInfoSubmit extends HttpServlet {
                     optionalProducts.add(opService.getOptionalProductById(name));
                 }
 
-                for (String name : optionalProductList) {
-                    optionalProducts.add(opService.getOptionalProductById(name));
-                }
 
-                Order order = new Order();
-                try {
-                    order = orderService.createOrder(validityPeriod, new Date(), new Date(), 100, user, servicePackage);
-                } catch (CredentialsException e) {
-                    e.printStackTrace();
-                }
+            Order order = new Order();
+            try {
+                order = orderService.createOrder(validityPeriod, new Date(), new Date(), 100, user, servicePackage);
+            } catch (CredentialsException e) {
+                e.printStackTrace();
+            }
 
 
                 req.getSession(false).setAttribute("optionalProducts", optionalProductList);
@@ -99,6 +91,7 @@ public class OnAdditionalInfoSubmit extends HttpServlet {
                 ctx.setVariable("chosenValidityPeriod", validityPeriod);
                 ctx.setVariable("servicePackageChosenCTX", servicePackage);
                 ctx.setVariable("optionalProductsCTX", optionalProducts);
+                ctx.setVariable("Order", order);
 
                 templateEngine.process("/WEB-INF/ConfirmationPage.html", ctx, resp.getWriter());
 
