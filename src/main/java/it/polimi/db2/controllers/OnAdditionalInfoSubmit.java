@@ -21,7 +21,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -79,11 +78,14 @@ public class OnAdditionalInfoSubmit extends HttpServlet {
             validityPeriod = parseInt(StringEscapeUtils.escapeJava(req.getParameter("validityPeriod")));
 
 
-            for(String name:optionalProductList) {
-                optionalProducts.add(opService.getOptionalProductById(name));
+            if(optionalProductList!= null) {
+                for (String name : optionalProductList) {
+                    optionalProducts.add(opService.getOptionalProductById(name));
+                }
             }
 
-            Orders order = new Orders();
+
+            Order order = new Order();
             try {
                 order = orderService.createOrder(validityPeriod, new Date(), new Date(), 100, user, servicePackage);
             } catch (CredentialsException e) {

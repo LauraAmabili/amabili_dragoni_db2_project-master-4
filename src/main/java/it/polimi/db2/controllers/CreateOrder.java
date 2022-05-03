@@ -4,10 +4,8 @@ import it.polimi.db2.entities.Order;
 import it.polimi.db2.entities.ServicePackage;
 import it.polimi.db2.entities.UserCustomer;
 import it.polimi.db2.exceptions.CredentialsException;
-import it.polimi.db2.exceptions.ServicePackageException;
 import it.polimi.db2.services.OrderService;
 import it.polimi.db2.services.ServicePackageService;
-import org.apache.commons.lang.StringEscapeUtils;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -22,9 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Date;
-import java.util.List;
 
-import static java.lang.Float.parseFloat;
 import static java.lang.Integer.parseInt;
 
 @WebServlet("/create-order")

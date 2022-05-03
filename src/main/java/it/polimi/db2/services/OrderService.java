@@ -1,7 +1,7 @@
 package it.polimi.db2.services;
 
 
-import it.polimi.db2.entities.Orders;
+import it.polimi.db2.entities.Order;
 import it.polimi.db2.entities.ServicePackage;
 import it.polimi.db2.entities.UserCustomer;
 import it.polimi.db2.exceptions.CredentialsException;
@@ -25,12 +25,12 @@ public class OrderService {
 
     }
 
-    public List<Orders> getAllOrders() throws CredentialsException, NonUniqueResultException {
+    public List<Order> getAllOrders() throws CredentialsException, NonUniqueResultException {
 
-        List<Orders> uList = new ArrayList<>();
+        List<Order> uList = new ArrayList<>();
 
         try {
-            uList = em.createNamedQuery("Orders.getAllOrders", Orders.class).getResultList();
+            uList = em.createNamedQuery("Orders.getAllOrders", Order.class).getResultList();
 
         } catch (PersistenceException var5) {
             throw new CredentialsException("Orders Error");
@@ -43,8 +43,8 @@ public class OrderService {
         }
     }
 
-    public Orders createOrder(int validityPeriodMonth, Date dateStart, Date orderDateTime, float totalCost, UserCustomer userOrder, ServicePackage servicePackage) throws CredentialsException, NonUniqueResultException {
-        Orders order = new Orders();
+    public Order createOrder(int validityPeriodMonth, Date dateStart, Date orderDateTime, float totalCost, UserCustomer userOrder, ServicePackage servicePackage) throws CredentialsException, NonUniqueResultException {
+        Order order = new Order();
         order.setValidityPeriodMonth(validityPeriodMonth);
         order.setDateStart(dateStart);
         order.setOrderDateTime(orderDateTime);
