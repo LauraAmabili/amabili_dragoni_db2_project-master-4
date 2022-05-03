@@ -59,4 +59,11 @@ public class OrderService {
         List <Order> orders = em.createNamedQuery("Order.getServicePkgOrders", Order.class).setParameter("servicePkg", sp).getResultList();
         return orders.size();
     }
+    public int getNumberOfSalesByServicePkgValidityPeriod (ServicePackage sp, int validityPeriod){
+        List <Order> orders = em.createNamedQuery("Order.getServicePkgValidityPeriodOrders", Order.class).
+                setParameter("servicePkg", sp)
+                .setParameter("validityPeriod", validityPeriod)
+                .getResultList();
+        return orders.size();
+    }
 }

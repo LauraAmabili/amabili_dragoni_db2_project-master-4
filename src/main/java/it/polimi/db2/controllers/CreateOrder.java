@@ -51,22 +51,18 @@ public class CreateOrder extends HttpServlet {
     }
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
         final WebContext ctx = new WebContext(req, resp, this.getServletContext(), req.getLocale());
-
 
         UserCustomer user = (UserCustomer) req.getSession(false).getAttribute("user");
         String optionalProductList[];
         if(req.getSession(false)!=null  &&  req.getSession(false).getAttribute("user")!=null) {
             //update of object user to make sure is the current one
 
-
             Order order = new Order();
             ServicePackage servicePackage = (ServicePackage) req.getSession(false).getAttribute("servicePackageChosen");
             int validityPeriod = (int) req.getSession(false).getAttribute("chosenValidityPeriod");
             optionalProductList =((req.getParameterValues("optionalProducts")));
             float totalCost;
-
 
 
             try {
