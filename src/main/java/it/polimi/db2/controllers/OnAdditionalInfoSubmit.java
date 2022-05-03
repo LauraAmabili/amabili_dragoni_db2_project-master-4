@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -77,6 +78,10 @@ public class OnAdditionalInfoSubmit extends HttpServlet {
             optionalProductList =((req.getParameterValues("optionalProducts")));
             validityPeriod = parseInt(StringEscapeUtils.escapeJava(req.getParameter("validityPeriod")));
 
+            if (optionalProductList != null) {
+                for (String name : optionalProductList) {
+                    optionalProducts.add(opService.getOptionalProductById(name));
+                }
 
             if(optionalProductList!= null) {
                 for (String name : optionalProductList) {
@@ -93,21 +98,18 @@ public class OnAdditionalInfoSubmit extends HttpServlet {
             }
 
 
+                req.getSession(false).setAttribute("optionalProducts", optionalProductList);
+                req.getSession(false).setAttribute("chosenValidityPeriod", validityPeriod);
+                ctx.setVariable("chosenValidityPeriod", validityPeriod);
+                ctx.setVariable("servicePackageChosenCTX", servicePackage);
+                ctx.setVariable("optionalProductsCTX", optionalProducts);
+
+                templateEngine.process("/WEB-INF/ConfirmationPage.html", ctx, resp.getWriter());
 
 
-
-            req.getSession(false).setAttribute("optionalProducts", optionalProductList);
-            req.getSession(false).setAttribute("chosenValidityPeriod", validityPeriod);
-            ctx.setVariable("chosenValidityPeriod", validityPeriod);
-            ctx.setVariable("servicePackageChosenCTX", servicePackage);
-            ctx.setVariable("optionalProductsCTX", optionalProducts);
-            ctx.setVariable("Order", order);
-
-            templateEngine.process("/WEB-INF/ConfirmationPage.html", ctx, resp.getWriter());
-
+            }
 
         }
-
     }
 
     @Override

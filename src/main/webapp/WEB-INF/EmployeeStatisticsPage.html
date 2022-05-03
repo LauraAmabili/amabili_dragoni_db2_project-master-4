@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Statistics</title>
+</head>
+<body>
+<p style="text-align: right;"><strong>&nbsp;</strong></p>
+<p style="text-align: right;"><td th:text="${loggedEmp.username}"></p>
+
+<h1 style="text-align: left;"><strong style="color: #ff0000; text-align: justify;">STATISTICS</strong></h1>
+<div class="page" title="Page 2">
+    <div class="layoutArea">
+        <div class="column">
+            <ul>
+                <li>
+                    <h3><strong><span style="color: #0000ff;">Number of total purchases per package &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span></strong></h3>
+                    <ul>
+                        <tr th:each="spp : ${salesPerPackage}">
+                            <li>
+                                <span style="color: #000000;"><span style="text-decoration: underline;" th:text="${spp.getKey()}"> </span></span>
+                                :
+                                <span style="color: #000000;"><span th:text="${spp.getValue()}"> </span></span>
+                                sales
+
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <h3><strong><span style="color: #0000ff;">Number of total purchases per package and validity period</span></strong></h3>
+                    <span style="text-decoration: underline;"><strong>PKG1</strong></span>
+                    <table style="border-collapse: collapse; width: 100%;" border="1">
+                        <tbody>
+                        <tr>
+                            <td style="width: 25%;"><strong>12 Months</strong></td>
+                            <td style="width: 25%;"><strong>24 Months</strong></td>
+                            <td style="width: 25%;"><strong>36 Months</strong></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 25%;">&nbsp;</td>
+                            <td style="width: 25%;">&nbsp;</td>
+                            <td style="width: 25%;">&nbsp;</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <strong><span style="text-decoration: underline;">PKG2</span></strong>
+                    <table style="border-collapse: collapse; width: 100%;" border="1">
+                        <tbody>
+                        <tr>
+                            <td style="width: 25%;"><strong>12 Months</strong></td>
+                            <td style="width: 25%;"><strong>24 Months</strong></td>
+                            <td style="width: 25%;"><strong>36 Months</strong></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 25%;">&nbsp;</td>
+                            <td style="width: 25%;">&nbsp;</td>
+                            <td style="width: 25%;">&nbsp;</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </li>
+                <li>
+                    <h3><strong><span style="color: #0000ff;">Total value of sales per package with and without the optional products</span></strong></h3>
+                    <ul>
+                        <li><span style="color: #000000;">Total Sales of pkg1 without optional products</span></li>
+                        <li><span style="color: #000000;">Total Sales of pkg1 with OP1</span></li>
+                        <li><span style="color: #000000;">Total Sales of pkg1 with OP2</span></li>
+                        <li><span style="color: #000000;">Total Sales of pkg2 without optional products</span></li>
+                        <li><span style="color: #000000;">Total Sales of pkg2 with OP1</span></li>
+                        <li><span style="color: #000000;">Total Sales of pkg2 with OP2</span></li>
+                    </ul>
+                </li>
+                <li>
+                    <h3><strong><span style="color: #0000ff;">Average number of optional products sold together with each service package</span></strong></h3>
+                    <ul>
+                        <li><span style="color: #000000;"><span style="text-decoration: underline;">pkg1</span>: 4</span></li>
+                        <li><span style="color: #000000;"><span style="text-decoration: underline;">pkg2</span>: 2</span></li>
+                        <li><span style="color: #000000;"><span style="text-decoration: underline;">pkg2</span>: 5</span></li>
+                    </ul>
+                </li>
+                <li>
+                    <h3><strong><span style="color: #0000ff;">List of insolvent users, suspended orders and alerts</span></strong></h3>
+                    <ul>
+                        <li><u>usr1</u></li>
+                        <li><u>usr2</u></li>
+                    </ul>
+                </li>
+                <li>
+                    <h3><strong><span style="color: #0000ff;">Best seller optional product, i.e. the optional product with the greatest value of sales across all&nbsp;the sold service packages</span></strong></h3>
+                </li>
+            </ul>
+            <ol>
+                <li style="list-style-type: none;">
+                    <ol>
+                        <li>op1: 10 sales in total</li>
+                        <li>op2: 9 sales in total</li>
+                        <li>op3: 8&nbsp;sales in total</li>
+                        <li>op4: 7&nbsp;sales in total</li>
+                    </ol>
+                </li>
+            </ol>
+        </div>
+    </div>
+</div>
+<p style="text-align: left;">&nbsp;</p>
+</form>
+
+</body>
+</html>

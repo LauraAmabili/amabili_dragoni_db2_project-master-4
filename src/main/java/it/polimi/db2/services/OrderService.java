@@ -54,4 +54,9 @@ public class OrderService {
         em.persist(order);
         return order;
     }
+
+    public int getNumberOfSalesByServicePkg(ServicePackage sp){
+        List <Order> orders = em.createNamedQuery("Order.getServicePkgOrders", Order.class).setParameter("servicePkg", sp).getResultList();
+        return orders.size();
+    }
 }
