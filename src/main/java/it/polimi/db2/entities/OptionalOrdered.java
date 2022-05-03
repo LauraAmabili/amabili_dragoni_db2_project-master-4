@@ -17,7 +17,7 @@ public class OptionalOrdered implements Serializable {
 
     @Id
     @Column(name = "orderId")
-    private String order;
+    private int order;
 
 
     public OptionalOrdered() {
@@ -31,11 +31,11 @@ public class OptionalOrdered implements Serializable {
         this.optionalProduct = optionalProduct;
     }
 
-    public String getOrder() {
+    public int getOrder() {
         return order;
     }
 
-    public void setOrder(String order) {
+    public void setOrder(int order) {
         this.order = order;
     }
 }

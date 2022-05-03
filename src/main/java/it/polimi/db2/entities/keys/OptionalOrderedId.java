@@ -5,12 +5,12 @@ import java.util.Objects;
 
 public class OptionalOrderedId implements Serializable {
     String optionalProduct;
-    String order;
+    int order;
 
     public OptionalOrderedId() {
     }
 
-    public OptionalOrderedId(String optionalProduct, String order) {
+    public OptionalOrderedId(String optionalProduct, int order) {
         this.optionalProduct = optionalProduct;
         this.order = order;
     }
@@ -39,11 +39,11 @@ public class OptionalOrderedId implements Serializable {
         this.optionalProduct = optionalProduct;
     }
 
-    public String getOrder() {
+    public int getOrder() {
         return order;
     }
 
-    public void setOrder(String order) {
+    public void setOrder(int order) {
         this.order = order;
     }
 }

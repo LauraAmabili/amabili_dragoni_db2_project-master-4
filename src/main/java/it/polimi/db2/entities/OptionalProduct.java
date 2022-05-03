@@ -19,7 +19,6 @@ public class OptionalProduct {
     private float monthlyFee;
 
 
-
     public OptionalProduct() {}
 
     public String getName() { return name; }
