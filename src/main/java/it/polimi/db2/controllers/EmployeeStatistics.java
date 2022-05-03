@@ -41,7 +41,6 @@ public class EmployeeStatistics extends HttpServlet {
     private OptionalProductService opService;
 
 
-
     public EmployeeStatistics() {
         super();
     }
@@ -64,79 +63,66 @@ public class EmployeeStatistics extends HttpServlet {
         request.getSession(false).setAttribute("employee", employee);
         ctx.setVariable("loggedEmp", employee);
 
-        // compute the number of sales for each service package
-        HashMap<String, Integer> salesPerPackage = new HashMap<String, Integer>();
-        try {
-            List<ServicePackage> servicePackages = spService.showPackages();
-            servicePackages.forEach(
-                    sp -> salesPerPackage.put(sp.getPackageName(),
-                    orderService.getNumberOfSalesByServicePkg(sp)));
-        } catch (CredentialsException e) {
-            e.printStackTrace();
-        }
 
-        // compute the number of sales for each service package for each monthly fee
+        HashMap<String, Integer> salesPerPackage = new HashMap<String, Integer>();
         HashMap<String, List<Integer>> salesPkgValidityPeriod = new HashMap<String, List<Integer>>();
+        HashMap<String, HashMap<String, Integer>> salesOp = new HashMap<String, HashMap<String, Integer>>();
+
         try {
             List<ServicePackage> servicePackages = spService.showPackages();
+            // for each service package
             servicePackages.forEach(sp -> {
+                // compute the number of sales for each service package
+                salesPerPackage.put(sp.getPackageName(), orderService.getNumberOfSalesByServicePkg(sp));
+
+                // compute the number of sales for each service package for each monthly fee
                 int sales12 = orderService.getNumberOfSalesByServicePkgValidityPeriod(sp, 12);
                 int sales24 = orderService.getNumberOfSalesByServicePkgValidityPeriod(sp, 24);
                 int sales36 = orderService.getNumberOfSalesByServicePkgValidityPeriod(sp, 36);
                 List<Integer> sales = new ArrayList<Integer>();
-                sales.add(sales12); sales.add(sales24); sales.add(sales36);
-
+                sales.add(sales12);
+                sales.add(sales24);
+                sales.add(sales36);
                 salesPkgValidityPeriod.put(sp.getPackageName(), sales);
-            });
-        } catch (CredentialsException e) {
-            e.printStackTrace();
-        }
 
-        // compute the number of sales without optional product for each package service
-       // HashMap<String, Integer> salesPkgNoOp = new HashMap<String, Integer>();
-        HashMap<String, HashMap<String, Integer>> salesOp = new HashMap<String, HashMap<String, Integer>> ();
-        try {
-            // for each service package
-            List<ServicePackage> servicePackages = spService.showPackages();
-            // compute number without optional products
-            servicePackages.forEach(sp -> {
-                int noOp = orderService.getNumOfOrderedWithoutOptionalProduct(sp);
-                // salesPkgNoOp.put(sp.getPackageName(), noOp);
-                // prendo gli optional products di quel service package
+                // compute the number of sales without optional product for each package service
                 HashMap<String, Integer> spOp = new HashMap<String, Integer>();
+                // number of sales without optional products
+                int noOp = orderService.getNumOfOrderedWithoutOptionalProduct(sp);
                 spOp.put("without optional products", noOp);
                 try {
                     List<String> servicePkgOptionalProducts = opService.showServicePackageOptionalProducts(sp);
-                    if(servicePkgOptionalProducts != null) {
-                        // calcolo per ognuno quanti ne ho venduti
+                    // for each optional product of the service package
+                    if (servicePkgOptionalProducts != null) {
+                        // number of sales of service package with that optional product
                         servicePkgOptionalProducts.forEach(servicePkgOptionalProduct -> {
                             int opNum = orderService.getNumOfOrderedWithOptionalProduct(sp, servicePkgOptionalProduct);
+                            // number of sales for the package service for each optional product
                             spOp.put("with " + servicePkgOptionalProduct, opNum);
-                           // salesOp.put(sp.getPackageName(), spOp);
-
+                            // average number of optional products sold together with each service package
                         });
                     }
-                        salesOp.put(sp.getPackageName(), spOp);
+                    // insert founded values in the hash map
+                    salesOp.put(sp.getPackageName(), spOp);
 
                 } catch (CredentialsException e) {
                     e.printStackTrace();
                 }
 
+                // avg number of optional products selected with each service package by customers
+
+
+
+
             });
         } catch (CredentialsException e) {
             e.printStackTrace();
         }
 
 
-        HashMap<String, HashMap<String, Integer>> salesOp2 = salesOp;
-
-
-
-
         ctx.setVariable("salesPerPackage", salesPerPackage);
         ctx.setVariable("salesPerPackageValidityPeriod", salesPkgValidityPeriod);
         ctx.setVariable("salesPkgOp", salesOp);
-
 
         templateEngine.process("/WEB-INF/EmployeeStatisticsPage.html", ctx, response.getWriter());
 
