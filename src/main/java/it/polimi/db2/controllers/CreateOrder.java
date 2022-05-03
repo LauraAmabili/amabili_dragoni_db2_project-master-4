@@ -1,6 +1,5 @@
 package it.polimi.db2.controllers;
 
-import it.polimi.db2.entities.MontlyFee;
 import it.polimi.db2.entities.Orders;
 import it.polimi.db2.entities.ServicePackage;
 import it.polimi.db2.entities.UserCustomer;
@@ -35,6 +34,9 @@ public class CreateOrder extends HttpServlet {
     @EJB(name = "services/ServicePackageService")
     private ServicePackageService spService;
 
+    @EJB(name = "services/OrderService")
+    private OrderService orderService;
+
     public CreateOrder(){
         super();
     }
@@ -53,6 +55,7 @@ public class CreateOrder extends HttpServlet {
         final WebContext ctx = new WebContext(req, resp, this.getServletContext(), req.getLocale());
 
 
+        UserCustomer user = (UserCustomer) req.getSession(false).getAttribute("user");
         String optionalProductList[];
         if(req.getSession(false)!=null  &&  req.getSession(false).getAttribute("user")!=null) {
             //update of object user to make sure is the current one
@@ -61,13 +64,12 @@ public class CreateOrder extends HttpServlet {
             ServicePackage servicePackage = (ServicePackage) req.getSession(false).getAttribute("servicePackageChosen");
             int validityPeriod = (int) req.getSession(false).getAttribute("chosenValidityPeriod");
             optionalProductList =((req.getParameterValues("optionalProducts")));
-            order.setOrderedService(servicePackage);
-            order.setValidityPeriodMonth((int) validityPeriod);
 
-            order.setOrderDateTime(new Date());
-
-
-
+            try {
+                orderService.createOrder(validityPeriod, new Date(), new Date(), 100, user);
+            } catch (CredentialsException e) {
+                e.printStackTrace();
+            }
 
 
             ctx.setVariable("monthlyFeeChosen", validityPeriod);
