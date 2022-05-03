@@ -26,39 +26,35 @@
                         </li>
                     </ul>
                 </li>
+
                 <li>
                     <h3><strong><span style="color: #0000ff;">Number of total purchases per package and validity period</span></strong></h3>
-                    <span style="text-decoration: underline;"><strong>PKG1</strong></span>
-                    <table style="border-collapse: collapse; width: 100%;" border="1">
-                        <tbody>
-                        <tr>
-                            <td style="width: 25%;"><strong>12 Months</strong></td>
-                            <td style="width: 25%;"><strong>24 Months</strong></td>
-                            <td style="width: 25%;"><strong>36 Months</strong></td>
-                        </tr>
-                        <tr>
-                            <td style="width: 25%;">&nbsp;</td>
-                            <td style="width: 25%;">&nbsp;</td>
-                            <td style="width: 25%;">&nbsp;</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                    <strong><span style="text-decoration: underline;">PKG2</span></strong>
-                    <table style="border-collapse: collapse; width: 100%;" border="1">
-                        <tbody>
-                        <tr>
-                            <td style="width: 25%;"><strong>12 Months</strong></td>
-                            <td style="width: 25%;"><strong>24 Months</strong></td>
-                            <td style="width: 25%;"><strong>36 Months</strong></td>
-                        </tr>
-                        <tr>
-                            <td style="width: 25%;">&nbsp;</td>
-                            <td style="width: 25%;">&nbsp;</td>
-                            <td style="width: 25%;">&nbsp;</td>
-                        </tr>
-                        </tbody>
-                    </table>
+                    <tr th:each="sppvp : ${salesPerPackageValidityPeriod}">
+                        <span style="text-decoration: underline;" th:text="${sppvp.getKey()}"><strong></strong></span>
+                        <table style="border-collapse: collapse; width: 100%;" border="1">
+                            <tbody>
+                            <tr>
+                                <td style="width: 25%;"><strong>12 Months</strong></td>
+                                <td style="width: 25%;"><strong>24 Months</strong></td>
+                                <td style="width: 25%;"><strong>36 Months</strong></td>
+                            </tr>
+                            <tr>
+                                <td> <span th:if="${sppvp.getValue().get(0) != null}" th:text="${sppvp.getValue().get(0)}"> </span>
+                                    <span th:unless="${sppvp.getValue().get(0) != null}">  </span>
+                                </td>
+                                <td> <span th:if="${sppvp.getValue().get(1) != null}" th:text="${sppvp.getValue().get(1)}"> </span>
+                                    <span th:unless="${sppvp.getValue().get(1) != null}">  </span>
+                                </td>
+                                <td> <span th:if="${sppvp.getValue().get(2) != null}" th:text="${sppvp.getValue().get(2)}"> </span>
+                                    <span th:unless="${sppvp.getValue().get(2) != null}">  </span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <p>&nbsp;</p>
+                    </tr>
                 </li>
+
                 <li>
                     <h3><strong><span style="color: #0000ff;">Total value of sales per package with and without the optional products</span></strong></h3>
                     <ul>

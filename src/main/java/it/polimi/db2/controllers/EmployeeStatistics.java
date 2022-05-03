@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -60,7 +61,6 @@ public class EmployeeStatistics extends HttpServlet {
 
         // compute the number of sales for each service package
         HashMap<String, Integer> salesPerPackage = new HashMap<String, Integer>();
-
         try {
             List<ServicePackage> servicePackages = spService.showPackages();
             servicePackages.forEach(
@@ -70,6 +70,26 @@ public class EmployeeStatistics extends HttpServlet {
             e.printStackTrace();
         }
 
+        // compute the number of sales for each service package for each monthly fee
+        HashMap<String, List<Integer>> salesPkgValidityPeriod = new HashMap<String, List<Integer>>();
+        try {
+            List<ServicePackage> servicePackages = spService.showPackages();
+            servicePackages.forEach(sp -> {
+                int sales12 = orderService.getNumberOfSalesByServicePkgValidityPeriod(sp, 12);
+                int sales24 = orderService.getNumberOfSalesByServicePkgValidityPeriod(sp, 24);
+                int sales36 = orderService.getNumberOfSalesByServicePkgValidityPeriod(sp, 36);
+                List<Integer> sales = new ArrayList<Integer>();
+                sales.add(sales12); sales.add(sales24); sales.add(sales36);
+
+                salesPkgValidityPeriod.put(sp.getPackageName(), sales);
+            });
+        } catch (CredentialsException e) {
+            e.printStackTrace();
+        }
+
+
+
+        ctx.setVariable("salesPerPackageValidityPeriod", salesPkgValidityPeriod);
         ctx.setVariable("salesPerPackage", salesPerPackage);
         templateEngine.process("/WEB-INF/EmployeeStatisticsPage.html", ctx, response.getWriter());
 

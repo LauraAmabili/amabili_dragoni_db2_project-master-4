@@ -60,7 +60,6 @@ public class CreateOrder extends HttpServlet {
             optionalProductList =((req.getParameterValues("optionalProducts")));
             float totalCost;
 
-
             try {
                 orderService.createOrder(validityPeriod, new Date(), new Date(), 100, user, servicePackage);
             } catch (CredentialsException e) {
