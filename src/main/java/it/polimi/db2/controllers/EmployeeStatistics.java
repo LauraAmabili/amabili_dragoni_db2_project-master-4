@@ -87,10 +87,26 @@ public class EmployeeStatistics extends HttpServlet {
             e.printStackTrace();
         }
 
+        // compute the number of sales without optional product for each package service
+        HashMap<String, List<Integer>> salesPkgNoOp = new HashMap<String, List<Integer>>();
+        try {
+            List<ServicePackage> servicePackages = spService.showPackages();
+            servicePackages.forEach(sp -> {
+                int noOp = orderService.getNumOfOrderedWithoutOptionalProduct(sp);
+                List<Integer> sales = new ArrayList<Integer>();
+                sales.add(noOp);
+                salesPkgNoOp.put(sp.getPackageName(), sales);
+            });
+        } catch (CredentialsException e) {
+            e.printStackTrace();
+        }
 
 
-        ctx.setVariable("salesPerPackageValidityPeriod", salesPkgValidityPeriod);
         ctx.setVariable("salesPerPackage", salesPerPackage);
+        ctx.setVariable("salesPerPackageValidityPeriod", salesPkgValidityPeriod);
+        ctx.setVariable("salesPkgNoOp", salesPkgNoOp);
+
+
         templateEngine.process("/WEB-INF/EmployeeStatisticsPage.html", ctx, response.getWriter());
 
 

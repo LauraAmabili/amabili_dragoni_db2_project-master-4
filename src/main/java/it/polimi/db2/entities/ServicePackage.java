@@ -9,13 +9,13 @@ import java.util.List;
 @Entity
 @Table(name = "ServicePackage", schema = "database2")
 @NamedQuery(name = "ServicePackage.showPackages", query = "SELECT sp from ServicePackage sp")
-@NamedQuery(name = "ServicePackage.findServicePackageById", query = "SELECT sp FROM ServicePackage sp WHERE sp.PackageName = :name")
+@NamedQuery(name = "ServicePackage.findServicePackageById", query = "SELECT sp FROM ServicePackage sp WHERE sp.packageName = :name")
 public class ServicePackage implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
     @Column(name = "PackageName")
-    private String PackageName;
+    private String packageName;
 
     @Column(name = "fixedPhoneNumber")
     private int fixedPhoneNumber;
@@ -39,7 +39,7 @@ public class ServicePackage implements Serializable {
     }
 
    public ServicePackage(String PackageName, int fixedPhoneNumber, MonthlyFee packageFees){
-       this.PackageName = PackageName;
+       this.packageName = PackageName;
        this.fixedPhoneNumber = fixedPhoneNumber;
        this.packageFees = packageFees;
    }
@@ -53,11 +53,11 @@ public class ServicePackage implements Serializable {
     }
 
     public String getPackageName() {
-        return PackageName;
+        return packageName;
     }
 
     public void setPackageName(String packageName) {
-        PackageName = packageName;
+        this.packageName = packageName;
     }
 
     public int getFixedPhoneNumber() {

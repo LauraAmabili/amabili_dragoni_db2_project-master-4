@@ -1,0 +1,41 @@
+package it.polimi.db2.entities;
+
+
+import it.polimi.db2.entities.keys.OptionalOrderedId;
+
+import javax.persistence.*;
+import java.io.Serializable;
+
+@Entity
+@IdClass(OptionalOrderedId.class)
+@Table(name = "OptionalOrdered", schema = "database2")
+public class OptionalOrdered implements Serializable {
+    private static final long serialVersionUID = 1L;
+    @Id
+    @Column(name = "optionalProductId")
+    private String optionalProduct;
+
+    @Id
+    @Column(name = "orderId")
+    private String order;
+
+
+    public OptionalOrdered() {
+    }
+
+    public String getOptionalProduct() {
+        return optionalProduct;
+    }
+
+    public void setOptionalProduct(String optionalProduct) {
+        this.optionalProduct = optionalProduct;
+    }
+
+    public String getOrder() {
+        return order;
+    }
+
+    public void setOrder(String order) {
+        this.order = order;
+    }
+}

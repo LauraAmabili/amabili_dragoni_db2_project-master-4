@@ -11,6 +11,9 @@ import java.util.Date;
 @NamedQuery(name = "Orders.getAllOrders", query = "SELECT order from Order order")
 @NamedQuery(name = "Order.getServicePkgOrders", query = "SELECT o from Order o where o.orderedService = :servicePkg")
 @NamedQuery(name = "Order.getServicePkgValidityPeriodOrders", query = "SELECT o from Order o where o.orderedService = :servicePkg and o.validityPeriodMonth = :validityPeriod")
+@NamedQuery(name = "Order.packagesWithoutOptionalProducts", query =
+        "SELECT o FROM Order o LEFT JOIN OptionalOrdered oo ON o.orderedService.packageName = oo.order " +
+                "WHERE oo.optionalProduct IS NULL and o.orderedService = :servicePkg")
 
 public class Order implements Serializable {
     private static final long serialVersionUID = 1L;
