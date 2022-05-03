@@ -2,13 +2,18 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Complete your order</title>
+    <title>Choose a service to buy</title>
+    <link rel="stylesheet" type="text/css" media="all"
+          href="../css/style.css" th:href="@{/css/style.css}" />
 </head>
 <body>
 
-
+<div>
 <p> Service package chosen: </p>
-<span th:if="${servicePackageChosenCTX != null}" th:text="${servicePackageChosenCTX}"> </span>
+<span th:if="${servicePackageChosenCTX != null}" th:text="${servicePackageChosenCTX.packageName}">
+<span th:if="${servicePackageChosenCTX.packageFees != 0}" th:text="'This service package has fixed internet'"> </span>
+    </span>
+</div>
 
 
 
@@ -23,12 +28,14 @@
             <option  th:if="${servicePackageChosenCTX != null}" th:each="vp : ${servicePackageChosenCTX.packageFees}" th:value="36"
                      th:text="${servicePackageChosenCTX.packageFees.thirtySixMonthPrice} + ' euro/month for ' + ' 36 months'"></option>
         </select>
-        <input type="submit" value="validity period" name="OnValidityPeriodSelection">
+
+        <label>Choose an optional product:</label>
+            <label>
+                <input type="checkbox" name="optionalProducts" th:each="op : ${optionalProductsObjects}" th:value="${op.name}" th:text="${op.name}">
+            </label>
+        <input type="submit" value="Confirm" name="OnAdditionalInfoSubmit">
     </form>
 </div>
-
-
-
 
 
 

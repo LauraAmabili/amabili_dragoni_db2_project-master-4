@@ -3,20 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <title>confirm selection </title>
-
-    <form method="POST" action="create-order">
-        <input type="submit" name="CreateOrder"/>
-    </form>
 </head>
 <body>
-<h1> Are you sure about that service?
-    <td th:text="${servicePackageChosenCTX.packageName }"></td>
-    validity period chosen
-    <td th:text="${chosenValidityPeriod}"></td>
-    <td th:text="${Order.validityPeriodMonth}"></td>
+<h1> Are you sure about that service?</h1>
 
+<td>
+    <span th:if="${chosenValidityPeriod != null}" th:text="'Validity Period Chosen: '+ ${chosenValidityPeriod}"> </span>
 
-</h1>
+    <span th:if="${servicePackageChosenCTX != null}" th:text="'Service Package Chosen: '+${servicePackageChosenCTX.packageName}"> </span>
+
+    <span th:if="${optionalProductsCTX != null}"  th:text="'Optional products chosen:'"> </span>
+    <span th:if="${optionalProductsCTX != null}"  th:each="op : ${optionalProductsCTX}" th:text="${op.name}">
+
+    </span>
+</td>
+
+<form method="POST" action="create-order">
+    <input type="submit" name="CreateOrder"/>
+</form>
 
 <title>Submit Button Redirect</title>
 

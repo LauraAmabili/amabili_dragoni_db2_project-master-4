@@ -1,9 +1,11 @@
 package it.polimi.db2.controllers;
 
 
-import it.polimi.db2.entities.ServicePackage;
+import it.polimi.db2.entities.*;
 import it.polimi.db2.exceptions.CredentialsException;
 import it.polimi.db2.exceptions.ServicePackageException;
+import it.polimi.db2.services.OptionalProductService;
+import it.polimi.db2.services.OrderService;
 import it.polimi.db2.services.ServicePackageService;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
@@ -18,6 +20,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 //@WebServlet(name = "buyService", value = "/buy-service")
 @WebServlet("/package-selected")
@@ -26,6 +30,9 @@ public class OnServicePackageSelection extends HttpServlet {
     private TemplateEngine templateEngine;
     @EJB(name = "services/ServicePackageService")
     private ServicePackageService spService;
+
+    @EJB(name = "services/OptionalProductService")
+    private OptionalProductService opService;
 
     public OnServicePackageSelection(){
         super();
@@ -46,6 +53,8 @@ public class OnServicePackageSelection extends HttpServlet {
         final WebContext ctx = new WebContext(req, resp, this.getServletContext(), req.getLocale());
 
         ServicePackage servicePackage = new ServicePackage();
+        List<String> optionalProductsIds = null;
+        List<OptionalProduct> optionalProducts = new ArrayList<>();
         if(req.getSession(false)!=null  &&  req.getSession(false).getAttribute("user")!=null) {
             //update of object user to make sure is the current one
             try {
@@ -61,10 +70,22 @@ public class OnServicePackageSelection extends HttpServlet {
 
 
             }
+            try {
+                optionalProductsIds = spService.showOptionalProducts(servicePackage);
+                if(optionalProductsIds!=null) {
+                    for (String optionalProductsId : optionalProductsIds) {
+                            optionalProducts.add(opService.getOptionalProductById(optionalProductsId));
+                    }
+                }
+            } catch (CredentialsException e) {
+                e.printStackTrace();
+            }
 
 
+            req.getSession(false).setAttribute("optionalProducts", optionalProductsIds);
             req.getSession(false).setAttribute("servicePackageChosen", servicePackage);
             ctx.setVariable("servicePackageChosenCTX", servicePackage);
+            ctx.setVariable("optionalProductsObjects", optionalProducts);
             templateEngine.process("/WEB-INF/AdditionalInformation.html", ctx, resp.getWriter());
         }
 

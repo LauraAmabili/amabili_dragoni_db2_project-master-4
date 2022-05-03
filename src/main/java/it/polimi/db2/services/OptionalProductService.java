@@ -35,6 +35,13 @@ public class OptionalProductService {
         return optionalProducts;
     }
 
+
+    public OptionalProduct getOptionalProductById(String name){
+        List<OptionalProduct> optionalProduct = em.createNamedQuery("OptionalProduct.findOptionalProductById", OptionalProduct.class).setParameter(1, name).getResultList();
+        return optionalProduct.get(0);
+    }
+
+
     public void addNewPkgOptionalProduct(String pkgName, String optionalProdName) {
         ServicePackageOptional newSpo = new ServicePackageOptional();
         newSpo.setOptionalProduct(optionalProdName);

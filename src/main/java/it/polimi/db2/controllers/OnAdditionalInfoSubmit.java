@@ -1,7 +1,8 @@
 package it.polimi.db2.controllers;
 
 
-import it.polimi.db2.entities.ServicePackage;
+import it.polimi.db2.entities.*;
+import it.polimi.db2.services.OptionalProductService;
 import it.polimi.db2.services.ServicePackageService;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.thymeleaf.TemplateEngine;
@@ -17,17 +18,23 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import static java.lang.Integer.parseInt;
 
 @WebServlet("/period-selected")
-public class OnValidityPeriodSelection extends HttpServlet {
+public class OnAdditionalInfoSubmit extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private TemplateEngine templateEngine;
     @EJB(name = "services/ServicePackageService")
     private ServicePackageService spService;
 
-    public OnValidityPeriodSelection(){
+    @EJB(name = "services/OptionalProductService")
+    private OptionalProductService opService;
+
+    public OnAdditionalInfoSubmit(){
         super();
     }
 
@@ -44,22 +51,33 @@ public class OnValidityPeriodSelection extends HttpServlet {
 
         final WebContext ctx = new WebContext(req, resp, this.getServletContext(), req.getLocale());
 
+
         ServicePackage servicePackage;
+        
+
 
         servicePackage = (ServicePackage) req.getSession(false).getAttribute("servicePackageChosen");
         int validityPeriod = 0; 
 
+        String optionalProductList[];
+        List<OptionalProduct> optionalProducts = new ArrayList<>();
         if(req.getSession(false)!=null  &&  req.getSession(false).getAttribute("user")!=null) {
             //update of object user to make sure is the current one
 
+
+            optionalProductList =((req.getParameterValues("optionalProducts")));
             validityPeriod = parseInt(StringEscapeUtils.escapeJava(req.getParameter("validityPeriod")));
 
+            for(String name:optionalProductList) {
+                optionalProducts.add(opService.getOptionalProductById(name));
+            }
 
-
-
+            req.getSession(false).setAttribute("optionalProducts", optionalProductList);
             req.getSession(false).setAttribute("chosenValidityPeriod", validityPeriod);
             ctx.setVariable("chosenValidityPeriod", validityPeriod);
             ctx.setVariable("servicePackageChosenCTX", servicePackage);
+            ctx.setVariable("optionalProductsCTX", optionalProducts);
+
             templateEngine.process("/WEB-INF/ConfirmationPage.html", ctx, resp.getWriter());
 
 
