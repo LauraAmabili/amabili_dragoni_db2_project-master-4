@@ -2,7 +2,9 @@ package it.polimi.db2.controllers;
 
 
 import it.polimi.db2.entities.*;
+import it.polimi.db2.exceptions.CredentialsException;
 import it.polimi.db2.services.OptionalProductService;
+import it.polimi.db2.services.OrderService;
 import it.polimi.db2.services.ServicePackageService;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.thymeleaf.TemplateEngine;
@@ -20,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import static java.lang.Integer.parseInt;
@@ -33,6 +36,9 @@ public class OnAdditionalInfoSubmit extends HttpServlet {
 
     @EJB(name = "services/OptionalProductService")
     private OptionalProductService opService;
+
+    @EJB(name = "services/OrderService")
+    private OrderService orderService;
 
     public OnAdditionalInfoSubmit(){
         super();
@@ -53,7 +59,7 @@ public class OnAdditionalInfoSubmit extends HttpServlet {
 
 
         ServicePackage servicePackage;
-        
+        UserCustomer user = (UserCustomer) req.getSession(false).getAttribute("user");
 
 
         servicePackage = (ServicePackage) req.getSession(false).getAttribute("servicePackageChosen");
@@ -65,18 +71,35 @@ public class OnAdditionalInfoSubmit extends HttpServlet {
             //update of object user to make sure is the current one
 
 
+
+            optionalProductList =((req.getParameterValues("optionalProducts")));
+
+
             optionalProductList =((req.getParameterValues("optionalProducts")));
             validityPeriod = parseInt(StringEscapeUtils.escapeJava(req.getParameter("validityPeriod")));
+
 
             for(String name:optionalProductList) {
                 optionalProducts.add(opService.getOptionalProductById(name));
             }
+
+            Orders order = new Orders();
+            try {
+                order = orderService.createOrder(validityPeriod, new Date(), new Date(), 100, user, servicePackage);
+            } catch (CredentialsException e) {
+                e.printStackTrace();
+            }
+
+
+
+
 
             req.getSession(false).setAttribute("optionalProducts", optionalProductList);
             req.getSession(false).setAttribute("chosenValidityPeriod", validityPeriod);
             ctx.setVariable("chosenValidityPeriod", validityPeriod);
             ctx.setVariable("servicePackageChosenCTX", servicePackage);
             ctx.setVariable("optionalProductsCTX", optionalProducts);
+            ctx.setVariable("Order", order);
 
             templateEngine.process("/WEB-INF/ConfirmationPage.html", ctx, resp.getWriter());
 

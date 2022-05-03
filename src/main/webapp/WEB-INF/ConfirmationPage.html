@@ -8,21 +8,19 @@
 <h1> Are you sure about that service?</h1>
 
 <td>
+
     <span th:if="${chosenValidityPeriod != null}" th:text="'Validity Period Chosen: '+ ${chosenValidityPeriod}"> </span>
-
+    <p>&nbsp;</p>
     <span th:if="${servicePackageChosenCTX != null}" th:text="'Service Package Chosen: '+${servicePackageChosenCTX.packageName}"> </span>
-
+    <p>&nbsp;</p>
     <span th:if="${optionalProductsCTX != null}"  th:text="'Optional products chosen:'"> </span>
-    <span th:if="${optionalProductsCTX != null}"  th:each="op : ${optionalProductsCTX}" th:text="${op.name}">
-
-    </span>
+    <span th:if="${optionalProductsCTX != null}"  th:each="op : ${optionalProductsCTX}" th:text="${op.name}"></span>
+    <p>&nbsp;</p>
+    <span th:if="${Order != null}"  th:text="'Total Cost:' + ${Order.getTotalCost()}"> </span>
 </td>
 
-<form method="POST" action="create-order">
-    <input type="submit" name="CreateOrder"/>
-</form>
 
-<title>Submit Button Redirect</title>
+
 
 
 

@@ -43,13 +43,15 @@ public class OrderService {
         }
     }
 
-    public void createOrder(int validityPeriodMonth, Date dateStart, Date orderDateTime, float totalCost, UserCustomer userOrder) throws CredentialsException, NonUniqueResultException {
+    public Orders createOrder(int validityPeriodMonth, Date dateStart, Date orderDateTime, float totalCost, UserCustomer userOrder, ServicePackage servicePackage) throws CredentialsException, NonUniqueResultException {
         Orders order = new Orders();
         order.setValidityPeriodMonth(validityPeriodMonth);
         order.setDateStart(dateStart);
         order.setOrderDateTime(orderDateTime);
-        order.setTotalCost(20);
+        order.setTotalCost(totalCost);
         order.setUserOrder(userOrder);
+        order.setOrderedService(servicePackage);
         em.persist(order);
+        return order;
     }
 }
