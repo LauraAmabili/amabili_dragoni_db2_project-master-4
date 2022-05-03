@@ -2,6 +2,7 @@ package it.polimi.db2.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 
 @Entity
@@ -26,6 +27,10 @@ public class InternetService implements Serializable {
 
     @Column(name = "fixedInternet")
     private int fixedInternet;
+
+    @ManyToMany
+    private List<ServicePackage> servicePackages;
+
 
 
 

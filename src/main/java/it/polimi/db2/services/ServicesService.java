@@ -2,6 +2,8 @@ package it.polimi.db2.services;
 
 import it.polimi.db2.entities.InternetService;
 import it.polimi.db2.entities.MobilePhoneService;
+import it.polimi.db2.entities.PkgServiceInternet;
+import it.polimi.db2.entities.PkgServicePhone;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -35,6 +37,20 @@ public class ServicesService {
         em.persist(newMP);
     }
 
+    public void addNewPkgInternetService (String pkgServiceName, String isName) {
+        PkgServiceInternet newPsi = new PkgServiceInternet();
+        newPsi.setPackageService(pkgServiceName);
+        newPsi.setInternetService(isName);
+        em.persist(newPsi);
+    }
+
+    public void addNewPkgPhoneService (String pkgServiceName, String mpName) {
+        PkgServicePhone newPsp = new PkgServicePhone();
+        newPsp.setServicePackage(pkgServiceName);
+        newPsp.setMobilePhone(mpName);
+        em.persist(newPsp);
+    }
+
     public Boolean internetServiceAlreadyExists(String name){
         List<InternetService> internetServices = em.createNamedQuery("InternetService.findInternetServiceById", InternetService.class).setParameter(1, name).getResultList();
         if (internetServices.isEmpty()) return false;
@@ -61,4 +77,5 @@ public class ServicesService {
         List<MobilePhoneService> mobilePhoneServices = em.createNamedQuery("MobilePhoneService.getAllMobilePhoneServices").getResultList();
         return mobilePhoneServices;
     }
+
 }

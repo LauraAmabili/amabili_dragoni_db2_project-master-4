@@ -1,9 +1,6 @@
 package it.polimi.db2.entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 
 
@@ -13,29 +10,22 @@ import java.io.Serializable;
 public class PkgServiceInternet implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
-
     @Id
     @Column(name = "packageService")
-    private String name;
+    private String packageService;
+
 
     @Column(name = "internetService")
     private String internetService;
 
 
-    public String getName() {
-
-        return name;
+    public String getPackageService() { return packageService; }
+    public void setPackageService(String name) {
+        this.packageService = name;
     }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getInternetService() {
         return internetService;
     }
-
     public void setInternetService(String internetService) {
         this.internetService = internetService;
     }

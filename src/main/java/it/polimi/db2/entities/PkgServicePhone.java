@@ -16,17 +16,18 @@ public class PkgServicePhone implements Serializable {
 
     @Id
     @Column(name = "servicePackage")
-    private String name;
+    private String servicePackage;
+
 
     @Column(name = "mobilePhone")
     private String mobilePhone;
 
-    public String getName() {
-        return name;
+    public String getServicePackage() {
+        return servicePackage;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setServicePackage(String name) {
+        this.servicePackage = name;
     }
 
     public String getMobilePhone() {

@@ -1,6 +1,7 @@
 package it.polimi.db2.entities;
 
 import javax.persistence.*;
+import java.util.List;
 
 
 @Entity
@@ -16,6 +17,7 @@ public class OptionalProduct {
 
     @Column(name = "montlyFee")
     private float monthlyFee;
+
 
 
     public OptionalProduct() {}

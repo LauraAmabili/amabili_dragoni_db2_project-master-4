@@ -4,6 +4,7 @@ package it.polimi.db2.entities;
 import javax.persistence.*;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "ServicePackage", schema = "database2")
@@ -16,16 +17,22 @@ public class ServicePackage implements Serializable {
     @Column(name = "PackageName")
     private String PackageName;
 
-   @Column(name = "fixedPhoneNumber")
-   private int fixedPhoneNumber;
+    @Column(name = "fixedPhoneNumber")
+    private int fixedPhoneNumber;
 
-   // @Column(name = "packageFees")
 
     @ManyToOne
     @JoinColumn(name="packageFees", referencedColumnName="IdMontlyFee")
     private MonthlyFee packageFees;
 
+    @ManyToMany
+    private List<MobilePhoneService> mobilePhoneServices;
 
+    @ManyToMany
+    private List<InternetService> internetServices;
+
+    @ManyToMany
+    private List<OptionalProduct> optionalProducts;
 
     public ServicePackage() {
 
