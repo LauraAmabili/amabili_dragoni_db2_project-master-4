@@ -1,12 +1,12 @@
 package it.polimi.db2.entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import it.polimi.db2.entities.keys.ServicePackageOptionalId;
+
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
+@IdClass(ServicePackageOptionalId.class)
 @Table(name = "ServicePackageOptional", schema = "database2")
 public class ServicePackageOptional implements Serializable {
 
@@ -15,8 +15,12 @@ public class ServicePackageOptional implements Serializable {
     @Column(name = "optionalProduct")
     private String optionalProduct;
 
+    @Id
     @Column(name = "servicePackage")
     private String servicePackage;
+
+    public ServicePackageOptional() {
+    }
 
 
     public String getOptionalProduct() {

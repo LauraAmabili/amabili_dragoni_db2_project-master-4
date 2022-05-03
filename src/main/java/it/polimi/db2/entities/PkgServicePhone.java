@@ -1,14 +1,14 @@
 package it.polimi.db2.entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import it.polimi.db2.entities.keys.PkgServicePhoneId;
+
+import javax.persistence.*;
 import java.io.Serializable;
 
 
 
 @Entity
+@IdClass(PkgServicePhoneId.class)
 @Table(name = "PkgServicePhone", schema = "database2")
 public class PkgServicePhone implements Serializable {
 
@@ -18,9 +18,12 @@ public class PkgServicePhone implements Serializable {
     @Column(name = "servicePackage")
     private String servicePackage;
 
-
+    @Id
     @Column(name = "mobilePhone")
     private String mobilePhone;
+
+    public PkgServicePhone() {
+    }
 
     public String getServicePackage() {
         return servicePackage;

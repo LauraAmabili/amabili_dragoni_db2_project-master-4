@@ -1,11 +1,14 @@
 package it.polimi.db2.entities;
 
+import it.polimi.db2.entities.keys.PkgServiceInternetId;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
 
 
 @Entity
+@IdClass(PkgServiceInternetId.class)
 @Table(name = "PkgServiceInternet", schema = "database2")
 public class PkgServiceInternet implements Serializable {
 
@@ -14,9 +17,12 @@ public class PkgServiceInternet implements Serializable {
     @Column(name = "packageService")
     private String packageService;
 
-
+    @Id
     @Column(name = "internetService")
     private String internetService;
+
+    public PkgServiceInternet() {
+    }
 
 
     public String getPackageService() { return packageService; }
