@@ -1,5 +1,6 @@
 package it.polimi.db2.services;
 
+import it.polimi.db2.entities.OptionalOrdered;
 import it.polimi.db2.entities.OptionalProduct;
 import it.polimi.db2.entities.ServicePackage;
 import it.polimi.db2.entities.ServicePackageOptional;
@@ -66,5 +67,15 @@ public class OptionalProductService {
             return uList;
         }
     }
+
+    public float totAmountOptionalProduct(List<OptionalProduct> optionalProducts){
+        float total = 0;
+        for(OptionalProduct product : optionalProducts){
+            total = product.getMonthlyFee();
+        }
+        return total;
+    }
+
+
 
 }

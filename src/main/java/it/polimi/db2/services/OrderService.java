@@ -11,6 +11,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -30,7 +32,7 @@ public class OrderService {
         List<Order> uList = new ArrayList<>();
 
         try {
-            uList = em.createNamedQuery("Orders.getAllOrders", Order.class).getResultList();
+            uList = em.createNamedQuery("Order.getAllOrders", Order.class).getResultList();
 
         } catch (PersistenceException var5) {
             throw new CredentialsException("Orders Error");
@@ -48,7 +50,7 @@ public class OrderService {
         order.setValidityPeriodMonth(validityPeriodMonth);
         order.setDateStart(dateStart);
         order.setOrderDateTime(orderDateTime);
-        order.setTotalCost(20);
+        order.setTotalCost(totalCost);
         order.setUserOrder(userOrder);
         order.setOrderedService(servicePackage);
         em.persist(order);
@@ -77,4 +79,7 @@ public class OrderService {
         List<Order> ordersOp = em.createNamedQuery("Order.getServicePkgOrdersWithOptionalProducts", Order.class).setParameter("servicePkg", sp).setParameter("optionalProduct", optionalProduct).getResultList();
         return ordersOp.size();
     }
+
+
+
 }

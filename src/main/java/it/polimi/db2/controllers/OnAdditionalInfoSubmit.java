@@ -3,6 +3,7 @@ package it.polimi.db2.controllers;
 
 import it.polimi.db2.entities.*;
 import it.polimi.db2.exceptions.CredentialsException;
+import it.polimi.db2.services.OptionalOrderedService;
 import it.polimi.db2.services.OptionalProductService;
 import it.polimi.db2.services.OrderService;
 import it.polimi.db2.services.ServicePackageService;
@@ -19,6 +20,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -40,6 +42,9 @@ public class OnAdditionalInfoSubmit extends HttpServlet {
     @EJB(name = "services/OrderService")
     private OrderService orderService;
 
+    @EJB(name = "services/OptionalOrderedService")
+    private OptionalOrderedService optionalOrderedService;
+
     public OnAdditionalInfoSubmit(){
         super();
     }
@@ -56,11 +61,15 @@ public class OnAdditionalInfoSubmit extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         final WebContext ctx = new WebContext(req, resp, this.getServletContext(), req.getLocale());
+        HttpSession session = req.getSession(false);
 
-
+        if(session.getAttribute("user") == null) {
+            templateEngine.process("/WEB-INF/index.html", ctx, resp.getWriter());
+            return;
+        }
         ServicePackage servicePackage;
         servicePackage = (ServicePackage) req.getSession(false).getAttribute("servicePackageChosen");
-        UserCustomer user = (UserCustomer) req.getSession(false).getAttribute("user");
+        UserCustomer customer = (UserCustomer) req.getSession(false).getAttribute("user");
 
         int validityPeriod = 0; 
 
@@ -71,34 +80,35 @@ public class OnAdditionalInfoSubmit extends HttpServlet {
 
             optionalProductList =((req.getParameterValues("optionalProducts")));
             validityPeriod = parseInt(StringEscapeUtils.escapeJava(req.getParameter("validityPeriod")));
-
+            Date date = (Date) session.getAttribute("date");
             if (optionalProductList != null) {
                 for (String name : optionalProductList) {
                     optionalProducts.add(opService.getOptionalProductById(name));
+                    // optionalOrderedService.addOptionalProductToOrder(name,orderId);
                 }
-
-
-            Order order = new Order();
-            try {
-                order = orderService.createOrder(validityPeriod, new Date(), new Date(), 100, user, servicePackage);
-            } catch (CredentialsException e) {
-                e.printStackTrace();
             }
+            float totalOP = (opService.totAmountOptionalProduct(optionalProducts)) * validityPeriod;
+            float totalSP = spService.costPerMonth(validityPeriod, servicePackage);
+            float totalCost = totalOP + totalSP;
 
 
-                req.getSession(false).setAttribute("optionalProducts", optionalProductList);
-                req.getSession(false).setAttribute("chosenValidityPeriod", validityPeriod);
+            req.getSession(false).setAttribute("totalCost", totalCost);
+            req.getSession(false).setAttribute("optionalProducts", optionalProductList);
+            req.getSession(false).setAttribute("chosenValidityPeriod", validityPeriod);
+
+
+                ctx.setVariable("loggedCustomer", customer);
                 ctx.setVariable("chosenValidityPeriod", validityPeriod);
                 ctx.setVariable("servicePackageChosenCTX", servicePackage);
                 ctx.setVariable("optionalProductsCTX", optionalProducts);
-                ctx.setVariable("Order", order);
+                ctx.setVariable("totalCost", totalCost);
 
                 templateEngine.process("/WEB-INF/ConfirmationPage.html", ctx, resp.getWriter());
 
 
             }
 
-        }
+
     }
 
     @Override

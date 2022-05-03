@@ -8,7 +8,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "Order", schema = "database2")
-@NamedQuery(name = "Orders.getAllOrders", query = "SELECT order from Order order")
+@NamedQuery(name = "Order.getAllOrders", query = "SELECT order from Order order")
 // query that selects the orders of a given service package
 @NamedQuery(name = "Order.getServicePkgOrders", query = "SELECT o from Order o where o.orderedService = :servicePkg")
 // query that selects the orders with a given of a given service package
@@ -82,7 +82,6 @@ public class Order implements Serializable {
     public void setValidityPeriodMonth(int validityPeriodMonth) {
         this.validityPeriodMonth = validityPeriodMonth;
     }
-
 
 
     public int getValid() {

@@ -10,6 +10,7 @@ import java.io.Serializable;
 @Entity
 @IdClass(PkgServiceInternetId.class)
 @Table(name = "PkgServiceInternet", schema = "database2")
+@NamedQuery(name = "PkgServiceInternet.findServicePackageInternetService", query = "SELECT spo.internetService FROM PkgServiceInternet spo WHERE spo.packageService = :name")
 public class PkgServiceInternet implements Serializable {
 
     private static final long serialVersionUID = 1L;

@@ -6,6 +6,7 @@ import it.polimi.db2.exceptions.CredentialsException;
 import it.polimi.db2.exceptions.ServicePackageException;
 import it.polimi.db2.services.OptionalProductService;
 import it.polimi.db2.services.ServicePackageService;
+import it.polimi.db2.services.ServicesService;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -33,6 +34,10 @@ public class OnServicePackageSelection extends HttpServlet {
     @EJB(name = "services/OptionalProductService")
     private OptionalProductService opService;
 
+    @EJB(name = "services/ServicesService")
+    private ServicesService sService;
+
+
     public OnServicePackageSelection(){
         super();
     }
@@ -54,6 +59,10 @@ public class OnServicePackageSelection extends HttpServlet {
         ServicePackage servicePackage = new ServicePackage();
         List<String> optionalProductsIds = null;
         List<OptionalProduct> optionalProducts = new ArrayList<>();
+        List<String> internetServicesIds = new ArrayList<>();
+        List<InternetService> internetServices = new ArrayList<>();
+        List<String> mobilePhoneIds = new ArrayList<>();
+        List<MobilePhoneService> mobilePhoneServices = new ArrayList<>();
         if(req.getSession(false)!=null  &&  req.getSession(false).getAttribute("user")!=null) {
             //update of object user to make sure is the current one
             try {
@@ -80,11 +89,41 @@ public class OnServicePackageSelection extends HttpServlet {
                 e.printStackTrace();
             }
 
+            try {
+                internetServicesIds = spService.showInternetServices(servicePackage);
+
+            } catch (CredentialsException e) {
+                e.printStackTrace();
+            }
+            if (internetServicesIds != null) {
+                for (String name : internetServicesIds) {
+                    internetServices.add(sService.getInternetServiceById(name));
+                }
+            }
+
+            try {
+                mobilePhoneIds = spService.showMobilePhoneServices(servicePackage);
+
+            } catch (CredentialsException e) {
+                e.printStackTrace();
+            }
+            if (mobilePhoneIds != null) {
+                for (String name : mobilePhoneIds) {
+                    mobilePhoneServices.add(sService.getMobilePhoneServiceById(name));
+                }
+            }
+
+
+
+
 
             req.getSession(false).setAttribute("optionalProducts", optionalProductsIds);
             req.getSession(false).setAttribute("servicePackageChosen", servicePackage);
             ctx.setVariable("servicePackageChosenCTX", servicePackage);
             ctx.setVariable("optionalProductsObjects", optionalProducts);
+            ctx.setVariable("internetServices", internetServices);
+            ctx.setVariable("mobilePhoneServices", mobilePhoneServices);
+
             templateEngine.process("/WEB-INF/AdditionalInformation.html", ctx, resp.getWriter());
         }
 

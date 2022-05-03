@@ -17,9 +17,31 @@
     <span th:if="${!optionalProductsCTX.isEmpty()}"  th:text="'Optional products chosen:'"> </span>
     <span th:if="${optionalProductsCTX != null}"  th:each="op : ${optionalProductsCTX}" th:text="${op.name}"></span>
     <p>&nbsp;</p>
-    <span th:if="${Order != null}"  th:text="'Total Cost:' + ${Order.getTotalCost()}"> </span>
+    <span th:text="'Total Cost:' + ${totalCost}"> </span>
 </td>
 
+<span th:if="${loggedCustomer !=null}" th:text="${loggedCustomer.username}">
+    </span>
+<div th:if="${loggedCustomer != null}" >
+		<a href="payment" class="link">
+		  <span class="mask">
+		    <div class="link-container">
+		      <span class="link-title1 title">BUY</span>
+		    </div>
+		  </span>
+
+		</a>
+	</div>
+<div th:if="${loggedCustomer == null}" >
+    <a href="period-selected" class="link">
+		  <span class="mask">
+		    <div class="link-container">
+		      <span class="link-title1 title">BUY</span>
+		    </div>
+		  </span>
+
+    </a>
+</div>
 
 
 
