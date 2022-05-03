@@ -1,10 +1,8 @@
 package it.polimi.db2.controllers;
 
 
-import it.polimi.db2.entities.Orders;
 import it.polimi.db2.entities.ServicePackage;
 import it.polimi.db2.exceptions.CredentialsException;
-import it.polimi.db2.services.OrderService;
 import it.polimi.db2.services.ServicePackageService;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;

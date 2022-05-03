@@ -1,6 +1,6 @@
 package it.polimi.db2.controllers;
 
-import it.polimi.db2.entities.Orders;
+import it.polimi.db2.entities.Order;
 import it.polimi.db2.entities.ServicePackage;
 import it.polimi.db2.services.ServicePackageService;
 import org.thymeleaf.TemplateEngine;
@@ -48,7 +48,7 @@ public class CreateOrder extends HttpServlet {
             //update of object user to make sure is the current one
 
 
-            Orders order = new Orders();
+            Order order = new Order();
             ServicePackage servicePackage = (ServicePackage) req.getSession(false).getAttribute("servicePackageChosen");
             int validityPeriod = (int) req.getSession(false).getAttribute("chosenValidityPeriod");
             order.setOrderedService(servicePackage);
