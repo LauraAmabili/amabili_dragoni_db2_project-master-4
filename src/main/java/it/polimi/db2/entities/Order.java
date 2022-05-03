@@ -9,11 +9,16 @@ import java.util.Date;
 @Entity
 @Table(name = "Order", schema = "database2")
 @NamedQuery(name = "Orders.getAllOrders", query = "SELECT order from Order order")
+// query that selects the orders of a given service package
 @NamedQuery(name = "Order.getServicePkgOrders", query = "SELECT o from Order o where o.orderedService = :servicePkg")
+// query that selects the orders with a given of a given service package
 @NamedQuery(name = "Order.getServicePkgValidityPeriodOrders", query = "SELECT o from Order o where o.orderedService = :servicePkg and o.validityPeriodMonth = :validityPeriod")
-@NamedQuery(name = "Order.packagesWithoutOptionalProducts", query =
-        "SELECT o FROM Order o LEFT JOIN OptionalOrdered oo ON o.orderId = oo.order " +
-                "WHERE oo.optionalProduct IS NULL and o.orderedService = :servicePkg")
+// query that selects the orders of a given service package without optional products
+@NamedQuery(name = "Order.getServicePkgOrdersWithoutOptionalProducts",
+        query = "SELECT o from Order o where (o.orderedService = :servicePkg  and o.orderId not in (SELECT oo.order FROM OptionalOrdered oo))")
+// query that selects the orders of a given service package with a given optional product
+@NamedQuery(name = "Order.getServicePkgOrdersWithOptionalProducts",
+        query = "SELECT o from Order o where (o.orderedService = :servicePkg  and o.orderId in (SELECT oo.order FROM OptionalOrdered oo WHERE oo.optionalProduct = :optionalProduct))")
 
 public class Order implements Serializable {
     private static final long serialVersionUID = 1L;

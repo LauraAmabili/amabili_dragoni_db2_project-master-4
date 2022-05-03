@@ -55,17 +55,23 @@
                     </tr>
                 </li>
 
+
                 <li>
                     <h3><strong><span style="color: #0000ff;">Total value of sales per package with and without the optional products</span></strong></h3>
-                    <ul>
-                        <li><span style="color: #000000;">Total Sales of pkg1 without optional products</span></li>
-                        <li><span style="color: #000000;">Total Sales of pkg1 with OP1</span></li>
-                        <li><span style="color: #000000;">Total Sales of pkg1 with OP2</span></li>
-                        <li><span style="color: #000000;">Total Sales of pkg2 without optional products</span></li>
-                        <li><span style="color: #000000;">Total Sales of pkg2 with OP1</span></li>
-                        <li><span style="color: #000000;">Total Sales of pkg2 with OP2</span></li>
-                    </ul>
+                    <li th:each="spo : ${salesPkgOp}">
+                        Total sales of
+                        <b><span style="color: #000000;"><span style="text-decoration: underline;"  th:text="${spo.getKey()}"> </span></span></b>
+                        <p></p>
+                        <ul th:each="spoo : ${spo.getValue()}">
+                            <b><span style="color: #000000;"><span th:text="${spoo.getKey()}"> </span></span></b>
+                            :
+                            <span style="color: #000000;"><span th:text="${spoo.getValue()}"> </span></span>
+                            <p></p>
+                        </ul>
+                    </li>
                 </li>
+
+
                 <li>
                     <h3><strong><span style="color: #0000ff;">Average number of optional products sold together with each service package</span></strong></h3>
                     <ul>
@@ -95,6 +101,7 @@
                     </ol>
                 </li>
             </ol>
+            </ul>
         </div>
     </div>
 </div>

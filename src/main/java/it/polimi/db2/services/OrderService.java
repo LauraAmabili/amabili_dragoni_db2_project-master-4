@@ -68,7 +68,13 @@ public class OrderService {
     }
 
     public int getNumOfOrderedWithoutOptionalProduct (ServicePackage sp){
-        List<Order> ordersNoOp = em.createNamedQuery("Order.packagesWithoutOptionalProducts", Order.class).setParameter("servicePkg", sp).getResultList();
-        return ordersNoOp.size();
+        List<Order> ordersNoOp = em.createNamedQuery("Order.getServicePkgOrdersWithoutOptionalProducts", Order.class).setParameter("servicePkg", sp).getResultList();
+        int ordersNoOpNum = ordersNoOp.size();
+        return ordersNoOpNum;
+    }
+
+    public int getNumOfOrderedWithOptionalProduct (ServicePackage sp, String optionalProduct) {
+        List<Order> ordersOp = em.createNamedQuery("Order.getServicePkgOrdersWithOptionalProducts", Order.class).setParameter("servicePkg", sp).setParameter("optionalProduct", optionalProduct).getResultList();
+        return ordersOp.size();
     }
 }

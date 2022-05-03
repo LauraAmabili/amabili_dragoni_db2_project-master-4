@@ -8,6 +8,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "ServicePackageOptional", schema = "database2")
 @IdClass(ServicePackageOptionalId.class)
+// query that gets the optional products associated to a given service package
 @NamedQuery(name = "ServicePackageOptional.findServicePackageOptionalProducts", query = "SELECT spo.optionalProduct FROM ServicePackageOptional spo WHERE spo.servicePackage = :name")
 public class ServicePackageOptional implements Serializable {
 

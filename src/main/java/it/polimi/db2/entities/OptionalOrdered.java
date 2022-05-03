@@ -11,6 +11,7 @@ import java.io.Serializable;
 @Table(name = "OptionalOrdered", schema = "database2")
 public class OptionalOrdered implements Serializable {
     private static final long serialVersionUID = 1L;
+
     @Id
     @Column(name = "optionalProductId")
     private String optionalProduct;
