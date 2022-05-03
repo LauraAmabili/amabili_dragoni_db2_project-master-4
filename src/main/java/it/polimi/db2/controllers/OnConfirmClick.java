@@ -61,6 +61,7 @@ public class OnConfirmClick extends HttpServlet {
         float totalCost = (float) req.getSession(false).getAttribute("totalCost");
         UserCustomer customer = (UserCustomer) req.getSession(false).getAttribute("user");
         ServicePackage servicePackage = (ServicePackage) req.getSession(false).getAttribute("servicePackageChosen");
+        Date startDate = (Date) req.getSession(false).getAttribute("startDate");
 
         Order order = new Order();
         try {

@@ -30,6 +30,14 @@ public class UserCustomerService {
 
     }
 
+    public void registerUser(String email, String username, String password){
+        UserCustomer user = new UserCustomer();
+        user.setUsername(username);
+        user.setEmail(email);
+        user.setPassword(password);
+        em.persist(user);
+    }
+
     public UserCustomer checkCredentials(String usrn, String pwd) throws CredentialsException, NonUniqueResultException {
         List<UserCustomer> uList = new ArrayList<>();
         try {

@@ -32,6 +32,18 @@
         <input type="submit" value="Login">
         <p th:if="${loginErrorMsgCust} != null" th:text="${loginErrorMsgCust}"style="color: #ff0000;"></p>
     </form>
+
+
+    <h2>REGISTRATION CUSTOMER</h2>
+
+    <form action="Registration" method="POST">
+        Email: <input type="text" name="email" required>
+        Username: <input type="text" name="username" required>
+        Password: <input type="text" name="password" required>
+        <input type="submit" value="Login">
+    </form>
+    <p th:text=" ${registrationMsg}"></p>
+
 </div>
 
 </body>
