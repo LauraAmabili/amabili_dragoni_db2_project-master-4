@@ -10,7 +10,7 @@ import java.util.List;
 @Entity
 @Table(name = "Order", schema = "database2")
 @NamedQuery(name = "Orders.getAllOrders", query = "SELECT order from Order order")
-@NamedQuery(name = "Order.getServicePkgOrders", query = "SELECT o from Order o where o.orderedService = :servicePkgId")
+@NamedQuery(name = "Order.getServicePkgOrders", query = "SELECT o from Order o where o.orderedService = :servicePkg")
 
 public class Order implements Serializable {
     private static final long serialVersionUID = 1L;

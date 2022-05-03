@@ -65,7 +65,7 @@ public class EmployeeStatistics extends HttpServlet {
             List<ServicePackage> servicePackages = spService.showPackages();
             servicePackages.forEach(
                     sp -> salesPerPackage.put(sp.getPackageName(),
-                    orderService.getNumberOfSalesByServicePkgId(sp)));
+                    orderService.getNumberOfSalesByServicePkg(sp)));
         } catch (CredentialsException e) {
             e.printStackTrace();
         }

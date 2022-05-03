@@ -63,52 +63,49 @@ public class OnAdditionalInfoSubmit extends HttpServlet {
 
 
         servicePackage = (ServicePackage) req.getSession(false).getAttribute("servicePackageChosen");
-        int validityPeriod = 0; 
+        int validityPeriod = 0;
 
         String optionalProductList[];
         List<OptionalProduct> optionalProducts = new ArrayList<>();
-        if(req.getSession(false)!=null  &&  req.getSession(false).getAttribute("user")!=null) {
+        if (req.getSession(false) != null && req.getSession(false).getAttribute("user") != null) {
             //update of object user to make sure is the current one
 
 
+            optionalProductList = ((req.getParameterValues("optionalProducts")));
 
-            optionalProductList =((req.getParameterValues("optionalProducts")));
 
-
-            optionalProductList =((req.getParameterValues("optionalProducts")));
+            optionalProductList = ((req.getParameterValues("optionalProducts")));
             validityPeriod = parseInt(StringEscapeUtils.escapeJava(req.getParameter("validityPeriod")));
 
-            if(optionalProductList!=null) {
+            if (optionalProductList != null) {
                 for (String name : optionalProductList) {
                     optionalProducts.add(opService.getOptionalProductById(name));
                 }
 
-            for(String name:optionalProductList) {
-                optionalProducts.add(opService.getOptionalProductById(name));
+                for (String name : optionalProductList) {
+                    optionalProducts.add(opService.getOptionalProductById(name));
+                }
+
+                Order order = new Order();
+                try {
+                    order = orderService.createOrder(validityPeriod, new Date(), new Date(), 100, user, servicePackage);
+                } catch (CredentialsException e) {
+                    e.printStackTrace();
+                }
+
+
+                req.getSession(false).setAttribute("optionalProducts", optionalProductList);
+                req.getSession(false).setAttribute("chosenValidityPeriod", validityPeriod);
+                ctx.setVariable("chosenValidityPeriod", validityPeriod);
+                ctx.setVariable("servicePackageChosenCTX", servicePackage);
+                ctx.setVariable("optionalProductsCTX", optionalProducts);
+
+                templateEngine.process("/WEB-INF/ConfirmationPage.html", ctx, resp.getWriter());
+
+
             }
-
-            Order order = new Order();
-            try {
-                order = orderService.createOrder(validityPeriod, new Date(), new Date(), 100, user, servicePackage);
-            } catch (CredentialsException e) {
-                e.printStackTrace();
-            }
-
-
-
-
-
-            req.getSession(false).setAttribute("optionalProducts", optionalProductList);
-            req.getSession(false).setAttribute("chosenValidityPeriod", validityPeriod);
-            ctx.setVariable("chosenValidityPeriod", validityPeriod);
-            ctx.setVariable("servicePackageChosenCTX", servicePackage);
-            ctx.setVariable("optionalProductsCTX", optionalProducts);
-
-            templateEngine.process("/WEB-INF/ConfirmationPage.html", ctx, resp.getWriter());
-
 
         }
-
     }
 
     @Override
