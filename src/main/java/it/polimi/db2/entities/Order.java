@@ -55,7 +55,7 @@ public class Order implements Serializable {
         this.dateStart = dateStart;
         this.orderDateTime = orderDateTime;
         this.totalCost = totalCost;
-       // this.userOrder = userOrder;
+        this.userOrder = userOrder;
     }
 
 
