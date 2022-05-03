@@ -51,10 +51,7 @@ public class OnAdditionalInfoSubmit extends HttpServlet {
 
         final WebContext ctx = new WebContext(req, resp, this.getServletContext(), req.getLocale());
 
-
         ServicePackage servicePackage;
-        
-
 
         servicePackage = (ServicePackage) req.getSession(false).getAttribute("servicePackageChosen");
         int validityPeriod = 0; 
@@ -68,8 +65,10 @@ public class OnAdditionalInfoSubmit extends HttpServlet {
             optionalProductList =((req.getParameterValues("optionalProducts")));
             validityPeriod = parseInt(StringEscapeUtils.escapeJava(req.getParameter("validityPeriod")));
 
-            for(String name:optionalProductList) {
-                optionalProducts.add(opService.getOptionalProductById(name));
+            if(optionalProductList!=null) {
+                for (String name : optionalProductList) {
+                    optionalProducts.add(opService.getOptionalProductById(name));
+                }
             }
 
             req.getSession(false).setAttribute("optionalProducts", optionalProductList);
