@@ -10,6 +10,7 @@ import java.util.Date;
 @Table(name = "Order", schema = "database2")
 @NamedQuery(name = "Orders.getAllOrders", query = "SELECT order from Order order")
 @NamedQuery(name = "Order.getServicePkgOrders", query = "SELECT o from Order o where o.orderedService = :servicePkg")
+@NamedQuery(name = "Order.getServicePkgValidityPeriodOrders", query = "SELECT o from Order o where o.orderedService = :servicePkg and o.validityPeriodMonth = :validityPeriod")
 
 public class Order implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -19,19 +20,19 @@ public class Order implements Serializable {
     private int orderId;
 
     @Column(name = "ValidityPeriodMonth")
-    private int ValidityPeriodMonth;
+    private int validityPeriodMonth;
 
     @Column(name = "Valid")
-    private int Valid;
+    private int valid;
 
     @Column(name = "DateStart")
-    private Date DateStart;
+    private Date dateStart;
 
     @Column(name = "OrderDateTime")
-    private java.util.Date OrderDateTime;
+    private java.util.Date orderDateTime;
 
     @Column(name = "TotalCost")
-    private float TotalCost;
+    private float totalCost;
 
     @ManyToOne
     @JoinColumn(name="userOrder", referencedColumnName="username")
@@ -49,11 +50,11 @@ public class Order implements Serializable {
 
     public Order(int orderId, int validityPeriodMonth, int valid, Date dateStart, Date orderDateTime, float totalCost, UserCustomer userOrder) {
         this.orderId = orderId;
-        ValidityPeriodMonth = validityPeriodMonth;
-        Valid = valid;
-        DateStart = dateStart;
-        OrderDateTime = orderDateTime;
-        TotalCost = totalCost;
+        this.validityPeriodMonth = validityPeriodMonth;
+        this.valid = valid;
+        this.dateStart = dateStart;
+        this.orderDateTime = orderDateTime;
+        this.totalCost = totalCost;
        // this.userOrder = userOrder;
     }
 
@@ -67,45 +68,45 @@ public class Order implements Serializable {
     }
 
     public int getValidityPeriodMonth() {
-        return ValidityPeriodMonth;
+        return validityPeriodMonth;
     }
 
     public void setValidityPeriodMonth(int validityPeriodMonth) {
-        ValidityPeriodMonth = validityPeriodMonth;
+        this.validityPeriodMonth = validityPeriodMonth;
     }
 
 
 
     public int getValid() {
-        return Valid;
+        return valid;
     }
 
     public void setValid(int valid) {
-        Valid = valid;
+        this.valid = valid;
     }
 
     public Date getDateStart() {
-        return DateStart;
+        return dateStart;
     }
 
     public void setDateStart(Date dateStart) {
-        DateStart = dateStart;
+        this.dateStart = dateStart;
     }
 
     public Date getOrderDateTime() {
-        return OrderDateTime;
+        return orderDateTime;
     }
 
     public void setOrderDateTime(Date orderDateTime) {
-        OrderDateTime = orderDateTime;
+        this.orderDateTime = orderDateTime;
     }
 
     public float getTotalCost() {
-        return TotalCost;
+        return totalCost;
     }
 
     public void setTotalCost(float totalCost) {
-        TotalCost = totalCost;
+        this.totalCost = totalCost;
     }
 
     public UserCustomer getUserOrder() {
