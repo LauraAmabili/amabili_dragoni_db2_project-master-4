@@ -5,7 +5,6 @@ import it.polimi.db2.entities.*;
 import it.polimi.db2.exceptions.CredentialsException;
 import it.polimi.db2.exceptions.ServicePackageException;
 import it.polimi.db2.services.OptionalProductService;
-import it.polimi.db2.services.OrderService;
 import it.polimi.db2.services.ServicePackageService;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
@@ -71,7 +70,7 @@ public class OnServicePackageSelection extends HttpServlet {
 
             }
             try {
-                optionalProductsIds = spService.showOptionalProducts(servicePackage);
+                optionalProductsIds = opService.showServicePackageOptionalProducts(servicePackage);
                 if(optionalProductsIds!=null) {
                     for (String optionalProductsId : optionalProductsIds) {
                             optionalProducts.add(opService.getOptionalProductById(optionalProductsId));

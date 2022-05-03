@@ -1,8 +1,10 @@
 package it.polimi.db2.controllers;
 
+import it.polimi.db2.entities.OptionalProduct;
 import it.polimi.db2.entities.ServicePackage;
 import it.polimi.db2.entities.UserEmployee;
 import it.polimi.db2.exceptions.CredentialsException;
+import it.polimi.db2.services.OptionalProductService;
 import it.polimi.db2.services.OrderService;
 import it.polimi.db2.services.ServicePackageService;
 import it.polimi.db2.services.UserCustomerService;
@@ -34,6 +36,9 @@ public class EmployeeStatistics extends HttpServlet {
 
     @EJB(name = "it/polimi/db2/services/OrderService")
     private OrderService orderService;
+
+    @EJB(name = "it/polimi/db2/services/OptionalProductService")
+    private OptionalProductService opService;
 
 
 
@@ -88,23 +93,49 @@ public class EmployeeStatistics extends HttpServlet {
         }
 
         // compute the number of sales without optional product for each package service
-        HashMap<String, List<Integer>> salesPkgNoOp = new HashMap<String, List<Integer>>();
+       // HashMap<String, Integer> salesPkgNoOp = new HashMap<String, Integer>();
+        HashMap<String, HashMap<String, Integer>> salesOp = new HashMap<String, HashMap<String, Integer>> ();
         try {
+            // for each service package
             List<ServicePackage> servicePackages = spService.showPackages();
+            // compute number without optional products
             servicePackages.forEach(sp -> {
                 int noOp = orderService.getNumOfOrderedWithoutOptionalProduct(sp);
-                List<Integer> sales = new ArrayList<Integer>();
-                sales.add(noOp);
-                salesPkgNoOp.put(sp.getPackageName(), sales);
+                // salesPkgNoOp.put(sp.getPackageName(), noOp);
+                // prendo gli optional products di quel service package
+                HashMap<String, Integer> spOp = new HashMap<String, Integer>();
+                spOp.put("without optional products", noOp);
+                try {
+                    List<String> servicePkgOptionalProducts = opService.showServicePackageOptionalProducts(sp);
+                    if(servicePkgOptionalProducts != null) {
+                        // calcolo per ognuno quanti ne ho venduti
+                        servicePkgOptionalProducts.forEach(servicePkgOptionalProduct -> {
+                            int opNum = orderService.getNumOfOrderedWithOptionalProduct(sp, servicePkgOptionalProduct);
+                            spOp.put("with " + servicePkgOptionalProduct, opNum);
+                           // salesOp.put(sp.getPackageName(), spOp);
+
+                        });
+                    }
+                        salesOp.put(sp.getPackageName(), spOp);
+
+                } catch (CredentialsException e) {
+                    e.printStackTrace();
+                }
+
             });
         } catch (CredentialsException e) {
             e.printStackTrace();
         }
 
 
+        HashMap<String, HashMap<String, Integer>> salesOp2 = salesOp;
+
+
+
+
         ctx.setVariable("salesPerPackage", salesPerPackage);
         ctx.setVariable("salesPerPackageValidityPeriod", salesPkgValidityPeriod);
-        ctx.setVariable("salesPkgNoOp", salesPkgNoOp);
+        ctx.setVariable("salesPkgOp", salesOp);
 
 
         templateEngine.process("/WEB-INF/EmployeeStatisticsPage.html", ctx, response.getWriter());

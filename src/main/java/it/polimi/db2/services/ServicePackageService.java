@@ -54,19 +54,6 @@ public class ServicePackageService {
     }
 
 
-    public List<String> showOptionalProducts(ServicePackage servicePackage) throws CredentialsException, NonUniqueResultException {
-        List<String> uList;
-        try {
-            uList = em.createNamedQuery("ServicePackageOptional.findServicePackageOptionalProducts", String.class).setParameter("name",servicePackage.getPackageName()).getResultList();
-        } catch (PersistenceException var5) {
-            throw new CredentialsException("Optional Products Error");
-        }
-        if (uList.isEmpty()) {
-            return null;
-        } else {
-            return uList;
-        }
-    }
 
     public Boolean servicePackageAlreadyExists(String pkgName){
         List<ServicePackage> servicePackages = em.createNamedQuery("ServicePackage.findServicePackageById", ServicePackage.class).setParameter("name", pkgName ).getResultList();
