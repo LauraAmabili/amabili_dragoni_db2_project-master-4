@@ -22,6 +22,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -80,7 +82,13 @@ public class OnAdditionalInfoSubmit extends HttpServlet {
 
             optionalProductList =((req.getParameterValues("optionalProducts")));
             validityPeriod = parseInt(StringEscapeUtils.escapeJava(req.getParameter("validityPeriod")));
-            Date date = (Date) session.getAttribute("date");
+            Date startDate = new Date();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            try {
+                startDate = (Date) sdf.parse(req.getParameter("date"));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
             if (optionalProductList != null) {
                 for (String name : optionalProductList) {
                     optionalProducts.add(opService.getOptionalProductById(name));
@@ -95,6 +103,7 @@ public class OnAdditionalInfoSubmit extends HttpServlet {
             req.getSession(false).setAttribute("totalCost", totalCost);
             req.getSession(false).setAttribute("optionalProducts", optionalProductList);
             req.getSession(false).setAttribute("chosenValidityPeriod", validityPeriod);
+            req.getSession(false).setAttribute("startDate", startDate);
 
 
                 ctx.setVariable("loggedCustomer", customer);
