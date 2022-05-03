@@ -1,6 +1,7 @@
 package it.polimi.db2.services;
 
 import it.polimi.db2.entities.OptionalProduct;
+import it.polimi.db2.entities.ServicePackageOptional;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -40,5 +41,12 @@ public class OptionalProductService {
         return optionalProduct.get(0);
     }
 
+
+    public void addNewPkgOptionalProduct(String pkgName, String optionalProdName) {
+        ServicePackageOptional newSpo = new ServicePackageOptional();
+        newSpo.setOptionalProduct(optionalProdName);
+        newSpo.setServicePackage(pkgName);
+        em.persist(newSpo);
+    }
 
 }

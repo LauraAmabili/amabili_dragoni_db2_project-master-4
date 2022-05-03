@@ -9,10 +9,12 @@ import java.util.List;
 
 @Entity
 @Table(name = "Montlyfee", schema = "database2")
-public class MontlyFee implements Serializable {
+@NamedQuery (name = "MonthlyFee.findMonthlyFeeId",
+        query = "SELECT m FROM MonthlyFee m WHERE m.TwelveMonthPrice = :price12 and m.TwentyFourMonthPrice = :price24 and m.ThirtySixMonthPrice = :price36")
+
+public class MonthlyFee implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
     @Id
     @Column(name = "IdMontlyFee")
     private int id;
@@ -29,10 +31,10 @@ public class MontlyFee implements Serializable {
     @OneToMany(mappedBy = "packageFees")
     private List<ServicePackage> servicePackageList;
 
-    public MontlyFee() {
+    public MonthlyFee() {
     }
 
-    public MontlyFee(int id, int Twelve, int TwentyFour, int ThirtySix) {
+    public MonthlyFee(int id, int Twelve, int TwentyFour, int ThirtySix) {
         this.id = id;
         this.TwelveMonthPrice = Twelve;
         this.TwentyFourMonthPrice = TwentyFour;

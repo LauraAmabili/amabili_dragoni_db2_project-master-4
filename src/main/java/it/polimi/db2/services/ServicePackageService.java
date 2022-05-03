@@ -2,6 +2,7 @@ package it.polimi.db2.services;
 
 
 import it.polimi.db2.entities.OptionalProduct;
+import it.polimi.db2.entities.MonthlyFee;
 import it.polimi.db2.entities.ServicePackage;
 import it.polimi.db2.entities.ServicePackageOptional;
 import it.polimi.db2.entities.UserCustomer;
@@ -65,6 +66,19 @@ public class ServicePackageService {
         } else {
             return uList;
         }
+    }
+
+    public Boolean servicePackageAlreadyExists(String pkgName){
+        List<ServicePackage> servicePackages = em.createNamedQuery("ServicePackage.findServicePackageById", ServicePackage.class).setParameter("name", pkgName ).getResultList();
+        return !servicePackages.isEmpty();
+    }
+
+    public void addNewServicePackage (String name, int fixedPhone, MonthlyFee packageFee) {
+        ServicePackage newSP = new ServicePackage();
+        newSP.setPackageName(name);
+        newSP.setFixedPhoneNumber(fixedPhone);
+        newSP.setPackageFees(packageFee);
+        em.persist(newSP);
     }
 
 }

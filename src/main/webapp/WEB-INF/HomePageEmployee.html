@@ -14,13 +14,33 @@
 
 <!-- CREATE SERVICE PACKAGE -->
 <form method="POST" action="create-service-package">
-<p style="text-align: right;"><strong>&nbsp;</strong></p>
+    <p style="text-align: right;"><strong>&nbsp;</strong></p>
     <p style="text-align: center;">&nbsp;</p>
-    <h2 style="text-align: justify;"><span style="color: #ff0000;"><strong>CREATE NEW SERVICE PACKAGE</strong></span></h2>
-    <p style="color: #ff0000;"><span style="color: #000000;">Name:</span>&nbsp; <input name="name" required="" type="text" />&nbsp; &nbsp; &nbsp; <input id="fixedPhoneService" checked="checked" name="scales" type="checkbox" /> <span style="color: #000000;">Fixed Phone <label for="fixedPhoneService"> </label> </span></p>
-    <p style="color: #ff0000; text-align: center;"><input style="background-color: #ccffcc; border-color: #008000;" type="submit" value=" Create Service Package" /></p>
-<p style="color: #ff0000;"><strong><span style="color: #000000;">Select Mobile Internet Service(s) you want to add </span></strong></p>
-<table class="styled-table" style="height: 38px; width: 577px; border-style: dotted;">
+    <h2 style="text-align: justify;"> <span style="color: #ff0000;">
+        <strong>CREATE NEW SERVICE PACKAGE</strong> </span>
+    </h2>
+    <p style="color: #ff0000;"><span style="color: #000000;">
+        Name:</span>&nbsp; <input name="name" required="" type="text" />&nbsp; &nbsp; &nbsp;
+    <input  type="checkbox" name="fixedPhone" value="fixedInternetIn">
+        <span style="color: #000000;">Fixed Phone</span>
+    </p>
+    <p th:if="${namePkgNotUnique} != null" th:text="${namePkgNotUnique}"style="color: #ff0000;"></p>
+    <p th:if="${wrongValuesPkg} != null" th:text="${wrongValuesPkg}"style="color: #ff0000;"></p>
+    <p th:if="${OKPKG} != null" th:text="${OKPKG}"style="color: #ff0000;"></p>
+    <p style="color: #ff0000;">
+        <span style="color: #000000;">
+            Price for 12 months: <input name="pkgPrice12" required="" type="text" /> &euro;/GB
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            Price for 24 months: <input name="pkgPrice24" required="" type="text" /> &euro;/GB
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            Price for 36 months: <input name="pkgPrice36" required="" type="text" /> &euro;/GB
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;
+        </span>
+        <input style="background-color: #ccffcc; border-color: #008000;" name="createServicePkg" type="submit" value=" Create Service Package" />
+    </p>
+
+    <p style="color: #ff0000;"><strong><span style="color: #000000;">Select Mobile Internet Service(s) you want to add </span></strong></p>
+    <table class="styled-table" style="height: 38px; width: 577px; border-style: dotted;">
     <tbody>
     <tr style="height: 18px;">
         <th style="height: 18px; width: 233.421875px;">Name</th>
@@ -28,7 +48,7 @@
         <th style="height: 18px; width: 172.3125px;">Fees for extra GB</th>
     </tr>
     </tbody>
-    <tr th:each="mis : ${mobileInternetServices}">s
+    <tr th:each="mis : ${mobileInternetServices}">
         <td th:text="${mis.name}"></td>
         <td>
             <span th:if="${mis.gigaNum != null}" th:text="${mis.gigaNum}"> </span>
@@ -40,7 +60,7 @@
             <span th:unless="${mis.extraFees != null}">  </span>
         </td>
         <td>
-            <input id="mobileInternetService" type="checkbox" name="check" value="2">
+            <input  type="checkbox" name="mobileInternetService" th:value="${mis.name}">
 </table>
 
 <p style="color: #ff0000;"><strong><span style="color: #000000;">Select Fixed Internet Service(s) you want to add</span></strong></p>
@@ -65,7 +85,7 @@
             <span th:unless="${fis.extraFees != null}">  </span>
         </td>
         <td>
-            <input id="fixedInternetService" type="checkbox" name="check" value="2"> <label for="fixedInternetService"></label>
+            <input  type="checkbox" name="fixedInternetService" th:value="${fis.name}">
 
         <td>
 
@@ -102,7 +122,9 @@
             <span th:unless="${mps.extraSmsFee != null}">  </span>
         </td>
         <td>
-            <input id="mobilePhoneService" type="checkbox" name="check" value="2" /> <label for="mobilePhoneService"></label>
+            <input  type="checkbox" name="mobilePhoneService" th:value="${mps.name}">
+
+<!--            <input  type="checkbox" name="mobilePhoneService" value="2" /> <label for="mobilePhoneService"></label>-->
         <td>
 </table>
 
@@ -121,7 +143,7 @@
             <span th:unless="${op.monthlyFee != null}">  </span>
         </td>
         <td>
-            <input id="optionalProductService" type="checkbox" name="check" value="2" /> <label for="optionalProductService"></label>
+            <input  type="checkbox" name="optionalProductService" th:value="${op.name}">
         <td>
 
 

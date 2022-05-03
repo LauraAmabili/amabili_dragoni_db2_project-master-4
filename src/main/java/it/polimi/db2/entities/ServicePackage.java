@@ -17,32 +17,38 @@ public class ServicePackage implements Serializable {
     @Column(name = "PackageName")
     private String PackageName;
 
-   @Column(name = "fixedPhoneNumber")
-   private int fixedPhoneNumber;
+    @Column(name = "fixedPhoneNumber")
+    private int fixedPhoneNumber;
 
-   // @Column(name = "packageFees")
 
     @ManyToOne
     @JoinColumn(name="packageFees", referencedColumnName="IdMontlyFee")
-    private MontlyFee packageFees;
+    private MonthlyFee packageFees;
 
+    @ManyToMany
+    private List<MobilePhoneService> mobilePhoneServices;
 
+    @ManyToMany
+    private List<InternetService> internetServices;
+
+    @ManyToMany
+    private List<OptionalProduct> optionalProducts;
 
     public ServicePackage() {
 
     }
 
-   public ServicePackage(String PackageName, int fixedPhoneNumber, MontlyFee packageFees){
+   public ServicePackage(String PackageName, int fixedPhoneNumber, MonthlyFee packageFees){
        this.PackageName = PackageName;
        this.fixedPhoneNumber = fixedPhoneNumber;
        this.packageFees = packageFees;
    }
 
-    public MontlyFee getPackageFees() {
+    public MonthlyFee getPackageFees() {
         return packageFees;
     }
 
-    public void setPackageFees(MontlyFee packageFees) {
+    public void setPackageFees(MonthlyFee packageFees) {
         this.packageFees = packageFees;
     }
 
