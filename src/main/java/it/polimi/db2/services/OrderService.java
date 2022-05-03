@@ -1,7 +1,7 @@
 package it.polimi.db2.services;
 
 
-import it.polimi.db2.entities.Order;
+import it.polimi.db2.entities.Orders;
 import it.polimi.db2.entities.ServicePackage;
 import it.polimi.db2.entities.UserCustomer;
 import it.polimi.db2.exceptions.CredentialsException;
@@ -25,12 +25,12 @@ public class OrderService {
 
     }
 
-    public List<Order> getAllOrders() throws CredentialsException, NonUniqueResultException {
+    public List<Orders> getAllOrders() throws CredentialsException, NonUniqueResultException {
 
-        List<Order> uList = new ArrayList<>();
+        List<Orders> uList = new ArrayList<>();
 
         try {
-            uList = em.createNamedQuery("Orders.getAllOrders", Order.class).getResultList();
+            uList = em.createNamedQuery("Orders.getAllOrders", Orders.class).getResultList();
 
         } catch (PersistenceException var5) {
             throw new CredentialsException("Orders Error");
@@ -43,19 +43,15 @@ public class OrderService {
         }
     }
 
-    public int getNumberOfSalesByServicePkgId (ServicePackage servicePkg) {
-        List <Order> pkgServiceOrders= em.createNamedQuery("Order.getServicePkgOrders", Order.class).setParameter("servicePkgId", servicePkg).getResultList();
-        int size = pkgServiceOrders.size();
-        return size;
-    }
-
-    public void createOrder(int validityPeriodMonth, Date dateStart, Date orderDateTime, float totalCost, UserCustomer userOrder) throws CredentialsException, NonUniqueResultException {
-        Order order = new Order();
+    public Orders createOrder(int validityPeriodMonth, Date dateStart, Date orderDateTime, float totalCost, UserCustomer userOrder, ServicePackage servicePackage) throws CredentialsException, NonUniqueResultException {
+        Orders order = new Orders();
         order.setValidityPeriodMonth(validityPeriodMonth);
         order.setDateStart(dateStart);
         order.setOrderDateTime(orderDateTime);
         order.setTotalCost(20);
         order.setUserOrder(userOrder);
+        order.setOrderedService(servicePackage);
         em.persist(order);
+        return order;
     }
 }
