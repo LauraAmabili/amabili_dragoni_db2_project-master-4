@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @WebServlet("/go-to-statistics")
 public class EmployeeStatistics extends HttpServlet {
@@ -134,10 +135,16 @@ public class EmployeeStatistics extends HttpServlet {
         }
 
 
+
+        HashMap<String, Integer> top = (HashMap<String, Integer> ) ooService.topOptionalOrdered();
+
+
+
         ctx.setVariable("salesPerPackage", salesPerPackage);
         ctx.setVariable("salesPerPackageValidityPeriod", salesPkgValidityPeriod);
         ctx.setVariable("salesPkgOp", salesOp);
         ctx.setVariable("avgOptionalSalesPerPackage", avgOptionalSalesPerPackage);
+        ctx.setVariable("topOptionalProducts", top);
 
         templateEngine.process("/WEB-INF/EmployeeStatisticsPage.html", ctx, response.getWriter());
 

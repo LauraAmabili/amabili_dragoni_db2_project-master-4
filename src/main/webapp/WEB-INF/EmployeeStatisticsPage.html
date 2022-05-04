@@ -85,34 +85,27 @@
 
 
                 <li>
-                    <h3><strong><span style="color: #0000ff;">Average number of optional products sold together with each service package</span></strong></h3>
-                    <ul>
-                        <li><span style="color: #000000;"><span style="text-decoration: underline;">pkg1</span>: 4</span></li>
-                        <li><span style="color: #000000;"><span style="text-decoration: underline;">pkg2</span>: 2</span></li>
-                        <li><span style="color: #000000;"><span style="text-decoration: underline;">pkg2</span>: 5</span></li>
-                    </ul>
-                </li>
-                <li>
                     <h3><strong><span style="color: #0000ff;">List of insolvent users, suspended orders and alerts</span></strong></h3>
                     <ul>
                         <li><u>usr1</u></li>
                         <li><u>usr2</u></li>
                     </ul>
                 </li>
+
                 <li>
                     <h3><strong><span style="color: #0000ff;">Best seller optional product, i.e. the optional product with the greatest value of sales across all&nbsp;the sold service packages</span></strong></h3>
-                </li>
-            </ul>
-            <ol>
-                <li style="list-style-type: none;">
+
+                <ol> <li style="list-style-type: none;">
                     <ol>
-                        <li>op1: 10 sales in total</li>
-                        <li>op2: 9 sales in total</li>
-                        <li>op3: 8&nbsp;sales in total</li>
-                        <li>op4: 7&nbsp;sales in total</li>
+                        <li th:each="top : ${topOptionalProducts}"><li>
+                        <b><span style="color: #000000;"><span style="text-decoration: underline;" th:text="${top}"> </span></span></b>
+                        :
+                        <span style="color: #000000;"><span th:text="${top}"> </span></span>
+                        sales in total
+                    </li>
                     </ol>
                 </li>
-            </ol>
+                </ol>
             </ul>
         </div>
     </div>
