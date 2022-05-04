@@ -25,6 +25,7 @@ public class ActivationScheduleService {
         AS.setDateStart(dateStart);
         AS.setOrderId(orderId);
         AS.setDateEnd(dateEnd);
+        em.persist(AS);
         return AS;
     }
 }

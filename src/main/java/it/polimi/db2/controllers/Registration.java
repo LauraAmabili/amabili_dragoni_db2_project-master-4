@@ -42,7 +42,7 @@ public class Registration extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // TODO missing email
+
         String email = StringEscapeUtils.escapeJava(request.getParameter("email"));
         String usrn = StringEscapeUtils.escapeJava(request.getParameter("username"));
         String pwd = StringEscapeUtils.escapeJava(request.getParameter("password"));

@@ -58,8 +58,15 @@ public class HomePageCustomer extends HttpServlet {
         if(req.getSession(false)!=null  &&  req.getSession(false).getAttribute("user")!=null) {
             //update of object user to make sure is the current one
             UserCustomer customer = userCustomerService.findCustomerById((UserCustomer) req.getSession().getAttribute("user"));
+
+            if(customer.getSolvent() == 0 ){
+                // TODO mostra rejected orders
+
+            }
             req.getSession(false).setAttribute("customer", customer);
             ctx.setVariable("loggedCustomer", customer);
+
+
         }
 
 
