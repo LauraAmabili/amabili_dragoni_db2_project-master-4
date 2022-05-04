@@ -69,7 +69,8 @@ public class Payment extends HttpServlet {
             ServicePackage servicePackage = (ServicePackage) req.getSession(false).getAttribute("servicePackageChosen");
             int validityPeriod = (int) req.getSession(false).getAttribute("chosenValidityPeriod");
             optionalProductList =((req.getParameterValues("optionalProducts")));
-            float totalCost = (int) req.getSession(false).getAttribute("totalCost");
+            float totalCost = (float) req.getSession(false).getAttribute("totalCost");
+
 
 //            try {
 //             //   orderService.createOrder(validityPeriod, new Date(), new Date(), 100, user, servicePackage);

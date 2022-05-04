@@ -63,9 +63,23 @@ public class OnServicePackageConfirm extends HttpServlet {
             e.printStackTrace();
         }
 
+        List<String> optionalProductsIds = null;
+        List<OptionalProduct> optionalProducts = new ArrayList<>();
+        try {
+            optionalProductsIds = opService.showServicePackageOptionalProducts(servicePackage);
+            if(optionalProductsIds!=null) {
+                for (String optionalProductsId : optionalProductsIds) {
+                    optionalProducts.add(opService.getOptionalProductById(optionalProductsId));
+                }
+            }
+        } catch (CredentialsException e) {
+            e.printStackTrace();
+        }
+
 
         req.getSession(false).setAttribute("servicePackageChosen", servicePackage);
         ctx.setVariable("servicePackageChosenCTX", servicePackage);
+        ctx.setVariable("optionalProductsObjects", optionalProducts);
         templateEngine.process("/WEB-INF/AdditionalInformation.html", ctx, resp.getWriter());
 
 
