@@ -18,61 +18,72 @@
                     <ul>
                         <tr th:each="spp : ${salesPerPackage}">
                             <li>
-                                <span style="color: #000000;"><span style="text-decoration: underline;" th:text="${spp.getKey()}"> </span>
+                                <span style="color: #000000;"><span style="text-decoration: underline;" th:text="${spp.getKey()}"> </span></span>
+                                :
+                                <span style="color: #000000;"><span th:text="${spp.getValue()}"> </span></span>
+                                sales
+                            </li>
                     </ul>
                 </li>
+
                 <li>
                     <h3><strong><span style="color: #0000ff;">Number of total purchases per package and validity period</span></strong></h3>
-                    <span style="text-decoration: underline;"><strong>PKG1</strong></span>
-                    <table style="border-collapse: collapse; width: 100%;" border="1">
-                        <tbody>
-                        <tr>
-                            <td style="width: 25%;"><strong>12 Months</strong></td>
-                            <td style="width: 25%;"><strong>24 Months</strong></td>
-                            <td style="width: 25%;"><strong>36 Months</strong></td>
-                        </tr>
-                        <tr>
-                            <td style="width: 25%;">&nbsp;</td>
-                            <td style="width: 25%;">&nbsp;</td>
-                            <td style="width: 25%;">&nbsp;</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                    <strong><span style="text-decoration: underline;">PKG2</span></strong>
-                    <table style="border-collapse: collapse; width: 100%;" border="1">
-                        <tbody>
-                        <tr>
-                            <td style="width: 25%;"><strong>12 Months</strong></td>
-                            <td style="width: 25%;"><strong>24 Months</strong></td>
-                            <td style="width: 25%;"><strong>36 Months</strong></td>
-                        </tr>
-                        <tr>
-                            <td style="width: 25%;">&nbsp;</td>
-                            <td style="width: 25%;">&nbsp;</td>
-                            <td style="width: 25%;">&nbsp;</td>
-                        </tr>
-                        </tbody>
-                    </table>
+                    <tr th:each="sppvp : ${salesPerPackageValidityPeriod}">
+                        <span style="text-decoration: underline;" th:text="${sppvp.getKey()}"><strong></strong></span>
+                        <table style="border-collapse: collapse; width: 100%;" border="1">
+                            <tbody>
+                            <tr>
+                                <td style="width: 25%;"><strong>12 Months</strong></td>
+                                <td style="width: 25%;"><strong>24 Months</strong></td>
+                                <td style="width: 25%;"><strong>36 Months</strong></td>
+                            </tr>
+                            <tr>
+                                <td> <span th:if="${sppvp.getValue().get(0) != null}" th:text="${sppvp.getValue().get(0)}"> </span>
+                                    <span th:unless="${sppvp.getValue().get(0) != null}">  </span>
+                                </td>
+                                <td> <span th:if="${sppvp.getValue().get(1) != null}" th:text="${sppvp.getValue().get(1)}"> </span>
+                                    <span th:unless="${sppvp.getValue().get(1) != null}">  </span>
+                                </td>
+                                <td> <span th:if="${sppvp.getValue().get(2) != null}" th:text="${sppvp.getValue().get(2)}"> </span>
+                                    <span th:unless="${sppvp.getValue().get(2) != null}">  </span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <p>&nbsp;</p>
+                    </tr>
                 </li>
+
+
                 <li>
                     <h3><strong><span style="color: #0000ff;">Total value of sales per package with and without the optional products</span></strong></h3>
-                    <ul>
-                        <li><span style="color: #000000;">Total Sales of pkg1 without optional products</span></li>
-                        <li><span style="color: #000000;">Total Sales of pkg1 with OP1</span></li>
-                        <li><span style="color: #000000;">Total Sales of pkg1 with OP2</span></li>
-                        <li><span style="color: #000000;">Total Sales of pkg2 without optional products</span></li>
-                        <li><span style="color: #000000;">Total Sales of pkg2 with OP1</span></li>
-                        <li><span style="color: #000000;">Total Sales of pkg2 with OP2</span></li>
+                <li th:each="spo : ${salesPkgOp}">
+                    Total sales of
+                    <b><span style="color: #000000;"><span style="text-decoration: underline;"  th:text="${spo.getKey()}"> </span></span></b>
+                    <p></p>
+                    <ul th:each="spoo : ${spo.getValue()}">
+                        <b><span style="color: #000000;"><span th:text="${spoo.getKey()}"> </span></span></b>
+                        :
+                        <span style="color: #000000;"><span th:text="${spoo.getValue()}"> </span></span>
+                        <p></p>
                     </ul>
                 </li>
+                </li>
+
                 <li>
-                    <h3><strong><span style="color: #0000ff;">Average number of optional products sold together with each service package</span></strong></h3>
+                    <h3><strong><span style="color: #0000ff;">Average number of optional products sold together with each service package </span></strong></h3>
                     <ul>
-                        <li><span style="color: #000000;"><span style="text-decoration: underline;">pkg1</span>: 4</span></li>
-                        <li><span style="color: #000000;"><span style="text-decoration: underline;">pkg2</span>: 2</span></li>
-                        <li><span style="color: #000000;"><span style="text-decoration: underline;">pkg2</span>: 5</span></li>
+                        <tr th:each="avg : ${avgOptionalSalesPerPackage}">
+                            <li>
+                                <b><span style="color: #000000;"><span style="text-decoration: underline;" th:text="${avg.getKey()}"> </span></span></b>
+                                :
+                                <span style="color: #000000;"><span th:text="${avg.getValue()}"> </span></span>
+                                sales
+                            </li>
                     </ul>
                 </li>
+
+
                 <li>
                     <h3><strong><span style="color: #0000ff;">List of insolvent users, suspended orders and alerts</span></strong></h3>
                     <ul>
@@ -80,20 +91,22 @@
                         <li><u>usr2</u></li>
                     </ul>
                 </li>
+
                 <li>
                     <h3><strong><span style="color: #0000ff;">Best seller optional product, i.e. the optional product with the greatest value of sales across all&nbsp;the sold service packages</span></strong></h3>
-                </li>
-            </ul>
-            <ol>
-                <li style="list-style-type: none;">
-                    <ol>
-                        <li>op1: 10 sales in total</li>
-                        <li>op2: 9 sales in total</li>
-                        <li>op3: 8&nbsp;sales in total</li>
-                        <li>op4: 7&nbsp;sales in total</li>
+
+                    <ol> <li style="list-style-type: none;">
+                        <ol>
+                            <li th:each="top : ${topOptionalProducts}"><li>
+                            <b><span style="color: #000000;"><span style="text-decoration: underline;" th:text="${top}"> </span></span></b>
+                            :
+                            <span style="color: #000000;"><span th:text="${top}"> </span></span>
+                            sales in total
+                        </li>
+                        </ol>
+                    </li>
                     </ol>
-                </li>
-            </ol>
+            </ul>
         </div>
     </div>
 </div>
