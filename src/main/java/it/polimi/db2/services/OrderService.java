@@ -6,6 +6,7 @@ import it.polimi.db2.entities.ServicePackage;
 import it.polimi.db2.entities.UserCustomer;
 import it.polimi.db2.exceptions.CredentialsException;
 
+import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NonUniqueResultException;
@@ -13,6 +14,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -45,16 +47,19 @@ public class OrderService {
         }
     }
 
-    public Order createOrder(int validityPeriodMonth, Date dateStart, Date orderDateTime, float totalCost, UserCustomer userOrder, ServicePackage servicePackage) throws CredentialsException, NonUniqueResultException {
+    public Order createOrder(int validityPeriodMonth,  Date dateStart, float totalCost, UserCustomer userOrder, ServicePackage servicePackage) throws CredentialsException, NonUniqueResultException {
         Order order = new Order();
         order.setValidityPeriodMonth(validityPeriodMonth);
         order.setDateStart(dateStart);
-        order.setOrderDateTime(orderDateTime);
         order.setTotalCost(totalCost);
         order.setUserOrder(userOrder);
         order.setOrderedService(servicePackage);
+        LocalDateTime orderDateTime = LocalDateTime.now();
+        order.setOrderDateTime(orderDateTime);
         em.persist(order);
+        em.flush();
         return order;
+
     }
 
     public int getNumberOfSalesByServicePkg(ServicePackage sp){
@@ -83,5 +88,14 @@ public class OrderService {
     public List<Order> getServicePackageOrders (ServicePackage sp) {
         List <Order> orders = em.createNamedQuery("Order.getServicePkgOrders", Order.class).setParameter("servicePkg", sp).getResultList();
         return orders;
+    }
+
+    public Order findOrderByDateTimeCustomer(String customer, LocalDateTime dateTime){
+        List<Order> order = em.createNamedQuery("Order.findOrderByDateTimeCustomer", Order.class)
+                .setParameter("userOrderId", customer)
+                .setParameter("orderDT", dateTime)
+                .getResultList();
+        List<Order> o2 = order;
+        return order.get(0);
     }
 }

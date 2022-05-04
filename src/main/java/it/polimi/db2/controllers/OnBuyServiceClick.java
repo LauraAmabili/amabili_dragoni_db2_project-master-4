@@ -49,16 +49,9 @@ public class OnBuyServiceClick extends HttpServlet {
         } catch (CredentialsException e) {
             e.printStackTrace();
         }
-
         final WebContext ctx = new WebContext(req, resp, this.getServletContext(), req.getLocale());
-
-
         ctx.setVariable("packageList", sp);
-
-
-
         templateEngine.process("/WEB-INF/BuyService.html", ctx, resp.getWriter());
-
     }
 
     @Override

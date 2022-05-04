@@ -35,13 +35,13 @@ public class OptionalOrderedService {
         return opNum.size();
     }
 
-
+/*
     public List<Object[]> topOptionalOrdered (){
 
         List<Object[]> top = em.createNamedQuery("OptionalOrder.TopOptional", Object[].class).getResultList();
 
         return top;
-    }
+    }*/
 
     /*
 

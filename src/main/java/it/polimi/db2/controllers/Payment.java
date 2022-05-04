@@ -60,11 +60,11 @@ public class Payment extends HttpServlet {
             optionalProductList =((req.getParameterValues("optionalProducts")));
             float totalCost;
 
-            try {
-                orderService.createOrder(validityPeriod, new Date(), new Date(), 100, user, servicePackage);
-            } catch (CredentialsException e) {
-                e.printStackTrace();
-            }
+//            try {
+//             //   orderService.createOrder(validityPeriod, new Date(), new Date(), 100, user, servicePackage);
+//            } catch (CredentialsException e) {
+//                e.printStackTrace();
+//            }
 
 
             ctx.setVariable("monthlyFeeChosen", validityPeriod);

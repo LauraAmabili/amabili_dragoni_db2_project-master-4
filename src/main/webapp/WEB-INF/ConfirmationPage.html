@@ -5,8 +5,9 @@
     <title>confirm selection </title>
 </head>
 <body>
-<h1> Are you sure about that service?</h1>
 
+<h1> Are you sure about that service?</h1>
+<form method="POST" action="create-order">
 <td>
 
     <span th:if="${chosenValidityPeriod != null}" th:text="'Validity Period Chosen: '+ ${chosenValidityPeriod}"> </span>
@@ -43,7 +44,12 @@
     </a>
 </div>
 
+<div class="form-style-4">
 
+        <input type="submit" value="BUY SERVICE">
+
+</div>
+</form>
 
 
 

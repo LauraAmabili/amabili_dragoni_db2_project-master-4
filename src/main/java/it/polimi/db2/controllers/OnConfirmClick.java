@@ -27,7 +27,7 @@ import java.util.List;
 import static java.lang.Integer.parseInt;
 
 //@WebServlet(name = "buyService", value = "/buy-service")
-@WebServlet("/create-order")
+@WebServlet("/create-order-2")
 public class OnConfirmClick extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private TemplateEngine templateEngine;
@@ -59,17 +59,16 @@ public class OnConfirmClick extends HttpServlet {
         int validityPeriod = parseInt(StringEscapeUtils.escapeJava((String) req.getSession(false).getAttribute("chosenValidityPeriod")));
         Date date = new Date();
         float totalCost = (float) req.getSession(false).getAttribute("totalCost");
-        UserCustomer customer = (UserCustomer) req.getSession(false).getAttribute("user");
+        UserCustomer customer = (UserCustomer) req.getSession(false).getAttribute("loggedCustomer");
         ServicePackage servicePackage = (ServicePackage) req.getSession(false).getAttribute("servicePackageChosen");
         Date startDate = (Date) req.getSession(false).getAttribute("startDate");
 
-        Order order = new Order();
-        try {
-            order = orderService.createOrder(validityPeriod, date, date, totalCost, customer, servicePackage);
-        } catch (CredentialsException e) {
-            e.printStackTrace();
-        }
-
+//        try {
+//           //  order = orderService.createOrder(validityPeriod, startDate, totalCost, customer, servicePackage);
+//        } catch (CredentialsException e) {
+//            e.printStackTrace();
+//        }
+//
 
 
         // the user has clicked buy , we create the order and go to payment
