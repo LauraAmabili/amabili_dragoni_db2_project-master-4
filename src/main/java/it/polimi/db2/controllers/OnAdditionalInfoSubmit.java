@@ -31,7 +31,7 @@ import java.util.List;
 
 import static java.lang.Integer.parseInt;
 
-@WebServlet("/period-selected")
+@WebServlet("/additional-info-selected")
 public class OnAdditionalInfoSubmit extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private TemplateEngine templateEngine;

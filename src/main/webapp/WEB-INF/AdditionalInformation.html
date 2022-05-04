@@ -18,7 +18,7 @@
 
 
 <div class="form-style-5">
-    <form method="POST" action="period-selected">
+    <form method="POST" action="additional-info-selected">
         <label for="validityPeriod">Choose a validity period:</label>
         <select th:if= "${servicePackageChosenCTX != null}" name="validityPeriod" id="validityPeriod">
             <option  th:if="${servicePackageChosenCTX != null}" th:each="vp : ${servicePackageChosenCTX.packageFees}" th:value="12"
