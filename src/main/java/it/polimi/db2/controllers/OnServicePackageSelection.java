@@ -125,6 +125,7 @@ public class OnServicePackageSelection extends HttpServlet {
             ctx.setVariable("mobilePhoneServices", mobilePhoneServices);
 
             templateEngine.process("/WEB-INF/AdditionalInformation.html", ctx, resp.getWriter());
+            //templateEngine.process("/WEB-INF/BuyService.html", ctx, resp.getWriter());
         }
 
     }
