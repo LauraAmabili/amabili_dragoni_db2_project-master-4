@@ -2,8 +2,6 @@ package it.polimi.db2.controllers;
 
 
 import it.polimi.db2.entities.*;
-import it.polimi.db2.exceptions.CredentialsException;
-import it.polimi.db2.services.OptionalOrderedService;
 import it.polimi.db2.services.OptionalProductService;
 import it.polimi.db2.services.OrderService;
 import it.polimi.db2.services.ServicePackageService;
@@ -25,7 +23,6 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -43,9 +40,6 @@ public class OnAdditionalInfoSubmit extends HttpServlet {
 
     @EJB(name = "services/OrderService")
     private OrderService orderService;
-
-    @EJB(name = "services/OptionalOrderedService")
-    private OptionalOrderedService optionalOrderedService;
 
     public OnAdditionalInfoSubmit(){
         super();
@@ -93,7 +87,6 @@ public class OnAdditionalInfoSubmit extends HttpServlet {
             if (optionalProductList != null) {
                 for (String name : optionalProductList) {
                     optionalProducts.add(opService.getOptionalProductById(name));
-                    // optionalOrderedService.addOptionalProductToOrder(name,orderId);
                 }
             }
             float totalOP = (opService.totAmountOptionalProduct(optionalProducts)) * validityPeriod;

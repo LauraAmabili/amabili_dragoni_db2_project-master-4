@@ -1,6 +1,7 @@
 package it.polimi.db2.entities;
 
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.List;
 
 
@@ -18,6 +19,10 @@ public class OptionalProduct {
     @Column(name = "montlyFee")
     private float monthlyFee;
 
+    @ManyToMany(mappedBy = "optionalOrdered")
+    private Collection<Order> orders;
+
+
 
     public OptionalProduct() {}
 
@@ -25,4 +30,6 @@ public class OptionalProduct {
     public void setName(String name) { this.name = name; }
     public float getMonthlyFee() { return monthlyFee; }
     public void setMonthlyFee(float monthlyFee) { this.monthlyFee = monthlyFee; }
+    public Collection<Order> getOrders() { return orders; }
+    public void setOrders(Collection<Order> orders) { this.orders = orders; }
 }

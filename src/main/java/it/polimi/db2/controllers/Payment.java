@@ -7,7 +7,6 @@ import it.polimi.db2.entities.UserCustomer;
 import it.polimi.db2.exceptions.CredentialsException;
 import it.polimi.db2.external.services.BillingService;
 import it.polimi.db2.services.ActivationScheduleService;
-import it.polimi.db2.services.OptionalOrderedService;
 import it.polimi.db2.services.OrderService;
 import it.polimi.db2.services.ServicePackageService;
 import org.thymeleaf.TemplateEngine;
@@ -43,8 +42,6 @@ public class Payment extends HttpServlet {
     @EJB(name = "services/ActivationScheduleService")
     private ActivationScheduleService asService;
 
-    @EJB(name = "services/OptionalOrderedService")
-    private OptionalOrderedService ooService;
 
     public Payment(){
         super();
@@ -63,12 +60,7 @@ public class Payment extends HttpServlet {
         final WebContext ctx = new WebContext(req, resp, this.getServletContext(), req.getLocale());
 
         UserCustomer user = (UserCustomer) req.getSession(false).getAttribute("user");
-        String optionalProductList[];
         HttpSession session = req.getSession(false);
-
-
-        // in payment ho diverse opzioni->
-        // pago l'ordine
 
         if(session.getAttribute("user") == null) {
             templateEngine.process("/WEB-INF/index.html", ctx, resp.getWriter());
@@ -77,51 +69,42 @@ public class Payment extends HttpServlet {
             // post->  create a new order
         } else if (session.getAttribute("user") != null && req.getSession(false).getAttribute("servicePackageChosen") != null ) {
 
-
             ServicePackage servicePackage = (ServicePackage) req.getSession(false).getAttribute("servicePackageChosen");
             int validityPeriod = (int) req.getSession(false).getAttribute("chosenValidityPeriod");
-            optionalProductList = ((req.getParameterValues("optionalProducts")));
             float totalCost = (float) req.getSession(false).getAttribute("totalCost");
             Date dateStart = (Date) req.getSession(false).getAttribute("startDate");
             Date dateEnd = addMonths(dateStart, validityPeriod);
 
-            Order order = null;
-                try {
-                    order = orderService.createOrder(validityPeriod, dateStart, totalCost, user, servicePackage);
-                    ctx.setVariable("Order", order);
-                    List<OptionalProduct> selectedOptionalProduct = (List<OptionalProduct>) req.getSession(false).getAttribute("selectedOptionalProducts");
-                    Order finalOrder = order;
-                    selectedOptionalProduct.forEach(sop -> {
-                        ooService.addOptionalProductToOrder(sop.getName(), finalOrder.getOrderId());
-                    });
-                } catch (CredentialsException e) {
-                    e.printStackTrace();
+            try {
+                List<OptionalProduct> selectedOptionalProduct = (List<OptionalProduct>) req.getSession(false).getAttribute("selectedOptionalProducts");
+                Order order = orderService.createOrder(validityPeriod, dateStart, totalCost, user, servicePackage, selectedOptionalProduct);
+                ctx.setVariable("Order", order);
+
+
+                //payment
+                boolean successfulPayment = true;
+                BillingService ba = new BillingService();
+                boolean value = Boolean.parseBoolean((String) req.getSession(false).getAttribute("makePaymentFail"));
+                successfulPayment = ba.attemptPayment(value);
+
+                if (successfulPayment && order != null) {
+                    order.setValid(1);
+                    Order o = order;
+                    asService.addNewActivationRecord(dateStart, dateEnd, order);
+                    ctx.setVariable("successfulPayment", successfulPayment);
+                }
+                if (!successfulPayment) {
+                    order.setValid(0);
+                    user.setSolvent(0);
+
+                    // TODO add to failed payment
                 }
 
-
-            //payment
-
-            boolean successfulPayment = true;
-            BillingService ba = new BillingService();
-            boolean value = Boolean.parseBoolean((String) req.getSession(false).getAttribute("makePaymentFail"));
-            successfulPayment = ba.attemptPayment(value);
-
-
-
-            if (successfulPayment && order != null) {
-                order.setValid(1);
-                asService.addNewActivationRecord(dateStart, dateEnd, order.getOrderId());
-                ctx.setVariable("successfulPayment", successfulPayment);
+                req.getSession(false).setAttribute("order", order);
+                templateEngine.process("/WEB-INF/PaymentPage.html", ctx, resp.getWriter());
+            } catch (CredentialsException e) {
+                e.printStackTrace();
             }
-            if(!successfulPayment) {
-                order.setValid(0);
-                user.setSolvent(0);
-
-                // TODO add to failed payment
-            }
-
-            req.getSession(false).setAttribute("order", order);
-            templateEngine.process("/WEB-INF/PaymentPage.html", ctx, resp.getWriter());
 
         }
 

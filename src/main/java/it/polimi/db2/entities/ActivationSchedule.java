@@ -1,9 +1,6 @@
 package it.polimi.db2.entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -14,8 +11,9 @@ public class ActivationSchedule implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idActivationSchedule")
-    private int idAvtivationSchedule;
+    private int idActivationSchedule;
 
     @Column(name = "DateStart")
     private Date dateStart;
@@ -23,27 +21,20 @@ public class ActivationSchedule implements Serializable {
     @Column(name = "DateEnd")
     private Date dateEnd;
 
-    @Column(name = "orderId")
-    private int orderId;
+    @OneToOne
+    @JoinColumn(name = "orderId")
+    private Order order;
 
-    public ActivationSchedule(int idAvtivationSchedule, Date dateStart, Date dateEnd, int orderId) {
-        this.idAvtivationSchedule = idAvtivationSchedule;
+    public ActivationSchedule( Date dateStart, Date dateEnd, Order order) {
         this.dateStart = dateStart;
         this.dateEnd = dateEnd;
-        this.orderId = orderId;
+        this.order = order;
     }
 
     public ActivationSchedule() {
-
+        super();
     }
 
-    public int getIdAvtivationSchedule() {
-        return idAvtivationSchedule;
-    }
-
-    public void setIdAvtivationSchedule(int idAvtivationSchedule) {
-        this.idAvtivationSchedule = idAvtivationSchedule;
-    }
 
     public Date getDateStart() {
         return dateStart;
@@ -61,11 +52,19 @@ public class ActivationSchedule implements Serializable {
         this.dateEnd = dateEnd;
     }
 
-    public int getOrderId() {
-        return orderId;
+    public Order getOrder() {
+        return order;
     }
 
-    public void setOrderId(int orderId) {
-        this.orderId = orderId;
+    public void setOrder(Order order) {
+        this.order = order;
+    }
+
+    public int getIdActivationSchedule() {
+        return idActivationSchedule;
+    }
+
+    public void setIdActivationSchedule(int idActivationSchedule) {
+        this.idActivationSchedule = idActivationSchedule;
     }
 }

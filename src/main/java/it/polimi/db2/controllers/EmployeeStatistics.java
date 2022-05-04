@@ -38,8 +38,7 @@ public class EmployeeStatistics extends HttpServlet {
     @EJB(name = "it/polimi/db2/services/OptionalProductService")
     private OptionalProductService opService;
 
-    @EJB(name = "it/polimi/db2/services/OptionalOrderedService")
-    private OptionalOrderedService ooService;
+
 
 
     public EmployeeStatistics() {
@@ -120,7 +119,7 @@ public class EmployeeStatistics extends HttpServlet {
                 // for each order, number of optional products selected
                 List<Integer> opNum = new ArrayList<>();
                 spOrders.forEach(o -> {
-                    opNum.add(ooService.numberOfOrderOptionalProduct(o.getOrderId()));
+          //          opNum.add(ooService.numberOfOrderOptionalProduct(o.getOrderId()));
                 });
 
                 float totOpNum = opNum.stream().mapToInt(i -> i).sum();

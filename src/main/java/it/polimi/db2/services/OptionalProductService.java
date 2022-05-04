@@ -1,6 +1,5 @@
 package it.polimi.db2.services;
 
-import it.polimi.db2.entities.OptionalOrdered;
 import it.polimi.db2.entities.OptionalProduct;
 import it.polimi.db2.entities.ServicePackage;
 import it.polimi.db2.entities.ServicePackageOptional;

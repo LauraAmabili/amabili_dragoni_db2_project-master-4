@@ -1,19 +1,18 @@
 package it.polimi.db2.services;
 
 
+import it.polimi.db2.entities.OptionalProduct;
 import it.polimi.db2.entities.Order;
 import it.polimi.db2.entities.ServicePackage;
 import it.polimi.db2.entities.UserCustomer;
 import it.polimi.db2.exceptions.CredentialsException;
 
-import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
-import java.sql.ResultSet;
-import java.sql.Statement;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -47,7 +46,7 @@ public class OrderService {
         }
     }
 
-    public Order createOrder(int validityPeriodMonth,  Date dateStart, float totalCost, UserCustomer userOrder, ServicePackage servicePackage) throws CredentialsException, NonUniqueResultException {
+    public Order createOrder(int validityPeriodMonth, Date dateStart, float totalCost, UserCustomer userOrder, ServicePackage servicePackage, List<OptionalProduct> optionalProducts) throws CredentialsException, NonUniqueResultException {
         Order order = new Order();
         order.setValidityPeriodMonth(validityPeriodMonth);
         order.setDateStart(dateStart);
@@ -56,6 +55,7 @@ public class OrderService {
         order.setOrderedService(servicePackage);
         LocalDateTime orderDateTime = LocalDateTime.now();
         order.setOrderDateTime(orderDateTime);
+        if(optionalProducts!=null) order.setOptionalOrdered(optionalProducts);
         em.persist(order);
         em.flush();
         return order;

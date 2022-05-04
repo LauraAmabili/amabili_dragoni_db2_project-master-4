@@ -1,3 +1,4 @@
+/*
 package it.polimi.db2.entities;
 
 
@@ -45,3 +46,4 @@ public class OptionalOrdered implements Serializable {
         this.order = order;
     }
 }
+*/

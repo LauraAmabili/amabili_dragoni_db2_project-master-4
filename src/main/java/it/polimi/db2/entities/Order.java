@@ -6,6 +6,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "Order", schema = "database2")
@@ -23,6 +24,7 @@ import java.util.Date;
 
 // query that returns the order based on the customer and the date time of the creation
 @NamedQuery(name = "Order.findOrderByDateTimeCustomer", query = "SELECT o from Order o where o.userOrder.username = :userOrderId and o.orderDateTime = :orderDT")
+
 public class Order implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -56,10 +58,16 @@ public class Order implements Serializable {
     @JoinColumn(name="orderedService", referencedColumnName="PackageName")
     private ServicePackage orderedService;
 
+    @ManyToMany
+    @JoinTable(name = "OptionalOrdered",
+            joinColumns = @JoinColumn(name = "orderId"),
+            inverseJoinColumns = @JoinColumn(name = "optionalProductId"))
+    private List<OptionalProduct> optionalOrdered;
 
-    public Order() {
+    @OneToOne(mappedBy = "order")
+    private ActivationSchedule activationSchedule;
 
-    }
+    public Order() { }
 
 
 
@@ -128,5 +136,17 @@ public class Order implements Serializable {
 
     public void setOrderDateTime(LocalDateTime orderDateTime) {
         this.orderDateTime = orderDateTime;
+    }
+
+    public List<OptionalProduct> getOptionalOrdered() { return optionalOrdered; }
+
+    public void setOptionalOrdered(List<OptionalProduct> optionalOrdered) { this.optionalOrdered = optionalOrdered; }
+
+    public ActivationSchedule getActivationSchedule() {
+        return activationSchedule;
+    }
+
+    public void setActivationSchedule(ActivationSchedule activationSchedule) {
+        this.activationSchedule = activationSchedule;
     }
 }

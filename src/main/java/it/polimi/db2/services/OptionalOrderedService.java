@@ -1,18 +1,11 @@
+/*
 package it.polimi.db2.services;
 
-import it.polimi.db2.entities.OptionalOrdered;
-import it.polimi.db2.entities.OptionalProduct;
-import it.polimi.db2.entities.ServicePackageOptional;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Tuple;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+
 
 @Stateless
 public class OptionalOrderedService {
@@ -35,15 +28,18 @@ public class OptionalOrderedService {
         return opNum.size();
     }
 
+*/
 /*
     public List<Object[]> topOptionalOrdered (){
 
         List<Object[]> top = em.createNamedQuery("OptionalOrder.TopOptional", Object[].class).getResultList();
 
         return top;
-    }*/
+    }*//*
 
-    /*
+
+    */
+/*
 
       Collectors.toMap(
         tuple -> ((Number) tuple.get("year")).intValue(),
@@ -64,10 +60,12 @@ Map<Number, Number> postCountByYearMap = (Map<Number, Number>) entityManager
 .setResultTransformer(
     new MapResultTransformer<Number, Number>()
 )
-.getSingleResult();*/
+.getSingleResult();*//*
+
 
 
 
 
 
 }
+*/
