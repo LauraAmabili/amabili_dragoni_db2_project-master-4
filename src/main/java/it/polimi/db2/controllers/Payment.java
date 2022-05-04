@@ -4,6 +4,7 @@ import it.polimi.db2.entities.Order;
 import it.polimi.db2.entities.ServicePackage;
 import it.polimi.db2.entities.UserCustomer;
 import it.polimi.db2.exceptions.CredentialsException;
+import it.polimi.db2.external.services.BillingService;
 import it.polimi.db2.services.OrderService;
 import it.polimi.db2.services.ServicePackageService;
 import org.thymeleaf.TemplateEngine;
@@ -18,6 +19,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Date;
 
@@ -51,14 +53,23 @@ public class Payment extends HttpServlet {
 
         UserCustomer user = (UserCustomer) req.getSession(false).getAttribute("user");
         String optionalProductList[];
-        if(req.getSession(false)!=null  &&  req.getSession(false).getAttribute("user")!=null) {
-            //update of object user to make sure is the current one
+        HttpSession session = req.getSession(false);
 
+
+        // in payment ho diverse opzioni->
+        // pago l'ordine
+
+        if(session.getAttribute("user") == null) {
+            templateEngine.process("/WEB-INF/index.html", ctx, resp.getWriter());
+            return;
+
+            // post->  create a new order
+        } else if (session.getAttribute("user") != null && req.getSession(false).getAttribute("servicePackageChosen") != null) {
             Order order = new Order();
             ServicePackage servicePackage = (ServicePackage) req.getSession(false).getAttribute("servicePackageChosen");
             int validityPeriod = (int) req.getSession(false).getAttribute("chosenValidityPeriod");
             optionalProductList =((req.getParameterValues("optionalProducts")));
-            float totalCost;
+            float totalCost = (int) req.getSession(false).getAttribute("totalCost");
 
             try {
                 orderService.createOrder(validityPeriod, new Date(), new Date(), 100, user, servicePackage);
@@ -66,11 +77,53 @@ public class Payment extends HttpServlet {
                 e.printStackTrace();
             }
 
+            //payment
+            boolean successfulPayment = true;
+            if(req.getParameter("makePaymentFail") != null) {
+                BillingService ba = new BillingService();
+                successfulPayment = ba.attemptPayment(Boolean.parseBoolean(req.getParameter("makePaymentFail")));
+                //boolean successfulPayment = ba.attemptPayment(true);
+            }
 
-            ctx.setVariable("monthlyFeeChosen", validityPeriod);
+            if(successfulPayment == true){
+                order.setValid(1); // TODO CHIAMATA AL DB
+                // TODO CREATE SERVICE ACTIVATION SCHEDULE
+            }
+
+            ctx.setVariable("successfulPayment", successfulPayment);
             ctx.setVariable("Order", order);
             templateEngine.process("/WEB-INF/PaymentPage.html", ctx, resp.getWriter());
+
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 
     @Override

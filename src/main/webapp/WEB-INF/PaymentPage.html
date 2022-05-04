@@ -1,10 +1,66 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Payment Page</title>
+    <meta charset="ISO-8859-1">
+    <title></title>
+    <link rel="stylesheet" type="text/css" media="all"
+          href="../css/style.css" th:href="@{/css/style.css}" />
 </head>
 <body>
+<br>
+<div style="float: right" th:if="${session.user != null}" th:text="${session.user.username}"></div>
 
+
+<span >Calling external service....</span>
+
+
+
+<div>
+    <label>Make payment fail:</label>
+</div>
+
+<div class="form-style-4">
+    <form method="POST" action="payment">
+        <label class="switch">
+            <input type="checkbox"  th:name="makePaymentFail" th:value="${true}" >
+            <span class="slider round" ></span>
+        </label>
+        <input type="submit" name="onBuyServiceClick" value="PAY">
+    </form>
+</div>
+
+
+<span th:if="${successfulPayment != null}">
+<div>
+    <span th:if="${successfulPayment}" th:text= "${'Payment successful'}"></span>
+    <span th:unless="${successfulPayment}" th:text= "${'Payment rejected, try later'}">  </span>
+</div>
+
+<br>
+
+<div th:if="${successfulPayment}" class="SucessContainer">
+    <div class="w3-modal-icon w3-modal-success animate">
+        <span class="w3-modal-line w3-modal-tip animateSuccessTip"></span>
+        <span class="w3-modal-line w3-modal-long animateSuccessLong"></span>
+        <div class="w3-modal-placeholder"></div>
+        <div class="w3-modal-fix"></div>
+    </div>
+</div>
+
+<br>
+
+<div>
+    <a href="home-page-customer" class="link">
+		  <span class="mask">
+		    <div class="link-container">
+		      <span class="link-title1 title">CONTINUE SHOPPING</span>
+		    </div>
+		  </span>
+        <div class="link-icon">
+        </div>
+    </a>
+</div>
+
+    </span>
 </body>
 </html>

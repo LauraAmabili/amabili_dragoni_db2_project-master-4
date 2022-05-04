@@ -2,8 +2,10 @@ package it.polimi.db2.controllers;
 
 
 import it.polimi.db2.entities.ServicePackage;
+import it.polimi.db2.entities.UserCustomer;
 import it.polimi.db2.exceptions.CredentialsException;
 import it.polimi.db2.services.ServicePackageService;
+import it.polimi.db2.services.UserCustomerService;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -27,6 +29,10 @@ public class OnBuyServiceClick extends HttpServlet {
     @EJB(name = "services/ServicePackageService")
     private ServicePackageService spService;
 
+    @EJB(name = "services/UserCustomerService")
+    private UserCustomerService userCustomerService;
+
+
     public OnBuyServiceClick(){
         super();
     }
@@ -42,6 +48,13 @@ public class OnBuyServiceClick extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+        final WebContext ctx = new WebContext(req, resp, this.getServletContext(), req.getLocale());
+
+        if(req.getSession(false)!=null  &&  req.getSession(false).getAttribute("user")!=null) {
+            //update of object user to make sure is the current one
+            UserCustomer customer = userCustomerService.findCustomerById((UserCustomer) req.getSession().getAttribute("user"));
+            ctx.setVariable("loggedCustomer", customer);
+        }
 
         List<ServicePackage> sp = null;
         try {
@@ -50,7 +63,7 @@ public class OnBuyServiceClick extends HttpServlet {
             e.printStackTrace();
         }
 
-        final WebContext ctx = new WebContext(req, resp, this.getServletContext(), req.getLocale());
+
 
 
         ctx.setVariable("packageList", sp);
