@@ -78,6 +78,7 @@ public class OnServicePackageConfirm extends HttpServlet {
 
 
         req.getSession(false).setAttribute("servicePackageChosen", servicePackage);
+        req.getSession(false).setAttribute("optionalProductsObjects", optionalProducts);
         ctx.setVariable("servicePackageChosenCTX", servicePackage);
         ctx.setVariable("optionalProductsObjects", optionalProducts);
         templateEngine.process("/WEB-INF/AdditionalInformation.html", ctx, resp.getWriter());
