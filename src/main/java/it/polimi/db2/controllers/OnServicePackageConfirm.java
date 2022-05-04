@@ -7,6 +7,7 @@ import it.polimi.db2.exceptions.ServicePackageException;
 import it.polimi.db2.services.OptionalProductService;
 import it.polimi.db2.services.ServicePackageService;
 import it.polimi.db2.services.ServicesService;
+import it.polimi.db2.services.UserCustomerService;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -37,6 +38,8 @@ public class OnServicePackageConfirm extends HttpServlet {
     @EJB(name = "services/ServicesService")
     private ServicesService sService;
 
+    @EJB(name = "services/UserCustomerService")
+    private UserCustomerService userCustomerService;
 
     public OnServicePackageConfirm(){
         super();
@@ -76,7 +79,9 @@ public class OnServicePackageConfirm extends HttpServlet {
             e.printStackTrace();
         }
 
-
+        UserCustomer customer = userCustomerService.findCustomerById((UserCustomer) req.getSession().getAttribute("user"));
+        ctx.setVariable("loggedCustomer", customer);
+        req.getSession(false).setAttribute("user", customer);
         req.getSession(false).setAttribute("servicePackageChosen", servicePackage);
         ctx.setVariable("servicePackageChosenCTX", servicePackage);
         ctx.setVariable("optionalProductsObjects", optionalProducts);

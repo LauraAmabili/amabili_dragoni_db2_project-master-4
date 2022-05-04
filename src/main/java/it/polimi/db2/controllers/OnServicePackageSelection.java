@@ -7,6 +7,7 @@ import it.polimi.db2.exceptions.ServicePackageException;
 import it.polimi.db2.services.OptionalProductService;
 import it.polimi.db2.services.ServicePackageService;
 import it.polimi.db2.services.ServicesService;
+import it.polimi.db2.services.UserCustomerService;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -37,6 +38,9 @@ public class OnServicePackageSelection extends HttpServlet {
     @EJB(name = "services/ServicesService")
     private ServicesService sService;
 
+    @EJB(name = "services/UserCustomerService")
+    private UserCustomerService userCustomerService;
+
 
     public OnServicePackageSelection(){
         super();
@@ -55,6 +59,10 @@ public class OnServicePackageSelection extends HttpServlet {
 
 
         final WebContext ctx = new WebContext(req, resp, this.getServletContext(), req.getLocale());
+
+        UserCustomer customer = userCustomerService.findCustomerById((UserCustomer) req.getSession().getAttribute("user"));
+        ctx.setVariable("loggedCustomer", customer);
+        req.getSession(false).setAttribute("user", customer);
 
         ServicePackage servicePackage = new ServicePackage();
         List<String> optionalProductsIds = null;
@@ -123,6 +131,7 @@ public class OnServicePackageSelection extends HttpServlet {
             ctx.setVariable("optionalProductsObjects", optionalProducts);
             ctx.setVariable("internetServices", internetServices);
             ctx.setVariable("mobilePhoneServices", mobilePhoneServices);
+
 
             //templateEngine.process("/WEB-INF/AdditionalInformation.html", ctx, resp.getWriter());
             templateEngine.process("/WEB-INF/BuyService.html", ctx, resp.getWriter());

@@ -100,7 +100,7 @@ public class OnAdditionalInfoSubmit extends HttpServlet {
             float totalSP = spService.costPerMonth(validityPeriod, servicePackage);
             float totalCost = totalOP + totalSP;
 
-
+            req.getSession(false).setAttribute("user", customer);
             req.getSession(false).setAttribute("totalCost", totalCost);
             req.getSession(false).setAttribute("optionalProducts", optionalProductList);
             req.getSession(false).setAttribute("selectedOptionalProducts", optionalProducts);

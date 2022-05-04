@@ -54,6 +54,7 @@ public class OnBuyServiceClick extends HttpServlet {
             //update of object user to make sure is the current one
             UserCustomer customer = userCustomerService.findCustomerById((UserCustomer) req.getSession().getAttribute("user"));
             ctx.setVariable("loggedCustomer", customer);
+            req.getSession(false).setAttribute("user", customer);
         }
 
         List<ServicePackage> sp = null;
