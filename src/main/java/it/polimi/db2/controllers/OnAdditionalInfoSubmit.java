@@ -69,6 +69,7 @@ public class OnAdditionalInfoSubmit extends HttpServlet {
             templateEngine.process("/WEB-INF/index.html", ctx, resp.getWriter());
             return;
         }
+
         ServicePackage servicePackage;
         servicePackage = (ServicePackage) req.getSession(false).getAttribute("servicePackageChosen");
         UserCustomer customer = (UserCustomer) req.getSession(false).getAttribute("user");
@@ -104,6 +105,7 @@ public class OnAdditionalInfoSubmit extends HttpServlet {
             req.getSession(false).setAttribute("optionalProducts", optionalProductList);
             req.getSession(false).setAttribute("chosenValidityPeriod", validityPeriod);
             req.getSession(false).setAttribute("startDate", startDate);
+            req.getSession(false).setAttribute("loggedCustomer", customer);
 
 
                 ctx.setVariable("loggedCustomer", customer);

@@ -66,12 +66,9 @@ public class OnBuyServiceClick extends HttpServlet {
 
 
 
+
         ctx.setVariable("packageList", sp);
-
-
-
         templateEngine.process("/WEB-INF/BuyService.html", ctx, resp.getWriter());
-
     }
 
     @Override

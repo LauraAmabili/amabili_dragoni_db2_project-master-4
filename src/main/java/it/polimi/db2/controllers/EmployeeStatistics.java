@@ -136,7 +136,7 @@ public class EmployeeStatistics extends HttpServlet {
 
 
 
-        HashMap<String, Integer> top = (HashMap<String, Integer> ) ooService.topOptionalOrdered();
+//        HashMap<String, Integer> top = (HashMap<String, Integer> ) ooService.topOptionalOrdered();
 
 
 
@@ -144,7 +144,7 @@ public class EmployeeStatistics extends HttpServlet {
         ctx.setVariable("salesPerPackageValidityPeriod", salesPkgValidityPeriod);
         ctx.setVariable("salesPkgOp", salesOp);
         ctx.setVariable("avgOptionalSalesPerPackage", avgOptionalSalesPerPackage);
-        ctx.setVariable("topOptionalProducts", top);
+   //     ctx.setVariable("topOptionalProducts", top);
 
         templateEngine.process("/WEB-INF/EmployeeStatisticsPage.html", ctx, response.getWriter());
 

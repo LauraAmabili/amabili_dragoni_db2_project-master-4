@@ -2,7 +2,12 @@ package it.polimi.db2.controllers;
 
 import it.polimi.db2.entities.Order;
 import it.polimi.db2.entities.ServicePackage;
+import it.polimi.db2.entities.UserCustomer;
+import it.polimi.db2.entities.UserEmployee;
+import it.polimi.db2.exceptions.CredentialsException;
+import it.polimi.db2.services.OrderService;
 import it.polimi.db2.services.ServicePackageService;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -16,7 +21,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.Date;
 
+import static java.lang.Float.parseFloat;
 import static java.lang.Integer.parseInt;
 
 @WebServlet("/create-order")
@@ -25,6 +33,8 @@ public class CreateOrder extends HttpServlet {
     private TemplateEngine templateEngine;
     @EJB(name = "services/ServicePackageService")
     private ServicePackageService spService;
+    @EJB(name = "services/OrderService")
+    private OrderService oService;
 
     public CreateOrder(){
         super();
@@ -45,18 +55,21 @@ public class CreateOrder extends HttpServlet {
 
 
         if(req.getSession(false)!=null  &&  req.getSession(false).getAttribute("user")!=null) {
-            //update of object user to make sure is the current one
-
-
-            Order order = new Order();
-            ServicePackage servicePackage = (ServicePackage) req.getSession(false).getAttribute("servicePackageChosen");
             int validityPeriod = (int) req.getSession(false).getAttribute("chosenValidityPeriod");
-            order.setOrderedService(servicePackage);
-            order.setValidityPeriodMonth((int) validityPeriod);
+            Date dateStart = (Date) req.getSession(false).getAttribute("startDate");
+            float totalCost = (float) req.getSession(false).getAttribute("totalCost");
+            UserCustomer user = (UserCustomer) req.getSession(false).getAttribute("loggedCustomer");
+            ServicePackage servicePackage = (ServicePackage) req.getSession(false).getAttribute("servicePackageChosen");
+
+            try {
+                Order order = oService.createOrder(validityPeriod, dateStart, totalCost, user, servicePackage);
+                ctx.setVariable("Order", order);
+            } catch (CredentialsException e) {
+                e.printStackTrace();
+            }
 
             ctx.setVariable("monthlyFeeChosen", validityPeriod);
-            ctx.setVariable("Order", order);
-            templateEngine.process("/WEB-INF/ConfirmationPage.html", ctx, resp.getWriter());
+            templateEngine.process("/WEB-INF/PaymentPage.html", ctx, resp.getWriter());
         }
     }
 

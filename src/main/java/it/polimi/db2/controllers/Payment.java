@@ -71,11 +71,11 @@ public class Payment extends HttpServlet {
             optionalProductList =((req.getParameterValues("optionalProducts")));
             float totalCost = (int) req.getSession(false).getAttribute("totalCost");
 
-            try {
-                orderService.createOrder(validityPeriod, new Date(), new Date(), 100, user, servicePackage);
-            } catch (CredentialsException e) {
-                e.printStackTrace();
-            }
+//            try {
+//             //   orderService.createOrder(validityPeriod, new Date(), new Date(), 100, user, servicePackage);
+//            } catch (CredentialsException e) {
+//                e.printStackTrace();
+//            }
 
             //payment
             boolean successfulPayment = true;

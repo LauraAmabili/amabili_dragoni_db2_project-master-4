@@ -4,6 +4,7 @@ package it.polimi.db2.entities;
 import javax.persistence.*;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -20,10 +21,13 @@ import java.util.Date;
 @NamedQuery(name = "Order.getServicePkgOrdersWithOptionalProducts",
         query = "SELECT o from Order o where (o.orderedService = :servicePkg  and o.orderId in (SELECT oo.order FROM OptionalOrdered oo WHERE oo.optionalProduct = :optionalProduct))")
 
+// query that returns the order based on the customer and the date time of the creation
+@NamedQuery(name = "Order.findOrderByDateTimeCustomer", query = "SELECT o from Order o where o.userOrder.username = :userOrderId and o.orderDateTime = :orderDT")
 public class Order implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "orderId")
     private int orderId;
 
@@ -33,11 +37,13 @@ public class Order implements Serializable {
     @Column(name = "Valid")
     private int valid;
 
+    //for start
     @Column(name = "DateStart")
     private Date dateStart;
 
+    // for creation
     @Column(name = "OrderDateTime")
-    private java.util.Date orderDateTime;
+    private LocalDateTime orderDateTime;
 
     @Column(name = "TotalCost")
     private float totalCost;
@@ -56,15 +62,7 @@ public class Order implements Serializable {
     }
 
 
-    public Order(int orderId, int validityPeriodMonth, int valid, Date dateStart, Date orderDateTime, float totalCost, UserCustomer userOrder) {
-        this.orderId = orderId;
-        this.validityPeriodMonth = validityPeriodMonth;
-        this.valid = valid;
-        this.dateStart = dateStart;
-        this.orderDateTime = orderDateTime;
-        this.totalCost = totalCost;
-        this.userOrder = userOrder;
-    }
+
 
 
     public int getOrderId() {
@@ -100,14 +98,6 @@ public class Order implements Serializable {
         this.dateStart = dateStart;
     }
 
-    public Date getOrderDateTime() {
-        return orderDateTime;
-    }
-
-    public void setOrderDateTime(Date orderDateTime) {
-        this.orderDateTime = orderDateTime;
-    }
-
     public float getTotalCost() {
         return totalCost;
     }
@@ -130,5 +120,13 @@ public class Order implements Serializable {
 
     public void setOrderedService(ServicePackage orderedService) {
         this.orderedService = orderedService;
+    }
+
+    public LocalDateTime getOrderDateTime() {
+        return orderDateTime;
+    }
+
+    public void setOrderDateTime(LocalDateTime orderDateTime) {
+        this.orderDateTime = orderDateTime;
     }
 }
