@@ -1,10 +1,8 @@
 package it.polimi.db2.controllers;
 
-import it.polimi.db2.entities.Order;
-import it.polimi.db2.entities.ServicePackage;
-import it.polimi.db2.entities.UserCustomer;
-import it.polimi.db2.entities.UserEmployee;
+import it.polimi.db2.entities.*;
 import it.polimi.db2.exceptions.CredentialsException;
+import it.polimi.db2.services.OptionalOrderedService;
 import it.polimi.db2.services.OrderService;
 import it.polimi.db2.services.ServicePackageService;
 import org.apache.commons.lang.StringEscapeUtils;
@@ -23,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 import static java.lang.Float.parseFloat;
 import static java.lang.Integer.parseInt;
@@ -35,7 +34,8 @@ public class CreateOrder extends HttpServlet {
     private ServicePackageService spService;
     @EJB(name = "services/OrderService")
     private OrderService oService;
-
+    @EJB(name = "services/OptionalOrderedService")
+    private OptionalOrderedService ooService;
     public CreateOrder(){
         super();
     }
@@ -64,9 +64,16 @@ public class CreateOrder extends HttpServlet {
             try {
                 Order order = oService.createOrder(validityPeriod, dateStart, totalCost, user, servicePackage);
                 ctx.setVariable("Order", order);
+                List<OptionalProduct> selectedOptionalProduct = (List<OptionalProduct>) req.getSession(false).getAttribute("selectedOptionalProducts");
+                selectedOptionalProduct.forEach(sop -> {
+                    ooService.addOptionalProductToOrder(sop.getName(), order.getOrderId());
+                });
             } catch (CredentialsException e) {
                 e.printStackTrace();
             }
+
+
+
 
             ctx.setVariable("monthlyFeeChosen", validityPeriod);
             templateEngine.process("/WEB-INF/PaymentPage.html", ctx, resp.getWriter());
