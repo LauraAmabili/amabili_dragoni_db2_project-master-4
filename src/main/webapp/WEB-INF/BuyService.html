@@ -27,6 +27,11 @@
 
     <span th:if="${servicePackageChosenCTX != null}" th:text="'Service Package chosen: '+ ${servicePackageChosenCTX.packageName}"> </span>
     <p>&nbsp;</p>
+    <div class="form-style-4">
+        <form method="POST" action="buy-service">
+            <input type="submit" name="onBuyServiceClick" value="CHANGE PACKET">
+        </form>
+    </div>
 
 
     <tbody>
@@ -80,6 +85,15 @@
         </td>
     </tr>
     </tbody>
+    <div class="form-style-4">
+        <form method="POST" action="package-confirmed">
+            <input type="submit" name="onServicePackageConfirmed" value="CONFIRM PACKAGE">
+        </form>
+    </div>
+
+
+
+
 
 
 
