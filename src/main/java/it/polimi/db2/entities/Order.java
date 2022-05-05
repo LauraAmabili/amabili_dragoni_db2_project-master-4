@@ -5,6 +5,7 @@ import javax.persistence.*;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -21,10 +22,10 @@ import java.util.List;
 // query that selects the orders of a given service package with a given optional product
 @NamedQuery(name = "Order.getServicePkgOrdersWithOptionalProducts",
         query = "SELECT o from Order o where (o.orderedService = :servicePkg  and o.orderId in (SELECT oo.order FROM OptionalOrdered oo WHERE oo.optionalProduct = :optionalProduct))")
-
 // query that returns the order based on the customer and the date time of the creation
 @NamedQuery(name = "Order.findOrderByDateTimeCustomer", query = "SELECT o from Order o where o.userOrder.username = :userOrderId and o.orderDateTime = :orderDT")
-
+//query that returns not correctly paid order of a user , valid = 0
+@NamedQuery(name = "Order.getNotValidOrdersOfUser", query = "SELECT o from Order o where o.userOrder = :userCustomer and o.valid = 0")
 public class Order implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -58,7 +59,7 @@ public class Order implements Serializable {
     @JoinColumn(name="orderedService", referencedColumnName="PackageName")
     private ServicePackage orderedService;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     @JoinTable(name = "OptionalOrdered",
             joinColumns = @JoinColumn(name = "orderId"),
             inverseJoinColumns = @JoinColumn(name = "optionalProductId"))

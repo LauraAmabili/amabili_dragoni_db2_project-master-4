@@ -1,13 +1,11 @@
 package it.polimi.db2.controllers;
 
-import it.polimi.db2.entities.OptionalProduct;
-import it.polimi.db2.entities.Order;
-import it.polimi.db2.entities.ServicePackage;
-import it.polimi.db2.entities.UserCustomer;
+import it.polimi.db2.entities.*;
 import it.polimi.db2.exceptions.CredentialsException;
 import it.polimi.db2.external.services.BillingService;
 import it.polimi.db2.services.ActivationScheduleService;
 import it.polimi.db2.services.OrderService;
+import it.polimi.db2.services.PaymentService;
 import it.polimi.db2.services.ServicePackageService;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
@@ -42,6 +40,9 @@ public class Payment extends HttpServlet {
     @EJB(name = "services/ActivationScheduleService")
     private ActivationScheduleService asService;
 
+    @EJB(name = "services/PaymentService")
+    private PaymentService paymentService;
+
 
     public Payment(){
         super();
@@ -68,13 +69,11 @@ public class Payment extends HttpServlet {
 
             // post->  create a new order
         } else if (session.getAttribute("user") != null && req.getSession(false).getAttribute("servicePackageChosen") != null ) {
-
             ServicePackage servicePackage = (ServicePackage) req.getSession(false).getAttribute("servicePackageChosen");
             int validityPeriod = (int) req.getSession(false).getAttribute("chosenValidityPeriod");
             float totalCost = (float) req.getSession(false).getAttribute("totalCost");
             Date dateStart = (Date) req.getSession(false).getAttribute("startDate");
             Date dateEnd = addMonths(dateStart, validityPeriod);
-
             try {
                 List<OptionalProduct> selectedOptionalProduct = (List<OptionalProduct>) req.getSession(false).getAttribute("selectedOptionalProducts");
                 Order order = orderService.createOrder(validityPeriod, dateStart, totalCost, user, servicePackage, selectedOptionalProduct);
@@ -84,20 +83,22 @@ public class Payment extends HttpServlet {
                 //payment
                 boolean successfulPayment = true;
                 BillingService ba = new BillingService();
-                boolean value = Boolean.parseBoolean((String) req.getSession(false).getAttribute("makePaymentFail"));
+                boolean value = Boolean.parseBoolean((String) req.getParameter("makePaymentFail"));
+                // boolean value2  = (boolean) req.getSession(false).getAttribute("makePaymentFail");
                 successfulPayment = ba.attemptPayment(value);
 
                 if (successfulPayment && order != null) {
                     order.setValid(1);
-                    Order o = order;
                     asService.addNewActivationRecord(dateStart, dateEnd, order);
                     ctx.setVariable("successfulPayment", successfulPayment);
                 }
                 if (!successfulPayment) {
                     order.setValid(0);
                     user.setSolvent(0);
-
-                    // TODO add to failed payment
+                    Date dateFailed = new Date();
+                    FailedPayment fp = new FailedPayment();
+                    fp = paymentService.addFailedPayment(dateFailed, totalCost, user);
+                    ctx.setVariable("failedPayment", fp);
                 }
 
                 req.getSession(false).setAttribute("order", order);
@@ -105,6 +106,20 @@ public class Payment extends HttpServlet {
             } catch (CredentialsException e) {
                 e.printStackTrace();
             }
+
+        } else if(session.getAttribute("user") != null && req.getSession(false).getAttribute("servicePackageChosen") != null && req.getSession(false).getAttribute("orderIdForRejectedPayment")!= null){
+
+            Order order = (Order) req.getSession(false).getAttribute("order");
+            boolean successfulPayment = true;
+            order.setValid(1);
+
+            ctx.setVariable("successfulPayment", successfulPayment);
+            req.getSession(false).setAttribute("order", order);
+            req.getSession().setAttribute("user", user);
+            templateEngine.process("/WEB-INF/PaymentPage.html", ctx, resp.getWriter());
+            // TODO payment page di quest'ordine --> poi ci penso
+            // TODO devi fare in modo che non compaia make payment fail
+
 
         }
 

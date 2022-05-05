@@ -2,6 +2,7 @@ package it.polimi.db2.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 
 @Entity
@@ -23,6 +24,10 @@ public class UserCustomer implements Serializable {
 
     @Column(name = "solvent")
     private int solvent;
+
+    @OneToMany(mappedBy = "failedUser")
+    private List<FailedPayment> failedPaymentList;
+
 
     public UserCustomer(){
     }
