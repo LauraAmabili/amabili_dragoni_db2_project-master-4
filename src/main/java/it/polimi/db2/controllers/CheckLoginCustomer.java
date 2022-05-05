@@ -12,6 +12,7 @@ import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 import javax.ejb.EJB;
 import javax.persistence.NonUniqueResultException;
 import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -87,6 +88,12 @@ public class CheckLoginCustomer extends HttpServlet {
             response.sendRedirect(path);
         }
     }
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        doPost(req, resp);
 
+
+
+    }
 
 }

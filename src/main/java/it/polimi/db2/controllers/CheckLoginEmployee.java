@@ -4,6 +4,7 @@ package it.polimi.db2.controllers;
 import javax.ejb.EJB;
 import javax.persistence.NonUniqueResultException;
 import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -112,5 +113,12 @@ public class CheckLoginEmployee extends HttpServlet {
             templateEngine.process("/WEB-INF/HomePageEmployee.html", ctx, response.getWriter());
 
         }
+    }
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        doPost(req, resp);
+
+
+
     }
 }
