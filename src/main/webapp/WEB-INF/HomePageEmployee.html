@@ -20,7 +20,7 @@
         <strong>CREATE NEW SERVICE PACKAGE</strong> </span>
     </h2>
     <p style="color: #ff0000;"><span style="color: #000000;">
-        Name:</span>&nbsp; <input name="name" required="" type="text" />&nbsp; &nbsp; &nbsp;
+        Name:</span>&nbsp; <input name="name" required="" type="text" maxlength="45" />&nbsp; &nbsp; &nbsp;
     <input  type="checkbox" name="fixedPhone" value="fixedInternetIn">
         <span style="color: #000000;">Fixed Phone</span>
     </p>
@@ -165,7 +165,7 @@
 <div id="mobilePhone" class="services" style="display:none">
     <form method="POST" action="create-mobile-phone-service">
     <p></p>
-    Name: <input type="text" name="name" required>
+    Name: <input type="text" name="name" maxlength="45" required>
     <p></p>
     Number of minutes Included: <input type="text" name="minutesNum" required>
     <p></p>
@@ -180,11 +180,11 @@
 <div id="fixedInternet" class="services" style="display:none">
     <form method="POST" action="create-fixed-internet-service">
     <p></p>
-    Name: <input type="text" name="name" required>
+    Name: <input type="text" name="name" maxlength="45" required>
     <p></p>
-    Number of GB Included: <input type="text" name="gigaNum" required>
+    Number of GB Included: <input type="text" maxlength="45" name="gigaNum" required>
         <p></p>
-    Fee for extra GB: <input type="text" name="extraFees" required> &euro;/GB
+    Fee for extra GB: <input type="text" maxlength="45" name="extraFees" required> &euro;/GB
 
         <input type="submit" value="Create Service">
     </form>
@@ -192,11 +192,11 @@
 <div id="mobileInternet" class="services" style="display:none">
     <form method="POST" action="create-mobile-internet-service">
     <p></p>
-    Name: <input type="text" name="name" required>
+    Name: <input type="text" maxlength="45" name="name" required>
     <p></p>
-    Number of GB Included: <input type="text" name="gigaNum" required>
+    Number of GB Included: <input type="text" maxlength="45" name="gigaNum" required>
     <p></p>
-    Fee for extra GB: <input type="text" name="extraFees" required> &euro;/GB
+    Fee for extra GB: <input type="text" maxlength="45" name="extraFees" required> &euro;/GB
     <p></p>
         <input type="submit" value="Create Service">
     </form>
@@ -222,8 +222,8 @@
 <pre>&nbsp;</pre>
 <form method="POST" action="create-optional-product-service">
     <h2 style="text-align: justify;"><span style="color: #0000ff;"><strong>CREATE NEW OPTIONAL PRODUCT</strong></span></h2>
-    <p>Name: <input name="name" required="" type="text" /></p>
-<p>Price per Month: <input name="monthlyFee" required="" type="text" /></p>
+    <p>Name: <input name="name" required="" type="text" maxlength="45"/></p>
+<p>Price per Month: <input name="monthlyFee" required="" type="text"  /></p>
 <input type="submit" value="Create Optional Product">
 </form>
 <p th:if="${wrongValuesOP} != null" th:text="${wrongValuesOP}"style="color: #ff0000;"></p>

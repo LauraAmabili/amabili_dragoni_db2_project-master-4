@@ -108,5 +108,11 @@ public class CreateOptionalProduct extends HttpServlet {
         templateEngine.process(path, ctx, response.getWriter());
 
     }
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        doPost(req, resp);
 
+
+
+    }
 }
