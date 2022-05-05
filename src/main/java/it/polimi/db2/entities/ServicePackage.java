@@ -4,6 +4,7 @@ package it.polimi.db2.entities;
 import javax.persistence.*;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -20,19 +21,31 @@ public class ServicePackage implements Serializable {
     @Column(name = "fixedPhoneNumber")
     private int fixedPhoneNumber;
 
-
     @ManyToOne
     @JoinColumn(name="packageFees", referencedColumnName="IdMontlyFee")
     private MonthlyFee packageFees;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
+    @JoinTable(name = "PkgServicePhone",
+            joinColumns = @JoinColumn(name = "servicePackage"),
+            inverseJoinColumns = @JoinColumn(name = "mobilePhone"))
     private List<MobilePhoneService> mobilePhoneServices;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
+    @JoinTable(name = "PkgServiceInternet",
+            joinColumns = @JoinColumn(name = "packageService"),
+            inverseJoinColumns = @JoinColumn(name = "internetService"))
     private List<InternetService> internetServices;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
+    @JoinTable(name = "ServicePackageOptional",
+            joinColumns = @JoinColumn(name = "servicePackage"),
+            inverseJoinColumns = @JoinColumn(name = "optionalProduct"))
     private List<OptionalProduct> optionalProducts;
+
+    @OneToMany(mappedBy = "orderedService")
+    private Collection<Order> orders;
+
 
     public ServicePackage() {
 
@@ -43,6 +56,15 @@ public class ServicePackage implements Serializable {
        this.fixedPhoneNumber = fixedPhoneNumber;
        this.packageFees = packageFees;
    }
+
+    public ServicePackage(String packageName, int fixedPhoneNumber, MonthlyFee packageFees, List<MobilePhoneService> mobilePhoneServices, List<InternetService> internetServices, List<OptionalProduct> optionalProducts) {
+        this.packageName = packageName;
+        this.fixedPhoneNumber = fixedPhoneNumber;
+        this.packageFees = packageFees;
+        this.mobilePhoneServices = mobilePhoneServices;
+        this.internetServices = internetServices;
+        this.optionalProducts = optionalProducts;
+    }
 
     public MonthlyFee getPackageFees() {
         return packageFees;
@@ -69,4 +91,27 @@ public class ServicePackage implements Serializable {
     }
 
 
+    public List<MobilePhoneService> getMobilePhoneServices() {
+        return mobilePhoneServices;
+    }
+
+    public void setMobilePhoneServices(List<MobilePhoneService> mobilePhoneServices) {
+        this.mobilePhoneServices = mobilePhoneServices;
+    }
+
+    public List<InternetService> getInternetServices() {
+        return internetServices;
+    }
+
+    public void setInternetServices(List<InternetService> internetServices) {
+        this.internetServices = internetServices;
+    }
+
+    public List<OptionalProduct> getOptionalProducts() {
+        return optionalProducts;
+    }
+
+    public void setOptionalProducts(List<OptionalProduct> optionalProducts) {
+        this.optionalProducts = optionalProducts;
+    }
 }

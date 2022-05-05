@@ -69,7 +69,7 @@ public class OnAdditionalInfoSubmit extends HttpServlet {
         UserCustomer customer = (UserCustomer) req.getSession(false).getAttribute("user");
 
 
-        int validityPeriod = 0; 
+        int validityPeriod = 0;
 
         String optionalProductList[] = new String[0];
         List<OptionalProduct> optionalProducts = new ArrayList<>();
@@ -96,6 +96,7 @@ public class OnAdditionalInfoSubmit extends HttpServlet {
 
         } else if(req.getSession(false)!=null  &&  req.getSession(false).getAttribute("user")!=null) {
             //update of object user to make sure is the current one
+
             servicePackage = (ServicePackage) req.getSession(false).getAttribute("servicePackageChosen");
             optionalProductList =((req.getParameterValues("optionalProducts")));
             validityPeriod = parseInt(StringEscapeUtils.escapeJava(req.getParameter("validityPeriod")));

@@ -1,6 +1,7 @@
 package it.polimi.db2.controllers;
 
 import it.polimi.db2.entities.*;
+import it.polimi.db2.exceptions.CredentialsException;
 import it.polimi.db2.services.MonthlyFeesService;
 import it.polimi.db2.services.OptionalProductService;
 import it.polimi.db2.services.ServicePackageService;
@@ -19,6 +20,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.Float.parseFloat;
@@ -118,49 +120,54 @@ public class CreateNewServicePackage extends HttpServlet {
         int fixedPhone = 1;
         if (fixedPhoneString == null) { fixedPhone = 0; }
 
-        // create the new service package
-        sPkgService.addNewServicePackage(packageName, fixedPhone, mf);
-
-        // take selected mobile/fixed internet services and add them in the PkgServiceInternet
+        List<InternetService> internetServices = new ArrayList<>();
         String[] myMobileInternetServices = request.getParameterValues("mobileInternetService");
-        if (myMobileInternetServices!= null) {
-            for (String mobileInternetService : myMobileInternetServices) {
-                sService.addNewPkgInternetService(packageName, mobileInternetService);
-            }
-        }
         String[] myFixedInternetServices = request.getParameterValues("fixedInternetService");
-        if(myFixedInternetServices != null) {
-            for (String fixedInternetService : myFixedInternetServices) {
-                sService.addNewPkgInternetService(packageName, fixedInternetService);
+        if(myMobileInternetServices != null) {
+            for (String myMobileInternetService : myMobileInternetServices) {
+                InternetService iService = sService.getInternetServiceById(myMobileInternetService);
+                internetServices.add(iService);
             }
         }
 
-        // take selected mobile phone services and add them in the PkgServicePhone
+        if(myFixedInternetServices != null) {
+            for (String myFixedInternetService : myFixedInternetServices) {
+                InternetService iService = sService.getInternetServiceById(myFixedInternetService);
+                internetServices.add(iService);
+            }
+        }
+
+
+        List<MobilePhoneService> mobilePhoneServices = new ArrayList<MobilePhoneService>();
         String[] myMobilePhoneServices = request.getParameterValues("mobilePhoneService");
         if (myMobilePhoneServices != null) {
-            for (String mobilePhoneService : myMobilePhoneServices) {
-                String mb = mobilePhoneService;
-                sService.addNewPkgPhoneService(packageName, mobilePhoneService);
+            for (String myMobilePhoneService : myMobilePhoneServices) {
+                MobilePhoneService mpService = sService.getMobilePhoneServiceById(myMobilePhoneService);
+                mobilePhoneServices.add(mpService);
             }
         }
 
-        // take selected optional products and add them in the PkgServiceOptional
+        List<OptionalProduct> optionalProducts = new ArrayList<>();
         String[] optionalProductServices = request.getParameterValues("optionalProductService");
-        if(optionalProductServices != null) {
+
+        if (optionalProductServices != null) {
             for (String optionalProductService : optionalProductServices) {
-                opService.addNewPkgOptionalProduct(packageName, optionalProductService);
+                OptionalProduct optService = opService.getOptionalProductById(optionalProductService);
+                optionalProducts.add(optService);
             }
         }
 
+        // create the new service package
+        sPkgService.addNewServicePackage(packageName, fixedPhone, mf, internetServices, mobilePhoneServices, optionalProducts);
 
         List<InternetService> fixedInternetServices = sService.getAllFixedInternetServices();
         ctx.setVariable("fixedInternetServices", fixedInternetServices);
         List<InternetService> mobileInternetServices = sService.getAllMobileInternetServices();
         ctx.setVariable("mobileInternetServices", mobileInternetServices);
-        List<MobilePhoneService> mobilePhoneServices = sService.getAllMobilePhoneServices();
-        ctx.setVariable("mobilePhoneServices", mobilePhoneServices);
-        List<OptionalProduct> optionalProducts = opService.getAllOptionalProducts();
-        ctx.setVariable("optionalProducts", optionalProducts);
+        List<MobilePhoneService> allMobilePhoneServices = sService.getAllMobilePhoneServices();
+        ctx.setVariable("mobilePhoneServices", allMobilePhoneServices);
+        List<OptionalProduct> allOptionalProducts = opService.getAllOptionalProducts();
+        ctx.setVariable("optionalProducts", allOptionalProducts);
         ctx.setVariable("OKPKG", "Service Pakage " + packageName + " Correctly inserted!");
         path = "/WEB-INF/HomePageEmployee.html";
         templateEngine.process(path, ctx, response.getWriter());

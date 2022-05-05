@@ -22,7 +22,8 @@ public class OptionalProduct {
     @ManyToMany(mappedBy = "optionalOrdered")
     private Collection<Order> orders;
 
-
+    @ManyToMany(mappedBy = "optionalProducts")
+    private Collection<ServicePackage> servicePackages;
 
     public OptionalProduct() {}
 

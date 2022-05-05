@@ -5,6 +5,7 @@ package it.polimi.db2.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -29,7 +30,7 @@ public class MonthlyFee implements Serializable {
     private float ThirtySixMonthPrice;
 
     @OneToMany(mappedBy = "packageFees")
-    private List<ServicePackage> servicePackageList;
+    private Collection<ServicePackage> servicePackageList;
 
     public MonthlyFee() {
     }
@@ -73,11 +74,12 @@ public class MonthlyFee implements Serializable {
         ThirtySixMonthPrice = thirtySixMonthPrice;
     }
 
-    public List<ServicePackage> getServicePackageList() {
+
+    public Collection<ServicePackage> getServicePackageList() {
         return servicePackageList;
     }
 
-    public void setServicePackageList(List<ServicePackage> servicePackageList) {
+    public void setServicePackageList(Collection<ServicePackage> servicePackageList) {
         this.servicePackageList = servicePackageList;
     }
 }

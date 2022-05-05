@@ -3,6 +3,7 @@ package it.polimi.db2.entities;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Collection;
 
 
 @Entity
@@ -28,6 +29,9 @@ public class UserCustomer implements Serializable {
     @OneToMany(mappedBy = "failedUser")
     private List<FailedPayment> failedPaymentList;
 
+
+    @OneToMany(mappedBy = "userOrder")
+    private Collection<Order> orders;
 
     public UserCustomer(){
     }
