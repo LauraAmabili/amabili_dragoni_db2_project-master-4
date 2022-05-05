@@ -62,6 +62,12 @@ public class Payment extends HttpServlet {
 
         UserCustomer user = (UserCustomer) req.getSession(false).getAttribute("user");
         HttpSession session = req.getSession(false);
+        Order order = null;
+        Date dateStart = null;
+        int validityPeriod = 0;
+        Date dateEnd = null;
+        float totalCost = 0;
+        int orderID = (int) req.getSession(false).getAttribute("orderIdForRejectedPayment");
 
         if(session.getAttribute("user") == null) {
             templateEngine.process("/WEB-INF/index.html", ctx, resp.getWriter());
@@ -70,58 +76,60 @@ public class Payment extends HttpServlet {
             // post->  create a new order
         } else if (session.getAttribute("user") != null && req.getSession(false).getAttribute("servicePackageChosen") != null ) {
             ServicePackage servicePackage = (ServicePackage) req.getSession(false).getAttribute("servicePackageChosen");
-            int validityPeriod = (int) req.getSession(false).getAttribute("chosenValidityPeriod");
-            float totalCost = (float) req.getSession(false).getAttribute("totalCost");
-            Date dateStart = (Date) req.getSession(false).getAttribute("startDate");
-            Date dateEnd = addMonths(dateStart, validityPeriod);
+            validityPeriod = (int) req.getSession(false).getAttribute("chosenValidityPeriod");
+            totalCost = (float) req.getSession(false).getAttribute("totalCost");
+            dateStart = (Date) req.getSession(false).getAttribute("startDate");
+            dateEnd = addMonths(dateStart, validityPeriod);
             try {
                 List<OptionalProduct> selectedOptionalProduct = (List<OptionalProduct>) req.getSession(false).getAttribute("selectedOptionalProducts");
-                Order order = orderService.createOrder(validityPeriod, dateStart, totalCost, user, servicePackage, selectedOptionalProduct);
+                // create new order
+                order = orderService.createOrder(validityPeriod, dateStart, totalCost, user, servicePackage, selectedOptionalProduct);
                 ctx.setVariable("Order", order);
 
-
-                //payment
-                boolean successfulPayment = true;
-                BillingService ba = new BillingService();
-                boolean value = Boolean.parseBoolean((String) req.getParameter("makePaymentFail"));
-                // boolean value2  = (boolean) req.getSession(false).getAttribute("makePaymentFail");
-                successfulPayment = ba.attemptPayment(value);
-
-                if (successfulPayment && order != null) {
-                    order.setValid(1);
-                    asService.addNewActivationRecord(dateStart, dateEnd, order);
-                    ctx.setVariable("successfulPayment", successfulPayment);
-                }
-                if (!successfulPayment) {
-                    order.setValid(0);
-                    user.setSolvent(0);
-                    Date dateFailed = new Date();
-                    FailedPayment fp = new FailedPayment();
-                    fp = paymentService.addFailedPayment(dateFailed, totalCost, user);
-                    ctx.setVariable("failedPayment", fp);
-                }
-
-                req.getSession(false).setAttribute("order", order);
-                templateEngine.process("/WEB-INF/PaymentPage.html", ctx, resp.getWriter());
             } catch (CredentialsException e) {
                 e.printStackTrace();
             }
+            // order already created
+        } else if(session.getAttribute("user") != null && req.getSession(false).getAttribute("orderIdForRejectedPayment")!= null){
 
-        } else if(session.getAttribute("user") != null && req.getSession(false).getAttribute("servicePackageChosen") != null && req.getSession(false).getAttribute("orderIdForRejectedPayment")!= null){
-
-            Order order = (Order) req.getSession(false).getAttribute("order");
+            order = (Order) req.getSession(false).getAttribute("order");
             boolean successfulPayment = true;
-            order.setValid(1);
+            orderService.setValid(order,0);
+            dateStart = order.getDateStart();
+            validityPeriod = order.getValidityPeriodMonth();
+            totalCost = order.getTotalCost();
 
-            ctx.setVariable("successfulPayment", successfulPayment);
-            req.getSession(false).setAttribute("order", order);
-            req.getSession().setAttribute("user", user);
-            templateEngine.process("/WEB-INF/PaymentPage.html", ctx, resp.getWriter());
-            // TODO payment page di quest'ordine --> poi ci penso
-            // TODO devi fare in modo che non compaia make payment fail
+            dateEnd = addMonths(dateStart, validityPeriod);
 
 
         }
+
+        boolean successfulPayment = true;
+        BillingService ba = new BillingService();
+        boolean value = Boolean.parseBoolean((String) req.getParameter("makePaymentFail"));
+
+        successfulPayment = ba.attemptPayment(value);
+
+        if (successfulPayment && order != null) {
+            orderService.setValid(order,1);
+            asService.addNewActivationRecord(dateStart, dateEnd, order);
+            ctx.setVariable("successfulPayment", successfulPayment);
+        }
+        if (!successfulPayment && order != null) {
+            // set valid = 0
+            orderService.setValid(order,0);
+            user.setSolvent(0);
+            Date dateFailed = new Date();
+            FailedPayment fp = new FailedPayment();
+            fp = paymentService.addFailedPayment(dateFailed, totalCost, user);
+            ctx.setVariable("failedPayment", fp);
+        }
+
+
+        ctx.setVariable("successfulPayment", successfulPayment);
+        req.getSession(false).setAttribute("order", order);
+        req.getSession().setAttribute("user", user);
+        templateEngine.process("/WEB-INF/PaymentPage.html", ctx, resp.getWriter());
 
 
 

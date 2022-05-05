@@ -112,4 +112,8 @@ public class OrderService {
 
     }
 
+    public void setValid(Order order, int valid){
+        Order order2 = em.find(Order.class, order.getOrderId());
+        order2.setValid(valid);
+    }
 }
