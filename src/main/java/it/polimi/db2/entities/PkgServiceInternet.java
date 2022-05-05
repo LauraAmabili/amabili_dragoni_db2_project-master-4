@@ -1,3 +1,4 @@
+/*
 package it.polimi.db2.entities;
 
 import it.polimi.db2.entities.keys.PkgServiceInternetId;
@@ -37,3 +38,4 @@ public class PkgServiceInternet implements Serializable {
         this.internetService = internetService;
     }
 }
+*/

@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.Float.parseFloat;
@@ -118,31 +119,36 @@ public class CreateNewServicePackage extends HttpServlet {
         int fixedPhone = 1;
         if (fixedPhoneString == null) { fixedPhone = 0; }
 
-        // create the new service package
-        sPkgService.addNewServicePackage(packageName, fixedPhone, mf);
-
-        // take selected mobile/fixed internet services and add them in the PkgServiceInternet
+        List<InternetService> internetServices = new ArrayList<>();
         String[] myMobileInternetServices = request.getParameterValues("mobileInternetService");
-        if (myMobileInternetServices!= null) {
-            for (String mobileInternetService : myMobileInternetServices) {
-                sService.addNewPkgInternetService(packageName, mobileInternetService);
-            }
-        }
         String[] myFixedInternetServices = request.getParameterValues("fixedInternetService");
-        if(myFixedInternetServices != null) {
-            for (String fixedInternetService : myFixedInternetServices) {
-                sService.addNewPkgInternetService(packageName, fixedInternetService);
+        if(myMobileInternetServices != null) {
+            for (String myMobileInternetService : myMobileInternetServices) {
+                InternetService iService = sService.getInternetServiceById(myMobileInternetService);
+                internetServices.add(iService);
             }
         }
 
-        // take selected mobile phone services and add them in the PkgServicePhone
+        if(myFixedInternetServices != null) {
+            for (String myFixedInternetService : myFixedInternetServices) {
+                InternetService iService = sService.getInternetServiceById(myFixedInternetService);
+                internetServices.add(iService);
+            }
+        }
+
+
+        List<MobilePhoneService> mobilePhoneServices = new ArrayList<>();
         String[] myMobilePhoneServices = request.getParameterValues("mobilePhoneService");
         if (myMobilePhoneServices != null) {
-            for (String mobilePhoneService : myMobilePhoneServices) {
-                String mb = mobilePhoneService;
-                sService.addNewPkgPhoneService(packageName, mobilePhoneService);
+            for (String myMobilePhoneService : myMobilePhoneServices) {
+                MobilePhoneService mpService = sService.getMobilePhoneServiceById(myMobilePhoneService);
+                mobilePhoneServices.add(mpService);
             }
         }
+
+        // create the new service package
+        sPkgService.addNewServicePackage(packageName, fixedPhone, mf, internetServices, mobilePhoneServices);
+
 
         // take selected optional products and add them in the PkgServiceOptional
         String[] optionalProductServices = request.getParameterValues("optionalProductService");
@@ -157,8 +163,8 @@ public class CreateNewServicePackage extends HttpServlet {
         ctx.setVariable("fixedInternetServices", fixedInternetServices);
         List<InternetService> mobileInternetServices = sService.getAllMobileInternetServices();
         ctx.setVariable("mobileInternetServices", mobileInternetServices);
-        List<MobilePhoneService> mobilePhoneServices = sService.getAllMobilePhoneServices();
-        ctx.setVariable("mobilePhoneServices", mobilePhoneServices);
+        List<MobilePhoneService> allMobilePhoneServices = sService.getAllMobilePhoneServices();
+        ctx.setVariable("mobilePhoneServices", allMobilePhoneServices);
         List<OptionalProduct> optionalProducts = opService.getAllOptionalProducts();
         ctx.setVariable("optionalProducts", optionalProducts);
         ctx.setVariable("OKPKG", "Service Pakage " + packageName + " Correctly inserted!");

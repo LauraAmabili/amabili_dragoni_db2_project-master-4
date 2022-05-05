@@ -28,7 +28,7 @@ public class InternetService implements Serializable {
     @Column(name = "fixedInternet")
     private int fixedInternet;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "internetServices")
     private List<ServicePackage> servicePackages;
 
 

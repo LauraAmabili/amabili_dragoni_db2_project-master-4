@@ -26,9 +26,15 @@ public class ServicePackage implements Serializable {
     private MonthlyFee packageFees;
 
     @ManyToMany
+    @JoinTable(name = "PkgServicePhone",
+            joinColumns = @JoinColumn(name = "servicePackage"),
+            inverseJoinColumns = @JoinColumn(name = "mobilePhone"))
     private List<MobilePhoneService> mobilePhoneServices;
 
     @ManyToMany
+    @JoinTable(name = "PkgServiceInternet",
+            joinColumns = @JoinColumn(name = "packageService"),
+            inverseJoinColumns = @JoinColumn(name = "internetService"))
     private List<InternetService> internetServices;
 
     @ManyToMany
@@ -69,4 +75,27 @@ public class ServicePackage implements Serializable {
     }
 
 
+    public List<MobilePhoneService> getMobilePhoneServices() {
+        return mobilePhoneServices;
+    }
+
+    public void setMobilePhoneServices(List<MobilePhoneService> mobilePhoneServices) {
+        this.mobilePhoneServices = mobilePhoneServices;
+    }
+
+    public List<InternetService> getInternetServices() {
+        return internetServices;
+    }
+
+    public void setInternetServices(List<InternetService> internetServices) {
+        this.internetServices = internetServices;
+    }
+
+    public List<OptionalProduct> getOptionalProducts() {
+        return optionalProducts;
+    }
+
+    public void setOptionalProducts(List<OptionalProduct> optionalProducts) {
+        this.optionalProducts = optionalProducts;
+    }
 }

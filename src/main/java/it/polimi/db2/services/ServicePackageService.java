@@ -23,8 +23,6 @@ public class ServicePackageService {
     public ServicePackageService() { }
 
     public ServicePackage findServicePackageById(String servicePackageName) throws CredentialsException {
-
-
         List<ServicePackage> sp;
         try {
             sp = em.createNamedQuery("ServicePackage.findServicePackageById", ServicePackage.class).setParameter("name",servicePackageName).getResultList();
@@ -96,11 +94,13 @@ public class ServicePackageService {
         return !servicePackages.isEmpty();
     }
 
-    public void addNewServicePackage (String name, int fixedPhone, MonthlyFee packageFee) {
+    public void addNewServicePackage (String name, int fixedPhone, MonthlyFee packageFee, List<InternetService> internetServices, List<MobilePhoneService> mobilePhoneServices) {
         ServicePackage newSP = new ServicePackage();
         newSP.setPackageName(name);
         newSP.setFixedPhoneNumber(fixedPhone);
         newSP.setPackageFees(packageFee);
+        if (internetServices != null) newSP.setInternetServices(internetServices);
+        if (mobilePhoneServices != null) newSP.setMobilePhoneServices(mobilePhoneServices);
         em.persist(newSP);
     }
 

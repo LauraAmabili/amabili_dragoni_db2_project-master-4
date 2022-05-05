@@ -29,7 +29,7 @@ public class MobilePhoneService implements Serializable {
     @Column(name = "extraSmsFee")
     private float extraSmsFee;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "mobilePhoneServices")
     private List<ServicePackage> servicePackages;
 
     public MobilePhoneService(String name, int minutesNum, int smsNum, float extraMinFee, float extraSmsFee) {
