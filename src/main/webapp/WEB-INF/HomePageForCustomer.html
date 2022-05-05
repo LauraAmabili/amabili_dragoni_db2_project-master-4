@@ -26,6 +26,7 @@
 
         <td>
             <span th:if="${sp.fixedPhoneNumber == 1 }" th:text="'Fixed phone number is activated'"> </span>
+            <span th:if="${sp.fixedPhoneNumber == 0 }" th:text="'Fixed phone number is not activated'"> </span>
             <span th:unless="${sp.fixedPhoneNumber != null}">  </span>
         </td>
 

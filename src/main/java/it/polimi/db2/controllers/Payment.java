@@ -67,7 +67,6 @@ public class Payment extends HttpServlet {
         int validityPeriod = 0;
         Date dateEnd = null;
         float totalCost = 0;
-        int orderID = (int) req.getSession(false).getAttribute("orderIdForRejectedPayment");
 
         if(session.getAttribute("user") == null) {
             templateEngine.process("/WEB-INF/index.html", ctx, resp.getWriter());
