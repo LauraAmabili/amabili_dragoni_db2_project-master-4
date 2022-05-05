@@ -58,7 +58,7 @@ public class Order implements Serializable {
     @JoinColumn(name="orderedService", referencedColumnName="PackageName")
     private ServicePackage orderedService;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     @JoinTable(name = "OptionalOrdered",
             joinColumns = @JoinColumn(name = "orderId"),
             inverseJoinColumns = @JoinColumn(name = "optionalProductId"))

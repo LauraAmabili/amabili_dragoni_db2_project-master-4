@@ -1,6 +1,7 @@
 package it.polimi.db2.controllers;
 
 import it.polimi.db2.entities.*;
+import it.polimi.db2.exceptions.CredentialsException;
 import it.polimi.db2.services.MonthlyFeesService;
 import it.polimi.db2.services.OptionalProductService;
 import it.polimi.db2.services.ServicePackageService;
@@ -137,7 +138,7 @@ public class CreateNewServicePackage extends HttpServlet {
         }
 
 
-        List<MobilePhoneService> mobilePhoneServices = new ArrayList<>();
+        List<MobilePhoneService> mobilePhoneServices = new ArrayList<MobilePhoneService>();
         String[] myMobilePhoneServices = request.getParameterValues("mobilePhoneService");
         if (myMobilePhoneServices != null) {
             for (String myMobilePhoneService : myMobilePhoneServices) {
@@ -146,18 +147,18 @@ public class CreateNewServicePackage extends HttpServlet {
             }
         }
 
-        // create the new service package
-        sPkgService.addNewServicePackage(packageName, fixedPhone, mf, internetServices, mobilePhoneServices);
-
-
-        // take selected optional products and add them in the PkgServiceOptional
+        List<OptionalProduct> optionalProducts = new ArrayList<>();
         String[] optionalProductServices = request.getParameterValues("optionalProductService");
-        if(optionalProductServices != null) {
+
+        if (optionalProductServices != null) {
             for (String optionalProductService : optionalProductServices) {
-                opService.addNewPkgOptionalProduct(packageName, optionalProductService);
+                OptionalProduct optService = opService.getOptionalProductById(optionalProductService);
+                optionalProducts.add(optService);
             }
         }
 
+        // create the new service package
+        sPkgService.addNewServicePackage(packageName, fixedPhone, mf, internetServices, mobilePhoneServices, optionalProducts);
 
         List<InternetService> fixedInternetServices = sService.getAllFixedInternetServices();
         ctx.setVariable("fixedInternetServices", fixedInternetServices);
@@ -165,8 +166,8 @@ public class CreateNewServicePackage extends HttpServlet {
         ctx.setVariable("mobileInternetServices", mobileInternetServices);
         List<MobilePhoneService> allMobilePhoneServices = sService.getAllMobilePhoneServices();
         ctx.setVariable("mobilePhoneServices", allMobilePhoneServices);
-        List<OptionalProduct> optionalProducts = opService.getAllOptionalProducts();
-        ctx.setVariable("optionalProducts", optionalProducts);
+        List<OptionalProduct> allOptionalProducts = opService.getAllOptionalProducts();
+        ctx.setVariable("optionalProducts", allOptionalProducts);
         ctx.setVariable("OKPKG", "Service Pakage " + packageName + " Correctly inserted!");
         path = "/WEB-INF/HomePageEmployee.html";
         templateEngine.process(path, ctx, response.getWriter());

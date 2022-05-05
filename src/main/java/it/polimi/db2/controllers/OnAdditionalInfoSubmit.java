@@ -75,7 +75,7 @@ public class OnAdditionalInfoSubmit extends HttpServlet {
         if(req.getSession(false)!=null  &&  req.getSession(false).getAttribute("user")!=null) {
             //update of object user to make sure is the current one
 
-            optionalProductList =((req.getParameterValues("optionalProducts")));
+            optionalProductList =req.getParameterValues("optionalProducts");
             validityPeriod = parseInt(StringEscapeUtils.escapeJava(req.getParameter("validityPeriod")));
             Date startDate = new Date();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");

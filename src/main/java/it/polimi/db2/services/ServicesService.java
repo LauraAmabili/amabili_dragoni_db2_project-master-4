@@ -48,8 +48,9 @@ public class ServicesService {
         return internetServices.get(0);
     }
     public MobilePhoneService getMobilePhoneServiceById(String name){
-        List<MobilePhoneService> mobilePhoneServices = em.createNamedQuery("MobilePhoneService.findMobilePhoneServiceById", MobilePhoneService.class).setParameter(1, name).getResultList();
-        return mobilePhoneServices.get(0);
+
+        List<MobilePhoneService> mobilePhoneService = em.createNamedQuery("MobilePhoneService.findMobilePhoneServiceById", MobilePhoneService.class).setParameter(1, name).getResultList();
+        return mobilePhoneService.get(0);
     }
 
     public Boolean mobilePhoneServiceAlreadyExists(String name){

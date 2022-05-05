@@ -2,6 +2,7 @@ package it.polimi.db2.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 
 
@@ -29,7 +30,7 @@ public class InternetService implements Serializable {
     private int fixedInternet;
 
     @ManyToMany(mappedBy = "internetServices")
-    private List<ServicePackage> servicePackages;
+    private Collection<ServicePackage> servicePackages;
 
 
 
@@ -70,4 +71,11 @@ public class InternetService implements Serializable {
     }
 
 
+    public Collection<ServicePackage> getServicePackages() {
+        return servicePackages;
+    }
+
+    public void setServicePackages(Collection<ServicePackage> servicePackages) {
+        this.servicePackages = servicePackages;
+    }
 }

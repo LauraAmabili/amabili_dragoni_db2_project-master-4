@@ -71,6 +71,7 @@ public class OnServicePackageSelection extends HttpServlet {
         List<InternetService> internetServices = new ArrayList<>();
         List<String> mobilePhoneIds = new ArrayList<>();
         List<MobilePhoneService> mobilePhoneServices = new ArrayList<>();
+
         if(req.getSession(false)!=null  &&  req.getSession(false).getAttribute("user")!=null) {
             //update of object user to make sure is the current one
             try {

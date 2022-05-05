@@ -2,6 +2,7 @@ package it.polimi.db2.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 
 
@@ -30,7 +31,7 @@ public class MobilePhoneService implements Serializable {
     private float extraSmsFee;
 
     @ManyToMany(mappedBy = "mobilePhoneServices")
-    private List<ServicePackage> servicePackages;
+    private Collection<ServicePackage> servicePackages;
 
     public MobilePhoneService(String name, int minutesNum, int smsNum, float extraMinFee, float extraSmsFee) {
         this.name = name;
@@ -84,11 +85,12 @@ public class MobilePhoneService implements Serializable {
         this.extraSmsFee = extraSmsFee;
     }
 
-    public List<ServicePackage> getServicePackages() {
+
+    public Collection<ServicePackage> getServicePackages() {
         return servicePackages;
     }
 
-    public void setServicePackages(List<ServicePackage> servicePackages) {
+    public void setServicePackages(Collection<ServicePackage> servicePackages) {
         this.servicePackages = servicePackages;
     }
 }

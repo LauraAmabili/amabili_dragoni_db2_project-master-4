@@ -2,14 +2,13 @@ package it.polimi.db2.services;
 
 import it.polimi.db2.entities.OptionalProduct;
 import it.polimi.db2.entities.ServicePackage;
-import it.polimi.db2.entities.ServicePackageOptional;
 import it.polimi.db2.exceptions.CredentialsException;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Stateless
@@ -46,25 +45,16 @@ public class OptionalProductService {
     }
 
 
-    public void addNewPkgOptionalProduct(String pkgName, String optionalProdName) {
-        ServicePackageOptional newSpo = new ServicePackageOptional();
-        newSpo.setOptionalProduct(optionalProdName);
-        newSpo.setServicePackage(pkgName);
-        em.persist(newSpo);
-    }
+
 
     public List<String> showServicePackageOptionalProducts(ServicePackage servicePackage) throws CredentialsException, NonUniqueResultException {
-        List<String> uList;
-        try {
-            uList = em.createNamedQuery("ServicePackageOptional.findServicePackageOptionalProducts", String.class).setParameter("name",servicePackage.getPackageName()).getResultList();
-        } catch (PersistenceException var5) {
-            throw new CredentialsException("Optional Products Error");
+        List<String> optionalProductsIds = new ArrayList<>();
+        List<OptionalProduct>optionalProducts = servicePackage.getOptionalProducts();
+        if(optionalProducts != null) {
+            optionalProducts.forEach(op -> optionalProductsIds.add(op.getName()));
         }
-        if (uList.isEmpty()) {
-            return null;
-        } else {
-            return uList;
-        }
+        List<String> debug = optionalProductsIds;
+        return optionalProductsIds;
     }
 
     public float totAmountOptionalProduct(List<OptionalProduct> optionalProducts){
