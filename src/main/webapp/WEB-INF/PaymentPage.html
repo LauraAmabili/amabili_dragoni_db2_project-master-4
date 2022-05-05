@@ -8,7 +8,7 @@
 </head>
 <body>
 <br>
-<div style="float: right" th:if="${session.user != null}" th:text="${session.user.username}"></div>
+<div style="float: right" th:if="${loggedCustomer != null}" th:text="${loggedCustomer.getUsername()}"></div>
 
 
 <span >Calling external service....</span>

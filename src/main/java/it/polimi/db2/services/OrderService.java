@@ -50,6 +50,7 @@ public class OrderService {
         Order order = new Order();
         order.setValidityPeriodMonth(validityPeriodMonth);
         order.setDateStart(dateStart);
+        order.setValid(1);
         order.setTotalCost(totalCost);
         order.setUserOrder(userOrder);
         order.setOrderedService(servicePackage);
@@ -99,5 +100,16 @@ public class OrderService {
         return order.get(0);
     }
 
+    public List<Order> getNotValidOrdersOfUser (UserCustomer us) {
+        List <Order> orders = em.createNamedQuery("Order.getNotValidOrdersOfUser", Order.class).setParameter("userCustomer", us).getResultList();
+        return orders;
+    }
+
+    public Order getOrder(int orderId){
+
+        Order order = em.find(Order.class, orderId);
+        return order;
+
+    }
 
 }

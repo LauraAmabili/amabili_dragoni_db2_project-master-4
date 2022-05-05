@@ -64,20 +64,42 @@ public class OnAdditionalInfoSubmit extends HttpServlet {
             return;
         }
 
-        ServicePackage servicePackage;
-        servicePackage = (ServicePackage) req.getSession(false).getAttribute("servicePackageChosen");
+        ServicePackage servicePackage = new ServicePackage();
+
         UserCustomer customer = (UserCustomer) req.getSession(false).getAttribute("user");
 
-        int validityPeriod = 0; 
 
-        String optionalProductList[];
+        int validityPeriod = 0;
+
+        String optionalProductList[] = new String[0];
         List<OptionalProduct> optionalProducts = new ArrayList<>();
-        if(req.getSession(false)!=null  &&  req.getSession(false).getAttribute("user")!=null) {
+        float totalCost = 0;
+        Date startDate = new Date();
+        if(req.getSession(false)!=null  &&  req.getSession(false).getAttribute("user")!=null  && req.getParameter("orderIdForRejectedPayment") !=null) {
+
+
+            int orderId = Integer.parseInt(req.getParameter("orderIdForRejectedPayment"));
+            Order order = orderService.getOrder(orderId);
+            totalCost = order.getTotalCost();
+            optionalProducts = order.getOptionalOrdered();
+           validityPeriod =order.getValidityPeriodMonth();
+           startDate = order.getDateStart();
+           servicePackage = order.getOrderedService();
+
+
+            req.getSession(false).setAttribute("order", order);
+            req.getSession(false).setAttribute("orderIdForRejectedPayment", orderId);
+
+            //TODO IMPORTANTE -> nella pagina dopo passare che è un ordine vecchio così non lo crea
+            // TODO-> settare ordine a valido ora
+
+
+        } else if(req.getSession(false)!=null  &&  req.getSession(false).getAttribute("user")!=null) {
             //update of object user to make sure is the current one
 
-            optionalProductList =req.getParameterValues("optionalProducts");
+            servicePackage = (ServicePackage) req.getSession(false).getAttribute("servicePackageChosen");
+            optionalProductList =((req.getParameterValues("optionalProducts")));
             validityPeriod = parseInt(StringEscapeUtils.escapeJava(req.getParameter("validityPeriod")));
-            Date startDate = new Date();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             try {
                 startDate = (Date) sdf.parse(req.getParameter("date"));
@@ -91,27 +113,25 @@ public class OnAdditionalInfoSubmit extends HttpServlet {
             }
             float totalOP = (opService.totAmountOptionalProduct(optionalProducts)) * validityPeriod;
             float totalSP = spService.costPerMonth(validityPeriod, servicePackage);
-            float totalCost = totalOP + totalSP;
-
-            req.getSession(false).setAttribute("user", customer);
-            req.getSession(false).setAttribute("totalCost", totalCost);
-            req.getSession(false).setAttribute("optionalProducts", optionalProductList);
-            req.getSession(false).setAttribute("selectedOptionalProducts", optionalProducts);
-            req.getSession(false).setAttribute("chosenValidityPeriod", validityPeriod);
-            req.getSession(false).setAttribute("startDate", startDate);
-            req.getSession(false).setAttribute("loggedCustomer", customer);
-
-
-                ctx.setVariable("loggedCustomer", customer);
-                ctx.setVariable("chosenValidityPeriod", validityPeriod);
-                ctx.setVariable("servicePackageChosenCTX", servicePackage);
-                ctx.setVariable("optionalProductsCTX", optionalProducts);
-                ctx.setVariable("totalCost", totalCost);
-
-                templateEngine.process("/WEB-INF/ConfirmationPage.html", ctx, resp.getWriter());
-
+            totalCost = totalOP + totalSP;
 
             }
+
+        req.getSession(false).setAttribute("user", customer);
+        req.getSession(false).setAttribute("totalCost", totalCost);
+        // req.getSession(false).setAttribute("optionalProducts", optionalProductList);
+        req.getSession(false).setAttribute("selectedOptionalProducts", optionalProducts);
+        req.getSession(false).setAttribute("chosenValidityPeriod", validityPeriod);
+        req.getSession(false).setAttribute("startDate", startDate);
+        req.getSession(false).setAttribute("loggedCustomer", customer);
+
+        ctx.setVariable("loggedCustomer", customer);
+        ctx.setVariable("chosenValidityPeriod", validityPeriod);
+        ctx.setVariable("servicePackageChosenCTX", servicePackage);
+        ctx.setVariable("optionalProductsCTX", optionalProducts);
+        ctx.setVariable("totalCost", totalCost);
+
+        templateEngine.process("/WEB-INF/ConfirmationPage.html", ctx, resp.getWriter());
 
 
     }

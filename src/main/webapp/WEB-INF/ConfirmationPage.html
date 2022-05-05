@@ -24,17 +24,18 @@
 <span th:if="${loggedCustomer !=null}" th:text="${loggedCustomer.username}">
     </span>
 <div th:if="${loggedCustomer != null}" >
-    <input type="submit" value="BUY SERVICE">
-	</div>
-
     <div class="form-style-4">
-            <label class="switch">
-                Make payment fail
-                <input type="checkbox" th:name="makePaymentFail" th:value="${true}" >
-                <span class="slider round" ></span>
-            </label>
+        <form method="POST" action="payment">
+        <label class="switch">
+            Make payment fail
+            <input type="checkbox" th:name="makePaymentFail" th:value="${true}" >
+            <span class="slider round" ></span>
+        </label>
+        </form>
     </div>
 
+    <input type="submit" value="BUY SERVICE">
+</div>
 
 </form>
 

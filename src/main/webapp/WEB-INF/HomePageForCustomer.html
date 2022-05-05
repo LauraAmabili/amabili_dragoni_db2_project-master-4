@@ -52,17 +52,66 @@
 
 
 
+
 </table>
 
 <div class="form-style-4">
 </div>
+<div class="form-style-4">
+    <form method="POST" action="buy-service">
+        <input type="submit" value="BUY SERVICE">
+    </form>
+</div>
+
+
+<table  class="styled-table">
+    <tr>
+        <th>Rejected Order</th>
+        <th>Date of order</th>
+        <th>Price to pay</th>
+        <th>Service Package</th>
+        <th>Validity periods</th>
+    </tr>
+    <tbody>
+    <tr th:each="rj : ${rejectedOrders}">
+        <td th:text="${rj.getOrderId()}"></td>
+
+        <td>
+            <span th:if="${rj.getOrderDateTime() != null}" th:text="${rj.getOrderDateTime().getDayOfMonth()}+${rj.getOrderDateTime().getMonth()}+${rj.getOrderDateTime().getYear()}"> </span>
+            <span th:unless="${rj.getOrderDateTime() != null}">  </span>
+        </td>
+
+        <td>
+            <span th:if="${rj.getTotalCost()!= null}" th:text="${rj.getTotalCost()}"> </span>
+            <span th:unless="${rj.getTotalCost() != null}">  </span>
+        </td>
+
+        <td>
+            <span th:if="${rj.getOrderedService()!= null}" th:text="${rj.getOrderedService().packageName}"> </span>
+            <span th:unless="${rj.getOrderedService() != null}">  </span>
+        </td>
+        <td>
+            <span th:if="${rj.getValidityPeriodMonth()!= null}" th:text="${rj.getValidityPeriodMonth()}"> </span>
+            <span th:unless="${rj.getValidityPeriodMonth() != null}">  </span>
+        </td>
+
+        <td>
+            <form method="POST" action="additional-info-selected">
+            <input type="submit" th:name="orderIdForRejectedPayment" th:value="${rj.orderId}" >
+            </form>
+        </td>
+
+    </tr>
+    </tbody>
+
+</table>
+
+
+
+
 </body>
 
-    <div class="form-style-4">
-        <form method="POST" action="buy-service">
-            <input type="submit" value="BUY SERVICE">
-        </form>
-    </div>
+
 
 
 

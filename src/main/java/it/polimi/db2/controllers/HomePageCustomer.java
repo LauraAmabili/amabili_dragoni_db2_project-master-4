@@ -1,10 +1,10 @@
 package it.polimi.db2.controllers;
 
 
-import it.polimi.db2.entities.MobilePhoneService;
-import it.polimi.db2.entities.ServicePackage;
-import it.polimi.db2.entities.UserCustomer;
+import it.polimi.db2.entities.*;
 import it.polimi.db2.exceptions.CredentialsException;
+import it.polimi.db2.services.OrderService;
+import it.polimi.db2.services.PaymentService;
 import it.polimi.db2.services.ServicePackageService;
 import it.polimi.db2.services.UserCustomerService;
 import org.thymeleaf.TemplateEngine;
@@ -35,6 +35,8 @@ public class HomePageCustomer extends HttpServlet {
     private ServicePackageService sps;
     @EJB(name = "services/UserCustomerService")
     private UserCustomerService userCustomerService;
+    @EJB(name = "services/OrderService")
+    private OrderService orderService;
 
     public void init() throws ServletException {
         ServletContext servletContext = getServletContext();
@@ -60,9 +62,10 @@ public class HomePageCustomer extends HttpServlet {
             UserCustomer customer = userCustomerService.findCustomerById((UserCustomer) req.getSession().getAttribute("user"));
 
             if(customer.getSolvent() == 0 ){
-                // TODO mostra rejected orders
-
+                List<Order> rejectedOrders = orderService.getNotValidOrdersOfUser(customer);
+                ctx.setVariable("rejectedOrders", rejectedOrders);
             }
+
             req.getSession(false).setAttribute("customer", customer);
             ctx.setVariable("loggedCustomer", customer);
 
