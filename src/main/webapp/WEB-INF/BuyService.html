@@ -13,28 +13,25 @@
 
 <h1> Buy a service </h1>
 
-
-
 <div class="form-style-5">
     <form method="POST" action="package-selected">
         <label for="servicePackagess">Choose a service package:</label>
             <select id="servicePackagess" name="servicePackageName" >
+                <option value=" "></option>
                 <option th:each="sp : ${packageList}" th:value="${sp.packageName }" th:text="${sp.packageName}">
                 </option>
 
             </select>
-        <input type="submit" name="OnServicePackageSelection">
+        <span th:if="${servicePackageChosenCTX == null}" >
+            <input type="submit" name="OnServicePackageSelection">
+        </span>
     </form>
 
 
     <span th:if="${servicePackageChosenCTX != null}" th:text="'Service Package chosen: '+ ${servicePackageChosenCTX.packageName}"> </span>
-    <p>&nbsp;</p>
-    <div class="form-style-4">
-        <form method="POST" action="buy-service">
-            <input type="submit" name="onBuyServiceClick" value="CHANGE PACKET">
-        </form>
-    </div>
 
+    <p></p>
+    <p></p>
 
     <tbody>
     <tr th:each="is : ${internetServices}">
@@ -58,10 +55,12 @@
             <li th:text="'Fee for extra FB' + ${is.extraFees}"></li>
 
         </td>
+        <p></p>
     </tr>
     </tbody>
 
-
+    <p></p>
+    <p></p>
 
     <tbody>
     <tr th:each="mp : ${mobilePhoneServices}">
@@ -85,15 +84,24 @@
             <li th:text="'Fee for extra SMS: ' + ${mp.extraSmsFee}"></li>
 
         </td>
+        <p></p>
     </tr>
     </tbody>
-    <div class="form-style-4">
-        <form method="POST" action="package-confirmed">
-            <input type="submit" name="onServicePackageConfirmed" value="CONFIRM PACKAGE">
-        </form>
-    </div>
+    <p>&nbsp;</p>
 
+    <span th:if="${servicePackageChosenCTX != null}" >
+        <div class="form-style-4">
+            <form method="POST" action="buy-service">
+                <input type="submit" name="onBuyServiceClick" value="CHANGE PACKET">
+            </form>
+        </div>
 
+        <div class="form-style-4">
+            <form method="POST" action="package-confirmed">
+                <input type="submit" name="onServicePackageConfirmed" value="CONFIRM PACKAGE">
+            </form>
+        </div>
+    </span>
 
 </div>
 
