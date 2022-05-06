@@ -7,6 +7,7 @@ import java.util.Date;
 @Entity
 @Table(name = "FailedPayment", schema = "database2")
 @NamedQuery(name = "FailedPayment.getFailedPaymentsOfUser", query = "SELECT payment from FailedPayment payment where payment.failedUser = :name")
+@NamedQuery(name = "FailedPayment.getFailedPaymentByOrder", query = "SELECT payment from FailedPayment payment where payment.order = :order")
 public class FailedPayment  implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -25,6 +26,10 @@ public class FailedPayment  implements Serializable {
     @JoinColumn(name = "failedUser", referencedColumnName = "username")
     private UserCustomer failedUser;
 
+    @OneToOne
+    @JoinColumn(name = "orderIdFailed")
+    private Orders order;
+
     public FailedPayment(int idFailedPayment, float amount, Date dateTime, UserCustomer failedUser) {
         this.idFailedPayment = idFailedPayment;
         this.amount = amount;
@@ -37,6 +42,14 @@ public class FailedPayment  implements Serializable {
 
     public int getIdFailedPayment() {
         return idFailedPayment;
+    }
+
+    public Orders getOrder() {
+        return order;
+    }
+
+    public void setOrder(Orders order) {
+        this.order = order;
     }
 
     public void setIdFailedPayment(int idFailedPayment) {

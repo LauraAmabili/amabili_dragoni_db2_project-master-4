@@ -62,6 +62,9 @@ public class Orders implements Serializable {
     @OneToOne(mappedBy = "order")
     private ActivationSchedule activationSchedule;
 
+    @OneToOne(mappedBy = "order")
+    private FailedPayment failedPayment;
+
     public Orders() { }
 
 

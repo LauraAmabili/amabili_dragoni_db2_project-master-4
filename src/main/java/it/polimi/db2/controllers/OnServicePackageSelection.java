@@ -20,6 +20,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -59,9 +60,7 @@ public class OnServicePackageSelection extends HttpServlet {
 
         final WebContext ctx = new WebContext(req, resp, this.getServletContext(), req.getLocale());
 
-        UserCustomer customer = userCustomerService.findCustomerById((UserCustomer) req.getSession().getAttribute("user"));
-        ctx.setVariable("loggedCustomer", customer);
-        req.getSession(false).setAttribute("user", customer);
+
 
         ServicePackage servicePackage = new ServicePackage();
         List<String> optionalProductsIds = null;
@@ -71,13 +70,15 @@ public class OnServicePackageSelection extends HttpServlet {
         List<String> mobilePhoneIds = new ArrayList<>();
         List<MobilePhoneService> mobilePhoneServices = new ArrayList<>();
 
-        if(req.getSession(false)!=null  &&  req.getSession(false).getAttribute("user")!=null) {
+
+        if(req.getParameter("servicePackageName") != null) {
             //update of object user to make sure is the current one
+
             try {
 
                 String name = req.getParameter("servicePackageName");
                 servicePackage = spService.findServicePackageById(name);
-            } catch(CredentialsException e){
+            } catch (CredentialsException e) {
                 try {
                     throw new ServicePackageException("find Message by Id didn't work");
                 } catch (ServicePackageException ex) {
@@ -88,9 +89,9 @@ public class OnServicePackageSelection extends HttpServlet {
             }
             try {
                 optionalProductsIds = opService.showServicePackageOptionalProducts(servicePackage);
-                if(optionalProductsIds!=null) {
+                if (optionalProductsIds != null) {
                     for (String optionalProductsId : optionalProductsIds) {
-                            optionalProducts.add(opService.getOptionalProductById(optionalProductsId));
+                        optionalProducts.add(opService.getOptionalProductById(optionalProductsId));
                     }
                 }
             } catch (CredentialsException e) {
@@ -121,21 +122,26 @@ public class OnServicePackageSelection extends HttpServlet {
                 }
             }
 
+            if(req.getSession(false)!=null  &&  req.getSession(false).getAttribute("user")!=null ) {
+                UserCustomer customer = userCustomerService.findCustomerById((UserCustomer) req.getSession().getAttribute("user"));
+                ctx.setVariable("loggedCustomer", customer);
+                req.getSession(false).setAttribute("loggedCustomer", customer);
+                req.getSession(false).setAttribute("optionalProducts", optionalProductsIds);
+                req.getSession(false).setAttribute("servicePackageChosen", servicePackage);
+
+            }
 
 
 
-
-            req.getSession(false).setAttribute("optionalProducts", optionalProductsIds);
-            req.getSession(false).setAttribute("servicePackageChosen", servicePackage);
             ctx.setVariable("servicePackageChosenCTX", servicePackage);
             ctx.setVariable("optionalProductsObjects", optionalProducts);
             ctx.setVariable("internetServices", internetServices);
             ctx.setVariable("mobilePhoneServices", mobilePhoneServices);
-
-
-            //templateEngine.process("/WEB-INF/AdditionalInformation.html", ctx, resp.getWriter());
-            templateEngine.process("/WEB-INF/BuyService.html", ctx, resp.getWriter());
         }
+
+
+            templateEngine.process("/WEB-INF/BuyService.html", ctx, resp.getWriter());
+
 
     }
 

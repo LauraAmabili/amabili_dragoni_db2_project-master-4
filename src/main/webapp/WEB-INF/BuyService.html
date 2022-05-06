@@ -97,8 +97,9 @@
         </div>
 
         <div class="form-style-4">
-            <form method="POST" action="package-confirmed">
-                <input type="submit" name="onServicePackageConfirmed" value="CONFIRM PACKAGE">
+            <form method="GET" action="package-confirmed">
+<!--                <input type="submit" name="servicePackageChosen" value="CONFIRM PACKET">-->
+                 <input th:type="submit" th:name="servicePackageChosen" th:value = "${servicePackageChosenCTX.packageName}">
             </form>
         </div>
     </span>
@@ -113,7 +114,7 @@
 
 
 
-
+</body>
 </html>
 
 

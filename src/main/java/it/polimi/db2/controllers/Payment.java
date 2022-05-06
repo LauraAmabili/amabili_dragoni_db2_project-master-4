@@ -3,10 +3,7 @@ package it.polimi.db2.controllers;
 import it.polimi.db2.entities.*;
 import it.polimi.db2.exceptions.CredentialsException;
 import it.polimi.db2.external.services.BillingService;
-import it.polimi.db2.services.ActivationScheduleService;
-import it.polimi.db2.services.OrderService;
-import it.polimi.db2.services.PaymentService;
-import it.polimi.db2.services.ServicePackageService;
+import it.polimi.db2.services.*;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -43,6 +40,9 @@ public class Payment extends HttpServlet {
     @EJB(name = "services/PaymentService")
     private PaymentService paymentService;
 
+    @EJB(name = "services/UserCustomerService")
+    private UserCustomerService ucService;
+
 
     public Payment(){
         super();
@@ -61,12 +61,15 @@ public class Payment extends HttpServlet {
         final WebContext ctx = new WebContext(req, resp, this.getServletContext(), req.getLocale());
 
         UserCustomer user = (UserCustomer) req.getSession(false).getAttribute("user");
+        UserCustomer user2 = (UserCustomer) req.getSession(false).getAttribute("user");
+        req.getSession(false).setAttribute("loggedCustomer", user);
         HttpSession session = req.getSession(false);
         Orders order = null;
         Date dateStart = null;
         int validityPeriod = 0;
         Date dateEnd = null;
         float totalCost = 0;
+        Date dateFailed = new Date();
 
         if(session.getAttribute("user") == null) {
             templateEngine.process("/WEB-INF/index.html", ctx, resp.getWriter());
@@ -92,8 +95,6 @@ public class Payment extends HttpServlet {
         } else if(session.getAttribute("user") != null && req.getSession(false).getAttribute("orderIdForRejectedPayment")!= null){
 
             order = (Orders) req.getSession(false).getAttribute("order");
-            boolean successfulPayment = true;
-            orderService.setValid(order,0);
             dateStart = order.getDateStart();
             validityPeriod = order.getValidityPeriodMonth();
             totalCost = order.getTotalCost();
@@ -101,34 +102,49 @@ public class Payment extends HttpServlet {
             dateEnd = addMonths(dateStart, validityPeriod);
 
 
+
+
         }
+
+
 
         boolean successfulPayment = true;
         BillingService ba = new BillingService();
         boolean value = Boolean.parseBoolean((String) req.getParameter("makePaymentFail"));
-
         successfulPayment = ba.attemptPayment(value);
 
         if (successfulPayment && order != null) {
             order = orderService.setValid(order,1);
             asService.addNewActivationRecord(dateStart, dateEnd, order);
             ctx.setVariable("successfulPayment", successfulPayment);
+            paymentService.updateAuditingTable(user, user.getEmail(), order.getTotalCost(), dateFailed, successfulPayment);
+            paymentService.updateFailedPayments(user, order);
+            if( paymentService.getFailedPaymentsOfUser(user) != null && paymentService.getFailedPaymentsOfUser(user).size() < 3 ){
+                paymentService.deleteAlert(user);
+            }
         }
         if (!successfulPayment && order != null) {
             // set valid = 0
-            orderService.setValid(order,0);
-            user.setSolvent(0);
-            Date dateFailed = new Date();
+            order = orderService.setValid(order,0);
+            user = ucService.setInsolvent(user);
             FailedPayment fp = new FailedPayment();
-            fp = paymentService.addFailedPayment(dateFailed, totalCost, user);
-            ctx.setVariable("failedPayment", fp);
+            fp = paymentService.addFailedPayment(dateFailed, totalCost, user, order);
+            List<FailedPayment> list = paymentService.getFailedPaymentsOfUser(user);
+            if(list.size()  ==  3 ){
+                paymentService.addAuditingTable(user, user.getEmail(), order.getTotalCost(), dateFailed);
+            } else if(list.size() > 3){
+                paymentService.updateAuditingTable(user, user.getEmail(), order.getTotalCost(), dateFailed, successfulPayment);
+            }
+
         }
 
 
         ctx.setVariable("successfulPayment", successfulPayment);
         ctx.setVariable("order", order);
+        ctx.setVariable("loggedCustomer", user);
         req.getSession(false).setAttribute("order", order);
-        req.getSession().setAttribute("user", user);
+        req.getSession(false).setAttribute("user", user);
+        req.getSession(false).setAttribute("loggedCustomer", user);
         templateEngine.process("/WEB-INF/PaymentPage.html", ctx, resp.getWriter());
 
 

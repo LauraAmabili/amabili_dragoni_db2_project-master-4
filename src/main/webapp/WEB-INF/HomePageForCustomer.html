@@ -8,9 +8,7 @@
           href="../css/style.css" th:href="@{/css/style.css}" />
 </head>
 <body>
-<div style="position: absolute; top: 0; right: 0; width: 100px; text-align:right;">
-<td th:text="${loggedCustomer.username}"></td>
-</div>
+
 <th>Available Service Packages</th>
 <table  class="styled-table">
     <tr>
@@ -52,10 +50,7 @@
     </tbody>
 
 
-
-
 </table>
-
 <div class="form-style-4">
 </div>
 <div class="form-style-4">
@@ -63,6 +58,8 @@
         <input type="submit" value="BUY SERVICE">
     </form>
 </div>
+
+
 
 
 <div th:if="${rejectedOrders != null}">
@@ -109,7 +106,9 @@
 </table>
     </div>
 
-
+<div style="position: absolute; top: 0; right: 0; width: 100px; text-align:right;">
+    <td th:text="${loggedCustomer.username}"></td>
+</div>
 
 
 </body>

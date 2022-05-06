@@ -20,6 +20,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,10 +59,14 @@ public class OnServicePackageConfirm extends HttpServlet {
 
 
         final WebContext ctx = new WebContext(req, resp, this.getServletContext(), req.getLocale());
+
+
+
+
         ServicePackage servicePackage = new ServicePackage();
-        ServicePackage service = (ServicePackage) req.getSession(false).getAttribute("servicePackageChosen");
+        String sp = req.getParameter("servicePackageChosen");
         try {
-            servicePackage = spService.findServicePackageById(service.getPackageName());
+            servicePackage = spService.findServicePackageById(req.getParameter("servicePackageChosen"));
         } catch (CredentialsException e) {
             e.printStackTrace();
         }
@@ -79,11 +84,18 @@ public class OnServicePackageConfirm extends HttpServlet {
             e.printStackTrace();
         }
 
-        UserCustomer customer = userCustomerService.findCustomerById((UserCustomer) req.getSession().getAttribute("user"));
-        ctx.setVariable("loggedCustomer", customer);
-        req.getSession(false).setAttribute("user", customer);
-        req.getSession(false).setAttribute("servicePackageChosen", servicePackage);
-        req.getSession(false).setAttribute("optionalProductsObjects", optionalProducts);
+        if(req.getSession(false)!=null  &&  req.getSession(false).getAttribute("user")!=null ) {
+            UserCustomer customer = userCustomerService.findCustomerById((UserCustomer) req.getSession().getAttribute("user"));
+            ctx.setVariable("loggedCustomer", customer);
+            req.getSession(false).setAttribute("loggedCustomer", customer);
+            req.getSession(false).setAttribute("optionalProducts", optionalProductsIds);
+            req.getSession(false).setAttribute("servicePackageChosen", servicePackage);
+            req.getSession(false).setAttribute("optionalProductsObjects", optionalProducts);
+
+        }
+
+
+
         ctx.setVariable("servicePackageChosenCTX", servicePackage);
         ctx.setVariable("optionalProductsObjects", optionalProducts);
         templateEngine.process("/WEB-INF/AdditionalInformation.html", ctx, resp.getWriter());
@@ -94,6 +106,8 @@ public class OnServicePackageConfirm extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+
         doPost(req, resp);
 
 

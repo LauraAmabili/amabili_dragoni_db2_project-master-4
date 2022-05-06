@@ -29,9 +29,13 @@ public class UserCustomer implements Serializable {
     @OneToMany(mappedBy = "failedUser")
     private List<FailedPayment> failedPaymentList;
 
-
     @OneToMany(mappedBy = "userOrder")
     private Collection<Orders> orders;
+
+    @OneToOne(mappedBy = "username")
+    private AuditingTable auditingTable;
+
+
 
     public UserCustomer(){
     }
