@@ -23,9 +23,9 @@ public class ActivationSchedule implements Serializable {
 
     @OneToOne
     @JoinColumn(name = "orderId")
-    private Order order;
+    private Orders order;
 
-    public ActivationSchedule( Date dateStart, Date dateEnd, Order order) {
+    public ActivationSchedule( Date dateStart, Date dateEnd, Orders order) {
         this.dateStart = dateStart;
         this.dateEnd = dateEnd;
         this.order = order;
@@ -52,11 +52,11 @@ public class ActivationSchedule implements Serializable {
         this.dateEnd = dateEnd;
     }
 
-    public Order getOrder() {
+    public Orders getOrder() {
         return order;
     }
 
-    public void setOrder(Order order) {
+    public void setOrder(Orders order) {
         this.order = order;
     }
 

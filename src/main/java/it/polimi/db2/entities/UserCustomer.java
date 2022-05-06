@@ -31,7 +31,7 @@ public class UserCustomer implements Serializable {
 
 
     @OneToMany(mappedBy = "userOrder")
-    private Collection<Order> orders;
+    private Collection<Orders> orders;
 
     public UserCustomer(){
     }
