@@ -11,18 +11,11 @@ import java.util.List;
 @Entity
 @Table(name = "Orders", schema = "database2")
 @NamedQuery(name = "Order.getAllOrders", query = "SELECT order from Orders order")
-@Table(name = "Orders", schema = "database2")
-@NamedQuery(name = "Order.getAllOrders", query = "SELECT order from Order order")
 // query that selects the orders of a given service package
 @NamedQuery(name = "Order.getServicePkgOrders", query = "SELECT o from Orders o where o.orderedService = :servicePkg")
 // query that selects the orders with a given of a given service package
 @NamedQuery(name = "Order.getServicePkgValidityPeriodOrders", query = "SELECT o from Orders o where o.orderedService = :servicePkg and o.validityPeriodMonth = :validityPeriod")
 // query that selects the orders of a given service package without optional products
-@NamedQuery(name = "Order.getServicePkgOrdersWithoutOptionalProducts",
-        query = "SELECT o from Orders o where (o.orderedService = :servicePkg  and o.orderId not in (SELECT oo.order FROM OptionalOrdered oo))")
-// query that selects the orders of a given service package with a given optional product
-@NamedQuery(name = "Order.getServicePkgOrdersWithOptionalProducts",
-        query = "SELECT o from Orders o where (o.orderedService = :servicePkg  and o.orderId in (SELECT oo.order FROM OptionalOrdered oo WHERE oo.optionalProduct = :optionalProduct))")
 // query that returns the order based on the customer and the date time of the creation
 @NamedQuery(name = "Order.findOrderByDateTimeCustomer", query = "SELECT o from Orders o where o.userOrder.username = :userOrderId and o.orderDateTime = :orderDT")
 //query that returns not correctly paid order of a user , valid = 0
