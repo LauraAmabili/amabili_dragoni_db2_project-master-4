@@ -13,8 +13,6 @@
         <class>it.polimi.db2.entities.InternetService</class>
         <class>it.polimi.db2.entities.MobilePhoneService</class>
         <class>it.polimi.db2.entities.MonthlyFee</class>
-        <class>it.polimi.db2.entities.PkgServiceInternet</class>
-        <class>it.polimi.db2.entities.PkgServicePhone</class>
         <class>it.polimi.db2.entities.ServicePackage</class>
 
 
