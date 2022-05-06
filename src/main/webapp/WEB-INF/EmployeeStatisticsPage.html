@@ -12,80 +12,72 @@
 <div class="page" title="Page 2">
     <div class="layoutArea">
         <div class="column">
-
+            <h3><strong><span style="color: #0000ff;">Number of total purchases per package &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span></strong></h3>
             <ul>
-                <li>
-                    <h3><strong><span style="color: #0000ff;">Number of total purchases per package &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span></strong></h3>
-                    <ul>
-                        <tr th:each="ppp : ${purchasesPerPackage}">
-                            <li>
-                                <b><span style="color: #000000;"><span style="text-decoration: underline;" th:text="${ppp.servicePackage.packageName}"> </span></span></b>
-                                :
-                                <span style="color: #000000;"><span th:text="${ppp.purchases}"> </span></span>
-                                sales
-                            </li>
-                    </ul>
-                </li>
-            </ul>
-
-            <li>
-                <h3><strong><span style="color: #0000ff;">Number of total purchases per package and validity period</span></strong></h3>
-                <tr th:each="sppvp : ${purchasesPerPackageValidityPeriod}">
-                    <b><span style="text-decoration: underline;" th:text="${sppvp.servicePackage.packageName}"><strong></strong></span></b>
-                    <table style="border-collapse: collapse; width: 100%;" border="1">
-                        <tbody>
-                        <tr>
-                            <td style="width: 25%;"><strong>12 Months</strong></td>
-                            <td style="width: 25%;"><strong>24 Months</strong></td>
-                            <td style="width: 25%;"><strong>36 Months</strong></td>
-                        </tr>
-                        <tr>
-                            <td> <span th:if="${sppvp.purchases12 != null}" th:text="${sppvp.purchases12}"> </span>
-                                <span th:unless="${sppvp.purchases12 != null}">  </span>
-                            </td>
-                            <td> <span th:if="${sppvp.purchases24 != null}" th:text="${sppvp.purchases24}"> </span>
-                                <span th:unless="${sppvp.purchases24 != null}">  </span>
-                            </td>
-                            <td> <span th:if="${sppvp.purchases36 != null}" th:text="${sppvp.purchases36}"> </span>
-                                <span th:unless="${sppvp.purchases36 != null}">  </span>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </tr>
-            </li>
-
-            <ul>
-                <li> <h3><strong><span style="color: #0000ff;">Total value of sales per package with and without the optional products</span></strong></h3>
-                    <tr th:if="${salesPkgOp != null}" th:each="s : ${salesPkgOp}">
-                        <ul>
-                            Service Package <b><span style="color: #000000;" th:text="${s.servicePackage.packageName}"> </span></b>
-                            <ul>
-                                <li>Without optional products: <b><span style="color: #000000;"><span th:text="${s.totSalesWithoutOp}"></span></span> &euro; </b></li>
-                                <li>with optional products: <b><span style="color: #000000;"><span th:text="${s.totSalesWithOp}"> &euro;</span></span> &euro; </b></li>
-                                <p></p>
-                            </ul>
-                        </ul>
-                    </tr>
-                </li>
-            </ul>
-
-
-            <li>
-                <h3><strong><span style="color: #0000ff;">Best seller optional product, i.e. the optional product with the greatest value of sales across all&nbsp;the sold service packages</span></strong></h3>
-                <ol>
-                    <li style="list-style-type: none;">
-                        <ol>
-                            <li th:if="${topOptionalProducts != null}"th:each="top : ${topOptionalProducts}">
-                                <b><span style="color: #000000;"><span style="text-decoration: underline;" th:text="${top.optionalProduct.name}"> </span></span></b>
-                                :
-                                <span style="color: #000000;"><span th:text="${top.totSales}"> </span></span>
-                                &euro; in total
-                            </li>
-                        </ol>
+                <tr th:each="ppp : ${purchasesPerPackage}">
+                    <li>
+                        <b><span style="color: #000000;"><span style="text-decoration: underline;" th:text="${ppp.servicePackage.packageName}"> </span></span></b>
+                        :
+                        <span style="color: #000000;"><span th:text="${ppp.purchases}"> </span></span>
+                        sales
                     </li>
-                </ol>
-            </li>
+            </ul>
+
+
+
+            <h3><strong><span style="color: #0000ff;">Number of total purchases per package and validity period</span></strong></h3>
+            <tr th:each="sppvp : ${purchasesPerPackageValidityPeriod}">
+                <b><span style="text-decoration: underline;" th:text="${sppvp.servicePackage.packageName}"><strong></strong></span></b>
+                <table style="border-collapse: collapse; width: 100%;" border="1">
+                    <tbody>
+                    <tr>
+                        <td style="width: 25%;"><strong>12 Months</strong></td>
+                        <td style="width: 25%;"><strong>24 Months</strong></td>
+                        <td style="width: 25%;"><strong>36 Months</strong></td>
+                    </tr>
+                    <tr>
+                        <td> <span th:if="${sppvp.purchases12 != null}" th:text="${sppvp.purchases12}"> </span>
+                            <span th:unless="${sppvp.purchases12 != null}">  </span>
+                        </td>
+                        <td> <span th:if="${sppvp.purchases24 != null}" th:text="${sppvp.purchases24}"> </span>
+                            <span th:unless="${sppvp.purchases24 != null}">  </span>
+                        </td>
+                        <td> <span th:if="${sppvp.purchases36 != null}" th:text="${sppvp.purchases36}"> </span>
+                            <span th:unless="${sppvp.purchases36 != null}">  </span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </tr>
+
+            <h3><strong><span style="color: #0000ff;">Total value of sales per package with and without the optional products</span></strong></h3>
+            <tr th:if="${salesPkgOp != null}" th:each="s : ${salesPkgOp}">
+                <ul>
+                    Service Package <b><span style="color: #000000;" th:text="${s.servicePackage.packageName}"> </span></b>
+                    <ul>
+                        <li>Without optional products: <b><span style="color: #000000;"><span th:text="${s.totSalesWithoutOp}"></span></span> &euro; </b></li>
+                        <li>with optional products: <b><span style="color: #000000;"><span th:text="${s.totSalesWithOp}"> &euro;</span></span> &euro; </b></li>
+                        <p></p>
+                    </ul>
+                </ul>
+            </tr>
+
+
+
+            <h3><strong><span style="color: #0000ff;">Best seller optional product, i.e. the optional product with the greatest value of sales across all&nbsp;the sold service packages</span></strong></h3>
+            <ol>
+                <li style="list-style-type: none;">
+                    <ol>
+                        <li th:if="${topOptionalProducts != null}"th:each="top : ${topOptionalProducts}">
+                            <b><span style="color: #000000;"><span style="text-decoration: underline;" th:text="${top.optionalProduct.name}"> </span></span></b>
+                            :
+                            <span style="color: #000000;"><span th:text="${top.totSales}"> </span></span>
+                            &euro; in total
+                        </li>
+                    </ol>
+                </li>
+            </ol>
+
 
 
 
