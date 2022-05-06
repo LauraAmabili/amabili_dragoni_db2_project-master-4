@@ -4,7 +4,6 @@ package it.polimi.db2.controllers;
 import it.polimi.db2.entities.*;
 import it.polimi.db2.exceptions.CredentialsException;
 import it.polimi.db2.services.OrderService;
-import it.polimi.db2.services.PaymentService;
 import it.polimi.db2.services.ServicePackageService;
 import it.polimi.db2.services.UserCustomerService;
 import org.thymeleaf.TemplateEngine;
@@ -62,7 +61,7 @@ public class HomePageCustomer extends HttpServlet {
             UserCustomer customer = userCustomerService.findCustomerById((UserCustomer) req.getSession().getAttribute("user"));
 
             if(customer.getSolvent() == 0 ){
-                List<Order> rejectedOrders = orderService.getNotValidOrdersOfUser(customer);
+                List<Orders> rejectedOrders = orderService.getNotValidOrdersOfUser(customer);
                 ctx.setVariable("rejectedOrders", rejectedOrders);
             }
 

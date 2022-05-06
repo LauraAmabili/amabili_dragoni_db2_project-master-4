@@ -62,7 +62,7 @@ public class Payment extends HttpServlet {
 
         UserCustomer user = (UserCustomer) req.getSession(false).getAttribute("user");
         HttpSession session = req.getSession(false);
-        Order order = null;
+        Orders order = null;
         Date dateStart = null;
         int validityPeriod = 0;
         Date dateEnd = null;
@@ -91,7 +91,7 @@ public class Payment extends HttpServlet {
             // order already created
         } else if(session.getAttribute("user") != null && req.getSession(false).getAttribute("orderIdForRejectedPayment")!= null){
 
-            order = (Order) req.getSession(false).getAttribute("order");
+            order = (Orders) req.getSession(false).getAttribute("order");
             boolean successfulPayment = true;
             orderService.setValid(order,0);
             dateStart = order.getDateStart();

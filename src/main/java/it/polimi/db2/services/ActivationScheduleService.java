@@ -2,7 +2,7 @@ package it.polimi.db2.services;
 
 
 import it.polimi.db2.entities.ActivationSchedule;
-import it.polimi.db2.entities.Order;
+import it.polimi.db2.entities.Orders;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -21,10 +21,10 @@ public class ActivationScheduleService {
 
     }
 
-    public void addNewActivationRecord(Date dateStart, Date dateEnd, Order order){
+    public void addNewActivationRecord(Date dateStart, Date dateEnd, Orders order){
 
         ActivationSchedule AS= new ActivationSchedule();
-        Order o = order;
+        Orders o = order;
         AS.setDateStart(dateStart);
         AS.setDateEnd(dateEnd);
         AS.setOrder(order);

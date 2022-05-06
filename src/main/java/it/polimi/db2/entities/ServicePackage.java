@@ -44,7 +44,7 @@ public class ServicePackage implements Serializable {
     private List<OptionalProduct> optionalProducts;
 
     @OneToMany(mappedBy = "orderedService")
-    private Collection<Order> orders;
+    private Collection<Orders> orders;
 
 
     public ServicePackage() {

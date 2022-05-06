@@ -79,7 +79,7 @@ public class OnAdditionalInfoSubmit extends HttpServlet {
 
 
             int orderId = Integer.parseInt(req.getParameter("orderIdForRejectedPayment"));
-            Order order = orderService.getOrder(orderId);
+            Orders order = orderService.getOrder(orderId);
             totalCost = order.getTotalCost();
             optionalProducts = order.getOptionalOrdered();
            validityPeriod =order.getValidityPeriodMonth();

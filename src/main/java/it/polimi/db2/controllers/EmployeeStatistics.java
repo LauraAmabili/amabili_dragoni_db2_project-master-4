@@ -1,6 +1,6 @@
 package it.polimi.db2.controllers;
 
-import it.polimi.db2.entities.Order;
+import it.polimi.db2.entities.Orders;
 import it.polimi.db2.entities.ServicePackage;
 import it.polimi.db2.entities.UserEmployee;
 import it.polimi.db2.exceptions.CredentialsException;
@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @WebServlet("/go-to-statistics")
 public class EmployeeStatistics extends HttpServlet {
@@ -115,7 +114,7 @@ public class EmployeeStatistics extends HttpServlet {
                 // total order for the service package
                 float totSales = orderService.getNumberOfSalesByServicePkg(sp);
 
-                List<Order> spOrders = orderService.getServicePackageOrders(sp);
+                List<Orders> spOrders = orderService.getServicePackageOrders(sp);
                 // for each order, number of optional products selected
                 List<Integer> opNum = new ArrayList<>();
                 spOrders.forEach(o -> {
