@@ -75,16 +75,7 @@ public class OrderService {
         return orders.size();
     }
 
-    public int getNumOfOrderedWithoutOptionalProduct (ServicePackage sp){
-        List<Orders> ordersNoOp = em.createNamedQuery("Order.getServicePkgOrdersWithoutOptionalProducts", Orders.class).setParameter("servicePkg", sp).getResultList();
-        int ordersNoOpNum = ordersNoOp.size();
-        return ordersNoOpNum;
-    }
 
-    public int getNumOfOrderedWithOptionalProduct (ServicePackage sp, String optionalProduct) {
-        List<Orders> ordersOp = em.createNamedQuery("Order.getServicePkgOrdersWithOptionalProducts", Orders.class).setParameter("servicePkg", sp).setParameter("optionalProduct", optionalProduct).getResultList();
-        return ordersOp.size();
-    }
 
     public List<Orders> getServicePackageOrders (ServicePackage sp) {
         List <Orders> orders = em.createNamedQuery("Order.getServicePkgOrders", Orders.class).setParameter("servicePkg", sp).getResultList();
@@ -112,8 +103,9 @@ public class OrderService {
 
     }
 
-    public void setValid(Orders order, int valid){
+    public Orders setValid(Orders order, int valid){
         Orders order2 = em.find(Orders.class, order.getOrderId());
         order2.setValid(valid);
+        return order2;
     }
 }

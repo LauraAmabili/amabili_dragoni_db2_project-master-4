@@ -6,6 +6,7 @@ drop trigger if exists updateTotalPurchasesPerPacketValidityPeriod24;
 drop trigger if exists updateTotalPurchasesPerPacketValidityPeriod36;
 drop trigger if exists updateTotalPurchasesPerPacketTotalPackageSales;
 drop trigger if exists insertServicePackage;
+drop trigger if exists updateTotalPackageSales;
 
 drop table if exists TotalPurchasesPerPacket;
 drop table if exists TotalPurchasesPerPacketValidityPeriod;

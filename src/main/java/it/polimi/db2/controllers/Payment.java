@@ -110,7 +110,7 @@ public class Payment extends HttpServlet {
         successfulPayment = ba.attemptPayment(value);
 
         if (successfulPayment && order != null) {
-            orderService.setValid(order,1);
+            order = orderService.setValid(order,1);
             asService.addNewActivationRecord(dateStart, dateEnd, order);
             ctx.setVariable("successfulPayment", successfulPayment);
         }
