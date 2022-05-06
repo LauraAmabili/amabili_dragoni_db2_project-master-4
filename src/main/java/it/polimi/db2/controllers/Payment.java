@@ -126,6 +126,7 @@ public class Payment extends HttpServlet {
 
 
         ctx.setVariable("successfulPayment", successfulPayment);
+        ctx.setVariable("order", order);
         req.getSession(false).setAttribute("order", order);
         req.getSession().setAttribute("user", user);
         templateEngine.process("/WEB-INF/PaymentPage.html", ctx, resp.getWriter());

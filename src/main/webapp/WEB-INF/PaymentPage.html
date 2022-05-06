@@ -17,6 +17,8 @@
 
 <span> External Service Called! </span>
 <div>
+
+    <span th:if="${order}" th:text= "'total cost:' + ${order.totalCost}"></span>
     <span th:if="${successfulPayment}" th:text= "${'Payment successful'}"></span>
     <span th:unless="${successfulPayment}" th:text= "${'Payment rejected, try later'}">  </span>
 </div>
