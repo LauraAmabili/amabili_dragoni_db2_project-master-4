@@ -78,6 +78,19 @@
                 </li>
             </ol>
 
+            <h3><strong><span style="color: #0000ff;">Average number of optional products sold together with each service package </span></strong></h3>
+            <ul>
+                <tr th:each="avg : ${averagePackageOptionalProducts}">
+                    <li>
+                        <b> <span style="color: #000000;"> <span style="text-decoration: underline;" th:text="${avg.servicePackage.name}"> </span></span></b>
+                        :
+                        <span style="color: #000000;"><span th:text="${avg.average}"> </span></span>
+                        sales on average
+                    </li>
+                </tr>
+            </ul>
+     
+
 
 
 

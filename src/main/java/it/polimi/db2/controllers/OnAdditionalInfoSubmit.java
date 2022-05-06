@@ -119,7 +119,7 @@ public class OnAdditionalInfoSubmit extends HttpServlet {
 
         req.getSession(false).setAttribute("user", customer);
         req.getSession(false).setAttribute("totalCost", totalCost);
-        // req.getSession(false).setAttribute("optionalProducts", optionalProductList);
+        req.getSession(false).setAttribute("optionalProducts", optionalProductList);
         req.getSession(false).setAttribute("selectedOptionalProducts", optionalProducts);
         req.getSession(false).setAttribute("chosenValidityPeriod", validityPeriod);
         req.getSession(false).setAttribute("startDate", startDate);

@@ -1,10 +1,7 @@
 package it.polimi.db2.controllers;
 
 import it.polimi.db2.entities.UserEmployee;
-import it.polimi.db2.materializedViews.BestOptional;
-import it.polimi.db2.materializedViews.TotalPackageSales;
-import it.polimi.db2.materializedViews.TotalPurchasesPerPacket;
-import it.polimi.db2.materializedViews.TotalPurchasesPerPacketValidityPeriod;
+import it.polimi.db2.materializedViews.*;
 import it.polimi.db2.services.StatisticsService;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
@@ -57,11 +54,14 @@ public class GoToStatisticsPage extends HttpServlet {
         List<TotalPurchasesPerPacketValidityPeriod> purchasesPerPackageValidityPeriod = statisticsService.getAllTotalPurchasesPacketValidityPeriod();
         List<TotalPackageSales> salesPkgOp = statisticsService.getAllTotalPackageSales();
         List<BestOptional> bestOptionals = statisticsService.getAllBestOptionalProducts();
+        List<AveragePackageOptionalProducts>averagePackageOptionalProducts = statisticsService.getAllAveragePackageOptionalProducts();
 
         ctx.setVariable("purchasesPerPackage", purchasesPerPackage);
         ctx.setVariable("purchasesPerPackageValidityPeriod", purchasesPerPackageValidityPeriod);
         ctx.setVariable("salesPkgOp", salesPkgOp);
         ctx.setVariable("topOptionalProducts", bestOptionals);
+        ctx.setVariable("averagePackageOptionalProducts", averagePackageOptionalProducts);
+
 
         templateEngine.process("/WEB-INF/EmployeeStatisticsPage.html", ctx, response.getWriter());
 

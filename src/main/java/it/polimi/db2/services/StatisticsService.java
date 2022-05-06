@@ -1,9 +1,6 @@
 package it.polimi.db2.services;
 
-import it.polimi.db2.materializedViews.BestOptional;
-import it.polimi.db2.materializedViews.TotalPackageSales;
-import it.polimi.db2.materializedViews.TotalPurchasesPerPacket;
-import it.polimi.db2.materializedViews.TotalPurchasesPerPacketValidityPeriod;
+import it.polimi.db2.materializedViews.*;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -57,6 +54,16 @@ public class StatisticsService {
             throw new PersistenceException("Cannot load Best Optional");
         }
         return bestOptionals;
+    }
+
+    public List<AveragePackageOptionalProducts> getAllAveragePackageOptionalProducts() {
+        List<AveragePackageOptionalProducts> averagePackageOptionalProducts = null;
+        try {
+            averagePackageOptionalProducts = em.createNamedQuery("AveragePackageOptionalProducts.findAllOrdered", AveragePackageOptionalProducts.class).getResultList();
+        } catch (PersistenceException e) {
+            throw new PersistenceException("Cannot load Best Optional");
+        }
+        return averagePackageOptionalProducts;
     }
 
 }

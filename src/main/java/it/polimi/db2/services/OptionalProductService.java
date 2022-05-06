@@ -53,7 +53,6 @@ public class OptionalProductService {
         if(optionalProducts != null) {
             optionalProducts.forEach(op -> optionalProductsIds.add(op.getName()));
         }
-        List<String> debug = optionalProductsIds;
         return optionalProductsIds;
     }
 
