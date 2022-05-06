@@ -25,7 +25,7 @@ public class ServicePackageService {
     public ServicePackage findServicePackageById(String servicePackageName) throws CredentialsException {
         ServicePackage sp = em.find(ServicePackage.class, servicePackageName);
         return sp;
-      /*  List<ServicePackage> sp;
+        /*List<ServicePackage> sp;
         try {
             sp = em.createNamedQuery("ServicePackage.findServicePackageById", ServicePackage.class).setParameter("name",servicePackageName).getResultList();
 

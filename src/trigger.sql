@@ -5,12 +5,22 @@ drop trigger if exists updateTotalPurchasesPerPacketValidityPeriod12;
 drop trigger if exists updateTotalPurchasesPerPacketValidityPeriod24;
 drop trigger if exists updateTotalPurchasesPerPacketValidityPeriod36;
 drop trigger if exists updateTotalPurchasesPerPacketTotalPackageSales;
-drop trigger if exists insertServicePackage;
 drop trigger if exists updateTotalPackageSales;
+drop trigger if exists updateTotalPackageSalesWithOp;
+drop trigger if exists updateTotalPackageSalesWithoutOp;
+drop trigger if exists updateBestOptional;
+drop trigger if exists insertOptionalProduct;
+drop trigger if exists insertServicePackage;
+drop trigger if exists updateAveragePackageOptionalProducts;
+
 
 drop table if exists TotalPurchasesPerPacket;
 drop table if exists TotalPurchasesPerPacketValidityPeriod;
 drop table if exists TotalPackageSales;
+drop table if exists BestOptional;
+drop table if exists AveragePackageOptionalProducts;
+
+
 
 /*Number of total purchases per package*/
 create table TotalPurchasesPerPacket(
@@ -71,15 +81,76 @@ create table TotalPackageSales(
     foreign key (servicePackage) references ServicePackage(PackageName) on delete cascade on update cascade,
     primary key (servicePackage));
 
-create trigger updateTotalPackageSales
+create trigger updateTotalPackageSalesWithOp
     after insert on ActivationSchedule
     for each row
     update TotalPackageSales
         set totSalesWithOp = totSalesWithOp + (select o.TotalCost from Orders as o where new.orderId = o.orderId);
 
+delimiter $$
+create trigger updateTotalPackageSalesWithoutOp
+    after insert on ActivationSchedule
+    for each row
+    begin
+
+        IF ( 12 = (select o.ValidityPeriodMonth from Orders as o where new.orderId = o.orderId)) THEN
+            update TotalPackageSales
+            set totSalesWithoutOP = totSalesWithoutOP + ((Select mf.12MonthPrice from MontlyFee as mf, ServicePackage as sp, Orders as o
+                                                         where mf.idMontlyFee = sp.packageFees and new.orderId = o.orderId and o.orderedService = sp.packageName) * 12);
+
+        ELSEIF ( 24 = (select o.ValidityPeriodMonth from Orders as o where new.orderId = o.orderId)) THEN
+            update TotalPackageSales
+            set totSalesWithoutOP = totSalesWithoutOP + ((Select mf.24MonthPrice from MontlyFee as mf, ServicePackage as sp, Orders as o
+                                                         where mf.idMontlyFee = sp.packageFees and new.orderId = o.orderId and o.orderedService = sp.packageName)*24);
+
+        ELSEIF ( 36 = (select o.ValidityPeriodMonth from Orders as o where new.orderId = o.orderId)) THEN
+            update TotalPackageSales
+            set totSalesWithoutOP = totSalesWithoutOP + ((Select mf.36MonthPrice from MontlyFee as mf, ServicePackage as sp, Orders as o
+                                                         where mf.idMontlyFee = sp.packageFees and new.orderId = o.orderId and o.orderedService = sp.packageName)*36);
+        END IF;
+    end $$
+
+delimiter ;
+
+/*Average number of optional products sold together with each service package*/
+create table AveragePackageOptionalProducts(
+    servicePackage varchar(45) not null,
+    average decimal(10,2) not null default 0.00,
+    foreign key (servicePackage) references ServicePackage(PackageName) on delete cascade on update cascade,
+    primary key (servicePackage));
+
+create trigger updateAveragePackageOptionalProducts
+    after insert on ActivationSchedule
+    for each row
+    update AveragePackageOptionalProducts
+    set average = (select count(*) from OptionalOrdered as oo where new.orderId = oo.orderId) /
+                  (select count(*) from ServicePackageOptional as spo, Orders as o
+                  where new.orderId = o.orderId and spo.servicePackage =o.orderedService)
+    where servicePackage = (select o.orderedService from Orders as o where o.orderId = new.orderId);
 
 
+    /*tutte le volte che vendo un pacchetto vado in optional ordered e mi calcolo la media */
+/*TODO List of insolvent users, suspended orders and alerts*/
 
+
+/*best seller optional products*/
+/*in the table are not ordered*/
+create table BestOptional(optionalProduct varchar(45) not null,
+                          pricePerMonth decimal(10,2) not null default 0.00,
+                          totSales decimal(10,2) not null default 0.00,
+                          foreign key (optionalProduct) references OptionalProduct(name) on delete cascade on update cascade,
+                          primary key (optionalProduct));
+
+delimiter $$
+create trigger updateBestOptional
+    after insert on ActivationSchedule
+    for each row
+    update BestOptional
+    set totSales = totSales + (select o.ValidityPeriodMonth from Orders as o where new.orderId = o.orderId ) * pricePerMonth
+    where optionalProduct in (select oo.optionalProductId from ServicePackage as sp, Orders as ord, OptionalOrdered as oo
+                                where new.orderId = ord.orderId and ord.orderId = oo.orderId);
+
+delimiter ;
 
 delimiter $$
 create trigger insertServicePackage
@@ -89,5 +160,16 @@ begin
     insert into TotalPurchasesPerPacket(servicePackage,purchases) values(new.PackageName, default);
     insert into TotalPurchasesPerPacketValidityPeriod(servicePackage,purchases12, purchases24, purchases36) values(new.PackageName, default, default, default);
     insert into TotalPackageSales(servicePackage, totSalesWithOp, totSalesWithoutOP) values(new.PackageName, default, default);
+    insert into AveragePackageOptionalProducts(servicePackage, average) values(new.PackageName, default);
+end $$
+delimiter ;
+
+
+delimiter $$
+create trigger insertOptionalProduct
+    after insert on OptionalProduct
+    for each row
+begin
+    insert into BestOptional(optionalProduct, pricePerMonth, totSales) values(new.name, new.montlyFee, default);
 end $$
 delimiter ;

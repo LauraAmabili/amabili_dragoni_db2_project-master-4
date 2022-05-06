@@ -8,6 +8,7 @@ import it.polimi.db2.services.OptionalProductService;
 import it.polimi.db2.services.ServicePackageService;
 import it.polimi.db2.services.ServicesService;
 import it.polimi.db2.services.UserCustomerService;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -75,8 +76,7 @@ public class OnServicePackageSelection extends HttpServlet {
             //update of object user to make sure is the current one
 
             try {
-
-                String name = req.getParameter("servicePackageName");
+                String name = StringEscapeUtils.escapeJava(req.getParameter("servicePackageName"));
                 servicePackage = spService.findServicePackageById(name);
             } catch (CredentialsException e) {
                 try {
