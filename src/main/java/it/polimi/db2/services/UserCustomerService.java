@@ -35,6 +35,7 @@ public class UserCustomerService {
         user.setUsername(username);
         user.setEmail(email);
         user.setPassword(password);
+        user.setSolvent(1);
         em.persist(user);
     }
 

@@ -5,12 +5,11 @@ import javax.persistence.*;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "Order", schema = "database2")
+@Table(name = "Orders", schema = "database2")
 @NamedQuery(name = "Order.getAllOrders", query = "SELECT order from Order order")
 // query that selects the orders of a given service package
 @NamedQuery(name = "Order.getServicePkgOrders", query = "SELECT o from Order o where o.orderedService = :servicePkg")
