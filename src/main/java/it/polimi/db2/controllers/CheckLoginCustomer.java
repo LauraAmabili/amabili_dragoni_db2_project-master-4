@@ -63,7 +63,6 @@ public class CheckLoginCustomer extends HttpServlet {
             }
 
         } catch (Exception e) {
-            // for debugging only e.printStackTrace();
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing credential value");
             return;
         }
@@ -104,11 +103,10 @@ public class CheckLoginCustomer extends HttpServlet {
             response.sendRedirect(path);
         }
     }
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         doPost(req, resp);
-
-
 
     }
 
