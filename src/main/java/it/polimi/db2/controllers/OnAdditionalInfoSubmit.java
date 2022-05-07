@@ -114,8 +114,8 @@ public class OnAdditionalInfoSubmit extends HttpServlet {
 
             }
 
-        if(req.getSession(false)!=null  &&  req.getSession(false).getAttribute("user")!=null) {
-            customer = (UserCustomer) req.getSession(false).getAttribute("user");
+        if(req.getSession(false)!=null  &&  req.getSession(false).getAttribute("loggedCustomer")!=null) {
+            customer = (UserCustomer) req.getSession(false).getAttribute("loggedCustomer");
             req.getSession(false).setAttribute("loggedCustomer", customer);
             req.getSession(false).setAttribute("totalCost", totalCost);
             req.getSession(false).setAttribute("optionalProducts", optionalProductList);

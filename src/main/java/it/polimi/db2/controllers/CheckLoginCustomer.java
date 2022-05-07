@@ -98,7 +98,8 @@ public class CheckLoginCustomer extends HttpServlet {
                 return;
             }
 
-            request.getSession().setAttribute("user", user);
+            //creo la sessione se non c'era
+            request.getSession().setAttribute("loggedCustomer", user);
             path = getServletContext().getContextPath() + "/home-page-customer";
             response.sendRedirect(path);
         }

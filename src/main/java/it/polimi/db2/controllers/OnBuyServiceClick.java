@@ -52,11 +52,11 @@ public class OnBuyServiceClick extends HttpServlet {
         final WebContext ctx = new WebContext(req, resp, this.getServletContext(), req.getLocale());
 
 
-        if(req.getSession(false)!=null  &&  req.getSession(false).getAttribute("user")!=null) {
+        if(req.getSession(false)!=null  &&  req.getSession(false).getAttribute("loggedCustomer")!=null) {
             //update of object user to make sure is the current one
-            UserCustomer customer = userCustomerService.findCustomerById((UserCustomer) req.getSession().getAttribute("user"));
+            UserCustomer customer = userCustomerService.findCustomerById((UserCustomer) req.getSession().getAttribute("loggedCustomer"));
             ctx.setVariable("loggedCustomer", customer);
-            req.getSession(false).setAttribute("user", customer);
+            req.getSession(false).setAttribute("loggedCustomer", customer);
         }
 
         List<ServicePackage> sp = null;

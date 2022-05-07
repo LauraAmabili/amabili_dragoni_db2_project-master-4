@@ -84,8 +84,8 @@ public class OnServicePackageConfirm extends HttpServlet {
             e.printStackTrace();
         }
 
-        if(req.getSession(false)!=null  &&  req.getSession(false).getAttribute("user")!=null ) {
-            UserCustomer customer = userCustomerService.findCustomerById((UserCustomer) req.getSession().getAttribute("user"));
+        if(req.getSession(false)!=null  &&  req.getSession(false).getAttribute("loggedCustomer")!=null ) {
+            UserCustomer customer = userCustomerService.findCustomerById((UserCustomer) req.getSession().getAttribute("loggedCustomer"));
             ctx.setVariable("loggedCustomer", customer);
             req.getSession(false).setAttribute("loggedCustomer", customer);
             req.getSession(false).setAttribute("optionalProducts", optionalProductsIds);

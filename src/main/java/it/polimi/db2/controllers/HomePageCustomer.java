@@ -56,15 +56,15 @@ public class HomePageCustomer extends HttpServlet {
         }
 
         final WebContext ctx = new WebContext(req, resp, this.getServletContext(), req.getLocale());
-        if(req.getSession(false)!=null  &&  req.getSession(false).getAttribute("user")!=null) {
+        if(req.getSession(false)!=null  &&  req.getSession(false).getAttribute("loggedCustomer")!=null) {
             //update of object user to make sure is the current one
-            UserCustomer customer = userCustomerService.findCustomerById((UserCustomer) req.getSession().getAttribute("user"));
+            UserCustomer customer = userCustomerService.findCustomerById((UserCustomer) req.getSession().getAttribute("loggedCustomer"));
             if(customer.getSolvent() == 0 ){
                 List<Orders> rejectedOrders = orderService.getNotValidOrdersOfUser(customer);
                 ctx.setVariable("rejectedOrders", rejectedOrders);
             }
 
-            req.getSession(false).setAttribute("customer", customer);
+            req.getSession(false).setAttribute("loggedCustomer", customer);
             ctx.setVariable("loggedCustomer", customer);
 
 
