@@ -178,8 +178,8 @@ CREATE TABLE `Orders` (
   UNIQUE KEY `OrderId_UNIQUE` (`orderId`),
   KEY `userOrder_idx` (`userOrder`),
   KEY `orderedService_idx` (`orderedService`),
-  CONSTRAINT `orderedService` FOREIGN KEY (`orderedService`) REFERENCES `ServicePackage` (`PackageName`) ON UPDATE CASCADE,
-  CONSTRAINT `userOrder` FOREIGN KEY (`userOrder`) REFERENCES `UserCustomer` (`username`) ON UPDATE CASCADE
+  CONSTRAINT `orderedService` FOREIGN KEY (`orderedService`) REFERENCES `ServicePackage` (`PackageName`) ON UPDATE CASCADE ON DELETE RESTRICT ,
+  CONSTRAINT `userOrder` FOREIGN KEY (`userOrder`) REFERENCES `UserCustomer` (`username`) ON UPDATE CASCADE ON DELETE RESTRICT
 ) ENGINE=InnoDB AUTO_INCREMENT=155 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -195,8 +195,8 @@ CREATE TABLE `PkgServiceInternet` (
   `internetService` varchar(45) NOT NULL,
   PRIMARY KEY (`packageService`,`internetService`),
   KEY `internetService_idx` (`internetService`),
-  CONSTRAINT `internetService` FOREIGN KEY (`internetService`) REFERENCES `InternetService` (`name`) ON UPDATE CASCADE,
-  CONSTRAINT `packageService` FOREIGN KEY (`packageService`) REFERENCES `ServicePackage` (`PackageName`) ON UPDATE CASCADE
+  CONSTRAINT `internetService` FOREIGN KEY (`internetService`) REFERENCES `InternetService` (`name`) ON UPDATE CASCADE ON DELETE RESTRICT ,
+  CONSTRAINT `packageService` FOREIGN KEY (`packageService`) REFERENCES `ServicePackage` (`PackageName`) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -212,8 +212,8 @@ CREATE TABLE `PkgServicePhone` (
   `mobilePhone` varchar(45) NOT NULL,
   PRIMARY KEY (`servicePackage`,`mobilePhone`),
   KEY `mobPhone_idx` (`mobilePhone`),
-  CONSTRAINT `mobPhone` FOREIGN KEY (`mobilePhone`) REFERENCES `MobilePhoneService` (`name`) ON UPDATE CASCADE,
-  CONSTRAINT `servicePkg` FOREIGN KEY (`servicePackage`) REFERENCES `ServicePackage` (`PackageName`) ON UPDATE CASCADE
+  CONSTRAINT `mobPhone` FOREIGN KEY (`mobilePhone`) REFERENCES `MobilePhoneService` (`name`) ON UPDATE CASCADE ON DELETE RESTRICT,
+  CONSTRAINT `servicePkg` FOREIGN KEY (`servicePackage`) REFERENCES `ServicePackage` (`PackageName`) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -231,7 +231,7 @@ CREATE TABLE `ServicePackage` (
   PRIMARY KEY (`PackageName`),
   UNIQUE KEY `Name_UNIQUE` (`PackageName`),
   KEY `packageFees_idx` (`packageFees`),
-  CONSTRAINT `packageFees` FOREIGN KEY (`packageFees`) REFERENCES `MontlyFee` (`IdMontlyFee`) ON UPDATE CASCADE
+  CONSTRAINT `packageFees` FOREIGN KEY (`packageFees`) REFERENCES `MontlyFee` (`IdMontlyFee`) ON UPDATE CASCADE ON DELETE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -247,8 +247,8 @@ CREATE TABLE `ServicePackageOptional` (
   `servicePackage` varchar(45) NOT NULL,
   PRIMARY KEY (`optionalProduct`,`servicePackage`),
   KEY `servicePackage_idx` (`servicePackage`),
-  CONSTRAINT `optionalProd` FOREIGN KEY (`optionalProduct`) REFERENCES `OptionalProduct` (`name`) ON UPDATE CASCADE,
-  CONSTRAINT `servicePackage` FOREIGN KEY (`servicePackage`) REFERENCES `ServicePackage` (`PackageName`) ON UPDATE CASCADE
+  CONSTRAINT `optionalProd` FOREIGN KEY (`optionalProduct`) REFERENCES `OptionalProduct` (`name`) ON UPDATE CASCADE ON DELETE RESTRICT ,
+  CONSTRAINT `servicePackage` FOREIGN KEY (`servicePackage`) REFERENCES `ServicePackage` (`PackageName`) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
