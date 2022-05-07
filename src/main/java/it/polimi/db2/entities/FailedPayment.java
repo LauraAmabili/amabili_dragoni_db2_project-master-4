@@ -22,7 +22,7 @@ public class FailedPayment  implements Serializable {
     @Column(name = "DateTime")
     private Date DateTime;
 
-    @ManyToOne
+    @ManyToOne( cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     @JoinColumn(name = "failedUser", referencedColumnName = "username")
     private UserCustomer failedUser;
 

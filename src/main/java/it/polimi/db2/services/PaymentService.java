@@ -38,7 +38,9 @@ public class PaymentService {
 
         List<FailedPayment> payments = em.createNamedQuery("FailedPayment.getFailedPaymentByOrder", FailedPayment.class).setParameter("order", order).getResultList();
         if(payments.size() != 0 ){
-            em.remove(payments.get(0));
+            payments.forEach(fp -> {
+                em.remove(fp);
+            });
         }
 
     }
