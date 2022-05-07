@@ -22,7 +22,6 @@ public class ActivationScheduleService {
     }
 
     public void addNewActivationRecord(Date dateStart, Date dateEnd, Orders order){
-
         ActivationSchedule AS= new ActivationSchedule();
         AS.setDateStart(dateStart);
         AS.setDateEnd(dateEnd);
