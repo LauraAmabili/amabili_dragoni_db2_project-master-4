@@ -49,9 +49,12 @@
 </form>
 
 <div style="position: absolute; top: 0; right: 0; width: 100px; text-align:right;">
-    <td th:text="${loggedCustomer.username}"></td>
-</div>
+    <td th:if="${loggedCustomer.username != null}" th:text="${loggedCustomer.username}"></td>
+    <form action="Logout" method="POST">
+        <input type="submit" value="Logout">
+    </form>
 
+</div>
 
 
 </body>

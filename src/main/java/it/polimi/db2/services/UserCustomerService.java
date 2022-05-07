@@ -60,9 +60,9 @@ public class UserCustomerService {
 
     }
 
-    public UserCustomer setInsolvent(UserCustomer user){
+    public UserCustomer setInsolvent(UserCustomer user, int solvent){
         UserCustomer u = em.find(UserCustomer.class, user.getUsername());
-        u.setSolvent(0);
+        u.setSolvent(solvent);
         return u;
     }
 

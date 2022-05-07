@@ -29,12 +29,12 @@
                      th:text="${servicePackageChosenCTX.packageFees.thirtySixMonthPrice} + ' euro/month for ' + ' 36 months'"></option>
         </select>
 
-        <span th:if="${optionalProductsObjects != null}">
+        <span th:if="${optionalProductsObjects.size() != 0}">
         <label>Choose an optional product:</label>
             <label>
                 <input type="checkbox" name="optionalProducts" th:each="op : ${optionalProductsObjects}" th:value="${op.name}" th:text="${op.name}">
             </label>
-        </span>
+</span>
         <p>
             Start Day: <input th:if= "${servicePackageChosenCTX != null}" type="date" name="date"
                               th:attr="min=${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}"
@@ -46,10 +46,12 @@
 </div>
 
 <div style="position: absolute; top: 0; right: 0; width: 100px; text-align:right;">
-    <td th:text="${loggedCustomer.username}"></td>
+    <td th:if="${loggedCustomer.username != null}" th:text="${loggedCustomer.username}"></td>
+    <form action="Logout" method="POST">
+        <input type="submit" value="Logout">
+    </form>
+
 </div>
-
-
 
 
 </body>
