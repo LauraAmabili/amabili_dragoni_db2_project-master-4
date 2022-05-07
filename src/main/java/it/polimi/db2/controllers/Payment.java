@@ -61,7 +61,6 @@ public class Payment extends HttpServlet {
         final WebContext ctx = new WebContext(req, resp, this.getServletContext(), req.getLocale());
 
         UserCustomer user = (UserCustomer) req.getSession(false).getAttribute("user");
-        UserCustomer user2 = (UserCustomer) req.getSession(false).getAttribute("user");
         req.getSession(false).setAttribute("loggedCustomer", user);
         HttpSession session = req.getSession(false);
         Orders order = null;
@@ -92,16 +91,13 @@ public class Payment extends HttpServlet {
                 e.printStackTrace();
             }
             // order already created
-        } else if(session.getAttribute("user") != null && req.getSession(false).getAttribute("orderIdForRejectedPayment")!= null){
+        } else if(session.getAttribute("user") != null && req.getParameter("orderIdForRejectedPayment")!= null){
 
             order = (Orders) req.getSession(false).getAttribute("order");
             dateStart = order.getDateStart();
             validityPeriod = order.getValidityPeriodMonth();
             totalCost = order.getTotalCost();
-
             dateEnd = addMonths(dateStart, validityPeriod);
-
-
 
 
         }
@@ -122,17 +118,19 @@ public class Payment extends HttpServlet {
             if( paymentService.getFailedPaymentsOfUser(user) != null && paymentService.getFailedPaymentsOfUser(user).size() < 3 ){
                 paymentService.deleteAlert(user);
             }
+            if(user.getFailedPaymentList().size() == 0){
+                user = ucService.setInsolvent(user, 1);
+            }
         }
         if (!successfulPayment && order != null) {
             // set valid = 0
             order = orderService.setValid(order,0);
-            user = ucService.setInsolvent(user);
+            user = ucService.setInsolvent(user, 0);
             FailedPayment fp = new FailedPayment();
             fp = paymentService.addFailedPayment(dateFailed, totalCost, user, order);
-            List<FailedPayment> list = paymentService.getFailedPaymentsOfUser(user);
-            if(list.size()  ==  3 ){
+            if(user.getFailedPaymentList().size()  ==  3 ){
                 paymentService.addAuditingTable(user, user.getEmail(), order.getTotalCost(), dateFailed);
-            } else if(list.size() > 3){
+            } else if(user.getFailedPaymentList().size() > 3){
                 paymentService.updateAuditingTable(user, user.getEmail(), order.getTotalCost(), dateFailed, successfulPayment);
             }
 

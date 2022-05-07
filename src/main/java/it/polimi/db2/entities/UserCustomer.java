@@ -29,13 +29,13 @@ public class UserCustomer implements Serializable {
     @Column(name = "solvent")
     private int solvent;
 
-    @OneToMany(mappedBy = "failedUser")
+    @OneToMany(mappedBy = "failedUser", cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     private List<FailedPayment> failedPaymentList;
 
-    @OneToMany(mappedBy = "userOrder")
+    @OneToMany(mappedBy = "userOrder", cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     private Collection<Orders> orders;
 
-    @OneToOne(mappedBy = "username")
+    @OneToOne(mappedBy = "username", cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     private AuditingTable auditingTable;
 
 
@@ -80,6 +80,30 @@ public class UserCustomer implements Serializable {
 
     public int getSolvent() {
         return solvent;
+    }
+
+    public List<FailedPayment> getFailedPaymentList() {
+        return failedPaymentList;
+    }
+
+    public void setFailedPaymentList(List<FailedPayment> failedPaymentList) {
+        this.failedPaymentList = failedPaymentList;
+    }
+
+    public Collection<Orders> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(Collection<Orders> orders) {
+        this.orders = orders;
+    }
+
+    public AuditingTable getAuditingTable() {
+        return auditingTable;
+    }
+
+    public void setAuditingTable(AuditingTable auditingTable) {
+        this.auditingTable = auditingTable;
     }
 
     public void setSolvent(int solvent) {
