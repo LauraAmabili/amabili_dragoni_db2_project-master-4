@@ -85,7 +85,7 @@ public class CheckLoginCustomer extends HttpServlet {
         } else {
             if(request.getSession(false) != null && request.getSession(false).getAttribute("servicePackageChosen")!=null){
 
-                request.getSession(false).setAttribute("user", user);
+                request.getSession(false).setAttribute("loggedCustomer", user);
 
                 ctx.setVariable("startDate", request.getSession(false).getAttribute("startDate"));
                 ctx.setVariable("chosenValidityPeriod", request.getSession(false).getAttribute("chosenValidityPeriod"));
