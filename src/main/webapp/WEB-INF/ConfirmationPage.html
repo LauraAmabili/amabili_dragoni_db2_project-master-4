@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:c="http://java.sun.com/jsf/html">
 <head>
     <meta charset="UTF-8">
     <title>confirm selection </title>
@@ -12,7 +12,7 @@
 
     <span th:if="${chosenValidityPeriod != null}" th:text="'Validity Period Chosen: '+ ${chosenValidityPeriod}"> </span>
     <p>&nbsp;</p>
-    <span th:if="${servicePackageChosenCTX != null}" th:text="'Service Package Chosen: '+${servicePackageChosenCTX.packageName}"> </span>
+    <span th:if="${servicePackageChosenCTX != null}" th:text="'Service Package Chosen: '+${servicePackageChosenCTX.packageName}" th:name="servicePackageChosenCTX" th:value="${servicePackageChosenCTX.packageName}"> </span>
     <p>&nbsp;</p>
     <span th:if="${optionalProductsCTX.isEmpty()}"  th:text="'No optional products chosen'"> </span>
     <span th:if="${!optionalProductsCTX.isEmpty()}"  th:text="'Optional products chosen:'"> </span>
@@ -35,18 +35,20 @@
     </div>
     <input type="submit" value="BUY SERVICE">
 </div>
+</form>
+
     <div th:if="${loggedCustomer == null}">
-                <a href="Registration" class="link">
-		  <span class="mask">
-		    <div class="link-container">
-		      <span class="link-title1 title">Go to LOGIN to Buy package!!</span>
-		    </div>
-		  </span>
-                </a>
+        <form method="POST" action = "Registration">
+            <input type="submit" th:if="${servicePackageChosenCTX != null}"  th:name="servicePackageChosenCTX" th:value="${servicePackageChosenCTX.packageName}">
+                    Go to login
+            </input>
+            <c:set var="validityPeriodChosen" th:value="${chosenValidityPeriod}" target="Integer" scope="session">
+            </c:set>
+        </form>
     </div>
 
 
-</form>
+
 
 <div style="position: absolute; top: 0; right: 0; width: 100px; text-align:right;">
     <td th:if="${loggedCustomer.username != null}" th:text="${loggedCustomer.username}"></td>

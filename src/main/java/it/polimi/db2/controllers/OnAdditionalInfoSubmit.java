@@ -85,11 +85,9 @@ public class OnAdditionalInfoSubmit extends HttpServlet {
 
 
 
-
-
-
         } else  {
             //update of object user to make sure is the current one
+
             try {
                 servicePackage = spService.findServicePackageById(req.getParameter("servicePackageChosen"));
             } catch (CredentialsException e) {
@@ -131,6 +129,14 @@ public class OnAdditionalInfoSubmit extends HttpServlet {
         ctx.setVariable("servicePackageChosenCTX", servicePackage);
         ctx.setVariable("optionalProductsCTX", optionalProducts);
         ctx.setVariable("totalCost", totalCost);
+        if(req.getSession(false) == null) {
+            req.getSession().setAttribute("chosenValidityPeriod", validityPeriod);
+            req.getSession().setAttribute("servicePackageChosenCTX", servicePackage);
+            req.getSession().setAttribute("optionalProducts", optionalProducts);
+            req.getSession().setAttribute("totalCost", totalCost);
+            req.getSession().setAttribute("startDate", startDate);
+        }
+
 
         templateEngine.process("/WEB-INF/ConfirmationPage.html", ctx, resp.getWriter());
 

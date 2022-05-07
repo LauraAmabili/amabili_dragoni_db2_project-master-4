@@ -93,7 +93,8 @@ public class Payment extends HttpServlet {
             // order already created
         } else if(session.getAttribute("user") != null && req.getParameter("orderIdForRejectedPayment")!= null){
 
-            order = (Orders) req.getSession(false).getAttribute("order");
+            Orders o = (Orders) req.getSession(false).getAttribute("order");
+            order = orderService.getOrder(o.getOrderId()) ;
             dateStart = order.getDateStart();
             validityPeriod = order.getValidityPeriodMonth();
             totalCost = order.getTotalCost();

@@ -62,8 +62,8 @@ public class Orders implements Serializable {
     @OneToOne(mappedBy = "order")
     private ActivationSchedule activationSchedule;
 
-    @OneToOne(mappedBy = "order")
-    private FailedPayment failedPayment;
+    @OneToMany(mappedBy = "order")
+    private List<FailedPayment> failedPayments;
 
     public Orders() { }
 
@@ -110,6 +110,14 @@ public class Orders implements Serializable {
 
     public void setTotalCost(float totalCost) {
         this.totalCost = totalCost;
+    }
+
+    public List<FailedPayment> getFailedPayments() {
+        return failedPayments;
+    }
+
+    public void setFailedPayments(List<FailedPayment> failedPayments) {
+        this.failedPayments = failedPayments;
     }
 
     public UserCustomer getUserOrder() {

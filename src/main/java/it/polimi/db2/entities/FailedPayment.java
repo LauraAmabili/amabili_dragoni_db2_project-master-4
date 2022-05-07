@@ -26,7 +26,7 @@ public class FailedPayment  implements Serializable {
     @JoinColumn(name = "failedUser", referencedColumnName = "username")
     private UserCustomer failedUser;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "orderIdFailed")
     private Orders order;
 

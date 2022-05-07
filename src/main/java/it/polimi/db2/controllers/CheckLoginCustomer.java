@@ -1,5 +1,6 @@
 package it.polimi.db2.controllers;
 
+import it.polimi.db2.entities.OptionalProduct;
 import it.polimi.db2.entities.UserCustomer;
 import it.polimi.db2.exceptions.CredentialsException;
 import it.polimi.db2.services.UserCustomerService;
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 
 @WebServlet("/CheckLoginCustomer")
@@ -82,8 +84,22 @@ public class CheckLoginCustomer extends HttpServlet {
             path = "/index.html";
             templateEngine.process(path, ctx, response.getWriter());
         } else {
-            request.getSession().setAttribute("user", user);
+            if(request.getSession(false) != null && request.getSession(false).getAttribute("servicePackageChosen")!=null){
 
+                request.getSession(false).setAttribute("user", user);
+
+                ctx.setVariable("startDate", request.getSession(false).getAttribute("startDate"));
+                ctx.setVariable("chosenValidityPeriod", request.getSession(false).getAttribute("chosenValidityPeriod"));
+                ctx.setVariable("servicePackageChosenCTX", request.getSession(false).getAttribute("servicePackageChosen"));
+                ctx.setVariable("optionalProductsCTX", request.getSession(false).getAttribute("optionalProducts"));
+                ctx.setVariable("totalCost", request.getSession(false).getAttribute("totalCost"));
+                ctx.setVariable("loggedCustomer", user);
+                templateEngine.process("/WEB-INF/ConfirmationPage.html", ctx, response.getWriter());
+
+                return;
+            }
+
+            request.getSession().setAttribute("user", user);
             path = getServletContext().getContextPath() + "/home-page-customer";
             response.sendRedirect(path);
         }

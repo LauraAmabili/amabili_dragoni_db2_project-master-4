@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import it.polimi.db2.entities.ServicePackage;
 import it.polimi.db2.entities.UserCustomer;
 import it.polimi.db2.services.UserCustomerService;
 import org.apache.commons.lang.StringEscapeUtils;
@@ -37,6 +38,7 @@ public class Registration extends HttpServlet {
         this.templateEngine = new TemplateEngine();
         this.templateEngine.setTemplateResolver(templateResolver);
         templateResolver.setSuffix(".html");
+
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -64,6 +66,15 @@ public class Registration extends HttpServlet {
             return;
         }
 
+        Object session = request.getSession();
+        if(request.getParameter("servicePackageChosenCTX") != null) {
+
+            request.getSession(false).setAttribute("chosenValidityPeriod", request.getSession(false).getAttribute("chosenValidityPeriod"));
+            request.getSession(false).setAttribute("servicePackageChosen",  request.getSession(false).getAttribute("servicePackageChosenCTX"));
+            request.getSession(false).setAttribute("optionalProducts", request.getSession(false).getAttribute("optionalProducts"));
+            request.getSession(false).setAttribute("totalCost", request.getSession(false).getAttribute("totalCost"));
+            request.getSession(false).setAttribute("startDate", request.getSession(false).getAttribute("startDate"));
+        }
         templateEngine.process("/index.html", ctx, response.getWriter());
 
 
