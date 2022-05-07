@@ -55,10 +55,8 @@ public class Registration extends HttpServlet {
             ctx.setVariable("email", usrn);
 
         // session not exist - user is in index.html
-        if (request.getSession(false) == null) {
+        if (request.getSession(false) == null && email != null) {
             userService.registerUser(email, usrn, pwd);
-
-            // after creating an user the session is not created, it is required to log in
             ctx.setVariable("registrationMsg", "Registration completed, now log in");
             ctx.setVariable("username", "");
             ctx.setVariable("email", "");
@@ -66,6 +64,7 @@ public class Registration extends HttpServlet {
             return;
         }
 
+        templateEngine.process("/index.html", ctx, response.getWriter());
 
 
     }
