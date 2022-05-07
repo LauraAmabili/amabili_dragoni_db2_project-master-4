@@ -110,7 +110,6 @@ public class CheckLoginEmployee extends HttpServlet {
             ctx.setVariable("loggedEmp", user);
             request.getSession().setAttribute("employee", user);
             templateEngine.process("/WEB-INF/HomePageEmployee.html", ctx, response.getWriter());
-
         }
     }
     @Override

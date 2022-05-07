@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
-import static java.lang.Integer.parseInt;
 import static org.apache.commons.lang.time.DateUtils.addMonths;
 
 @WebServlet("/payment")
@@ -116,7 +115,7 @@ public class Payment extends HttpServlet {
         successfulPayment = ba.attemptPayment(value);
 
         if (successfulPayment && order != null) {
-            order = orderService.setValid(order,1);
+            order.setValid(1);
             asService.addNewActivationRecord(dateStart, dateEnd, order);
             ctx.setVariable("successfulPayment", successfulPayment);
             paymentService.updateAuditingTable(user, user.getEmail(), order.getTotalCost(), dateFailed, successfulPayment);
