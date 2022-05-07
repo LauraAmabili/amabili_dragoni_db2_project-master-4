@@ -58,7 +58,6 @@ public class Registration extends HttpServlet {
         if (request.getSession(false) == null) {
             userService.registerUser(email, usrn, pwd);
 
-
             // after creating an user the session is not created, it is required to log in
             ctx.setVariable("registrationMsg", "Registration completed, now log in");
             ctx.setVariable("username", "");

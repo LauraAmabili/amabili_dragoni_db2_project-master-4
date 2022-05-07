@@ -2,6 +2,7 @@ package it.polimi.db2.controllers;
 
 
 import it.polimi.db2.entities.*;
+import it.polimi.db2.exceptions.CredentialsException;
 import it.polimi.db2.services.OptionalProductService;
 import it.polimi.db2.services.OrderService;
 import it.polimi.db2.services.ServicePackageService;
@@ -57,16 +58,13 @@ public class OnAdditionalInfoSubmit extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         final WebContext ctx = new WebContext(req, resp, this.getServletContext(), req.getLocale());
-        HttpSession session = req.getSession(false);
 
-        if(session.getAttribute("user") == null) {
-            templateEngine.process("/WEB-INF/index.html", ctx, resp.getWriter());
-            return;
-        }
+
+
 
         ServicePackage servicePackage = new ServicePackage();
+        UserCustomer customer = new UserCustomer();
 
-        UserCustomer customer = (UserCustomer) req.getSession(false).getAttribute("user");
 
 
         int validityPeriod = 0;
@@ -75,8 +73,7 @@ public class OnAdditionalInfoSubmit extends HttpServlet {
         List<OptionalProduct> optionalProducts = new ArrayList<>();
         float totalCost = 0;
         Date startDate = new Date();
-        if(req.getSession(false)!=null  &&  req.getSession(false).getAttribute("user")!=null  && req.getParameter("orderIdForRejectedPayment") !=null) {
-
+        if(req.getParameter("orderIdForRejectedPayment") !=null) {
 
             int orderId = Integer.parseInt(req.getParameter("orderIdForRejectedPayment"));
             Orders order = orderService.getOrder(orderId);
@@ -87,17 +84,17 @@ public class OnAdditionalInfoSubmit extends HttpServlet {
            servicePackage = order.getOrderedService();
 
 
-            req.getSession(false).setAttribute("order", order);
-            req.getSession(false).setAttribute("orderIdForRejectedPayment", orderId);
-
-            //TODO IMPORTANTE -> nella pagina dopo passare che è un ordine vecchio così non lo crea
-            // TODO-> settare ordine a valido ora
 
 
-        } else if(req.getSession(false)!=null  &&  req.getSession(false).getAttribute("user")!=null) {
+
+
+        } else  {
             //update of object user to make sure is the current one
-
-            servicePackage = (ServicePackage) req.getSession(false).getAttribute("servicePackageChosen");
+            try {
+                servicePackage = spService.findServicePackageById(req.getParameter("servicePackageChosen"));
+            } catch (CredentialsException e) {
+                e.printStackTrace();
+            }
             optionalProductList =((req.getParameterValues("optionalProducts")));
             validityPeriod = parseInt(StringEscapeUtils.escapeJava(req.getParameter("validityPeriod")));
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -117,15 +114,19 @@ public class OnAdditionalInfoSubmit extends HttpServlet {
 
             }
 
-        req.getSession(false).setAttribute("user", customer);
-        req.getSession(false).setAttribute("totalCost", totalCost);
-        req.getSession(false).setAttribute("optionalProducts", optionalProductList);
-        req.getSession(false).setAttribute("selectedOptionalProducts", optionalProducts);
-        req.getSession(false).setAttribute("chosenValidityPeriod", validityPeriod);
-        req.getSession(false).setAttribute("startDate", startDate);
-        req.getSession(false).setAttribute("loggedCustomer", customer);
+        if(req.getSession(false)!=null  &&  req.getSession(false).getAttribute("user")!=null) {
+            customer = (UserCustomer) req.getSession(false).getAttribute("user");
+            req.getSession(false).setAttribute("user", customer);
+            req.getSession(false).setAttribute("totalCost", totalCost);
+            req.getSession(false).setAttribute("optionalProducts", optionalProductList);
+            req.getSession(false).setAttribute("selectedOptionalProducts", optionalProducts);
+            req.getSession(false).setAttribute("chosenValidityPeriod", validityPeriod);
+            req.getSession(false).setAttribute("startDate", startDate);
+            req.getSession(false).setAttribute("loggedCustomer", customer);
+            ctx.setVariable("loggedCustomer", customer);
+        }
 
-        ctx.setVariable("loggedCustomer", customer);
+
         ctx.setVariable("chosenValidityPeriod", validityPeriod);
         ctx.setVariable("servicePackageChosenCTX", servicePackage);
         ctx.setVariable("optionalProductsCTX", optionalProducts);

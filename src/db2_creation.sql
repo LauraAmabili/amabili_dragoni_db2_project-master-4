@@ -31,7 +31,7 @@ CREATE TABLE `ActivationSchedule` (
   UNIQUE KEY `idActivationSchedule_UNIQUE` (`idActivationSchedule`),
   KEY `orderId_idx` (`orderId`),
   CONSTRAINT `orderId` FOREIGN KEY (`orderId`) REFERENCES `Orders` (`orderId`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -42,7 +42,7 @@ DROP TABLE IF EXISTS `AuditingTable`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `AuditingTable` (
-  `auditingTableId` int NOT NULL,
+  `auditingTableId` int NOT NULL AUTO_INCREMENT,
   `username` varchar(45) NOT NULL,
   `email` varchar(45) NOT NULL,
   `amount` int NOT NULL,
@@ -51,7 +51,7 @@ CREATE TABLE `AuditingTable` (
   UNIQUE KEY `auditingTableId_UNIQUE` (`auditingTableId`),
   KEY `username_idx` (`username`),
   CONSTRAINT `customerUsername` FOREIGN KEY (`username`) REFERENCES `UserCustomer` (`username`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -66,10 +66,12 @@ CREATE TABLE `FailedPayment` (
   `amount` decimal(10,2) NOT NULL,
   `DateTime` varchar(45) NOT NULL,
   `failedUser` varchar(45) NOT NULL,
+  `orderIdFailed` int NOT NULL,
   PRIMARY KEY (`idFailedPayment`),
   UNIQUE KEY `idFailedPayment_UNIQUE` (`idFailedPayment`),
-  KEY `username_idx` (`failedUser`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `username_idx` (`failedUser`),
+  KEY `orderIdFailed_idx` (`orderIdFailed`)
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -121,7 +123,7 @@ CREATE TABLE `MontlyFee` (
   `36MonthPrice` decimal(7,3) NOT NULL,
   PRIMARY KEY (`IdMontlyFee`),
   UNIQUE KEY `IdMontlyFee_UNIQUE` (`IdMontlyFee`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -178,7 +180,7 @@ CREATE TABLE `Orders` (
   KEY `orderedService_idx` (`orderedService`),
   CONSTRAINT `orderedService` FOREIGN KEY (`orderedService`) REFERENCES `ServicePackage` (`PackageName`) ON UPDATE CASCADE,
   CONSTRAINT `userOrder` FOREIGN KEY (`userOrder`) REFERENCES `UserCustomer` (`username`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=127 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=155 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -339,4 +341,4 @@ CREATE TABLE `UserEmployee` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-05-06 18:57:36
+-- Dump completed on 2022-05-07  2:12:46

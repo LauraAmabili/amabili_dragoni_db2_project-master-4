@@ -33,9 +33,18 @@
         </label>
         </form>
     </div>
-
     <input type="submit" value="BUY SERVICE">
 </div>
+    <div th:if="${loggedCustomer == null}">
+                <a href="../index.html" class="link">
+		  <span class="mask">
+		    <div class="link-container">
+		      <span class="link-title1 title">Go to LOGIN to Buy package!!</span>
+		    </div>
+		  </span>
+                </a>
+    </div>
+
 
 </form>
 
