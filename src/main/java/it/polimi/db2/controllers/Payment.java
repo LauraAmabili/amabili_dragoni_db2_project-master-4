@@ -69,6 +69,7 @@ public class Payment extends HttpServlet {
         float totalCost = 0;
         Date dateFailed = new Date();
 
+
         if(session.getAttribute("user") == null) {
             templateEngine.process("/WEB-INF/index.html", ctx, resp.getWriter());
             return;
@@ -90,7 +91,7 @@ public class Payment extends HttpServlet {
                 e.printStackTrace();
             }
             // order already created
-        } else if(session.getAttribute("user") != null && req.getParameter("orderIdForRejectedPayment")!= null){
+        } else if(session.getAttribute("user") != null && req.getSession(false).getAttribute("orderIdForRejectedPayment")!= null){
 
             Orders o = (Orders) req.getSession(false).getAttribute("order");
             order = orderService.getOrder(o.getOrderId()) ;
@@ -118,7 +119,7 @@ public class Payment extends HttpServlet {
             if( paymentService.getFailedPaymentsOfUser(user) != null && paymentService.getFailedPaymentsOfUser(user).size() < 3 ){
                 paymentService.deleteAlert(user);
             }
-            if(user.getFailedPaymentList().size() == 0){
+            if(paymentService.getFailedPaymentsOfUser(user).size() == 0){
                 user = ucService.setInsolvent(user, 1);
             }
         }
@@ -128,9 +129,9 @@ public class Payment extends HttpServlet {
             user = ucService.setInsolvent(user, 0);
             FailedPayment fp = new FailedPayment();
             fp = paymentService.addFailedPayment(dateFailed, totalCost, user, order);
-            if(user.getFailedPaymentList().size()  ==  3 ){
+            if(paymentService.getFailedPaymentsOfUser(user).size()  ==  3 ){
                 paymentService.addAuditingTable(user, user.getEmail(), order.getTotalCost(), dateFailed);
-            } else if(user.getFailedPaymentList().size() > 3){
+            } else if(paymentService.getFailedPaymentsOfUser(user).size() > 3){
                 paymentService.updateAuditingTable(user, user.getEmail(), order.getTotalCost(), dateFailed, successfulPayment);
             }
 

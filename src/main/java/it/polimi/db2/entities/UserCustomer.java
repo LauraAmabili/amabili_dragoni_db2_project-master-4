@@ -29,7 +29,7 @@ public class UserCustomer implements Serializable {
     @Column(name = "solvent")
     private int solvent;
 
-    @OneToMany(mappedBy = "failedUser", cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "failedUser")
     private List<FailedPayment> failedPaymentList;
 
     @OneToMany(mappedBy = "userOrder", cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
