@@ -89,7 +89,6 @@ public class Payment extends HttpServlet {
                 List<OptionalProduct> selectedOptionalProduct = (List<OptionalProduct>) req.getSession(false).getAttribute("selectedOptionalProducts");
                 // create new order
                 order = orderService.createOrder(validityPeriod, dateStart, totalCost, user, servicePackage, selectedOptionalProduct);
-                ctx.setVariable("Order", order);
 
             } catch (CredentialsException e) {
                 e.printStackTrace();
@@ -97,8 +96,8 @@ public class Payment extends HttpServlet {
             // order already created
         } else if(req.getSession(false).getAttribute("loggedCustomer")!= null && req.getSession(false).getAttribute("orderIdForRejectedPayment")!= null){
 
-            Orders o = (Orders) req.getSession(false).getAttribute("order");
-            order = orderService.getOrder(o.getOrderId()) ;
+
+            order = orderService.getOrder((Integer) req.getSession(false).getAttribute("orderIdForRejectedPayment")) ;
             dateStart = order.getDateStart();
             validityPeriod = order.getValidityPeriodMonth();
             totalCost = order.getTotalCost();
@@ -117,13 +116,11 @@ public class Payment extends HttpServlet {
         if (successfulPayment && order != null) {
             order = orderService.setValid(order, 1);
             asService.addNewActivationRecord(dateStart, dateEnd, order);
-            ctx.setVariable("successfulPayment", successfulPayment);
             paymentService.updateAuditingTable(user, user.getEmail(), order.getTotalCost(), dateFailed, successfulPayment);
             paymentService.updateFailedPayments(user, order);
             if( paymentService.getFailedPaymentsOfUser(user) != null && paymentService.getFailedPaymentsOfUser(user).size() < 3 ){
                 paymentService.deleteAlert(user);
             }
-
             if(paymentService.getFailedPaymentsOfUser(user).size() == 0){
                 user = ucService.setInsolvent(user, 1);
             }
@@ -149,7 +146,8 @@ public class Payment extends HttpServlet {
         // req.getSession(false).setAttribute("order", order);
         //req.getSession(false).setAttribute("user", user);
         req.getSession(false).setAttribute("loggedCustomer", user);
-        //req.getSession(false).removeAttribute("order");
+        req.getSession(false).removeAttribute("order");
+        req.getSession(false).removeAttribute("orderIdForRejectedPayment");
         templateEngine.process("/WEB-INF/PaymentPage.html", ctx, resp.getWriter());
 
 
