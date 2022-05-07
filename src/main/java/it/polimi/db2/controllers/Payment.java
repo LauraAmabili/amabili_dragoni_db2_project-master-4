@@ -60,7 +60,7 @@ public class Payment extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         final WebContext ctx = new WebContext(req, resp, this.getServletContext(), req.getLocale());
 
-        UserCustomer user = (UserCustomer) req.getSession(false).getAttribute("user");
+        UserCustomer user = (UserCustomer) req.getSession(false).getAttribute("loggedCustomer");
         req.getSession(false).setAttribute("loggedCustomer", user);
         HttpSession session = req.getSession(false);
         Orders order = null;
@@ -70,13 +70,17 @@ public class Payment extends HttpServlet {
         float totalCost = 0;
         Date dateFailed = new Date();
 
+        if(req.getSession(false).getAttribute("orderIdForRejectedPayment")!= null){
+            int id = (int) req.getSession(false).getAttribute("orderIdForRejectedPayment");
+        }
 
-        if(session.getAttribute("user") == null) {
+
+        if(req.getSession(false).getAttribute("loggedCustomer") == null) {
             templateEngine.process("/WEB-INF/index.html", ctx, resp.getWriter());
             return;
 
             // post->  create a new order
-        } else if (session.getAttribute("user") != null && req.getSession(false).getAttribute("servicePackageChosen") != null ) {
+        } else if (req.getSession(false).getAttribute("loggedCustomer")!= null  && req.getSession(false).getAttribute("servicePackageChosen") != null && req.getSession(false).getAttribute("orderIdForRejectedPayment") == null) {
             ServicePackage servicePackage = (ServicePackage) req.getSession(false).getAttribute("servicePackageChosen");
             validityPeriod = (int) req.getSession(false).getAttribute("chosenValidityPeriod");
             totalCost = (float) req.getSession(false).getAttribute("totalCost");
@@ -92,7 +96,7 @@ public class Payment extends HttpServlet {
                 e.printStackTrace();
             }
             // order already created
-        } else if(session.getAttribute("user") != null && req.getSession(false).getAttribute("orderIdForRejectedPayment")!= null){
+        } else if(req.getSession(false).getAttribute("loggedCustomer")!= null && req.getSession(false).getAttribute("orderIdForRejectedPayment")!= null){
 
             Orders o = (Orders) req.getSession(false).getAttribute("order");
             order = orderService.getOrder(o.getOrderId()) ;
@@ -120,6 +124,7 @@ public class Payment extends HttpServlet {
             if( paymentService.getFailedPaymentsOfUser(user) != null && paymentService.getFailedPaymentsOfUser(user).size() < 3 ){
                 paymentService.deleteAlert(user);
             }
+
             if(paymentService.getFailedPaymentsOfUser(user).size() == 0){
                 user = ucService.setInsolvent(user, 1);
             }

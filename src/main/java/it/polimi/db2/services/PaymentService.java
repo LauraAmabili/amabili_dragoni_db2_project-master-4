@@ -17,9 +17,7 @@ public class PaymentService {
     public PaymentService(){}
 
     public List<FailedPayment> getFailedPaymentsOfUser(UserCustomer name){
-
         List<FailedPayment> failedPaymentList = em.createNamedQuery("FailedPayment.getFailedPaymentsOfUser", FailedPayment.class).setParameter("name", name).getResultList();
-        if(failedPaymentList.isEmpty()) return null;
         return failedPaymentList;
     }
 
@@ -79,8 +77,9 @@ public class PaymentService {
 
 
     public void deleteAlert(UserCustomer user){
-        List<AuditingTable> userAuditingTable = em.createNamedQuery(  "AuditingTable.findAuditingTableByUser" ,AuditingTable.class).setParameter("username", user).getResultList();
+       List<AuditingTable> userAuditingTable = em.createNamedQuery(  "AuditingTable.findAuditingTableByUser" ,AuditingTable.class).setParameter("username", user).getResultList();
         if(userAuditingTable.size() != 0 ){
+            userAuditingTable.forEach(ua -> em.remove(ua));
             em.remove(userAuditingTable.get(0));
         }
     }

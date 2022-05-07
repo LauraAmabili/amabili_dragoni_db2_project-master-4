@@ -35,7 +35,7 @@ public class UserCustomer implements Serializable {
     @OneToMany(mappedBy = "userOrder", cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     private Collection<Orders> orders;
 
-    @OneToOne(mappedBy = "username", cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
+    @OneToOne(mappedBy = "username")
     private AuditingTable auditingTable;
 
 
