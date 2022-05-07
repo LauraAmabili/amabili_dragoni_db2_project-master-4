@@ -76,7 +76,6 @@ public class CheckLoginEmployee extends HttpServlet {
             }
 
         } catch (CredentialsException e) {
-            // for debugging only e.printStackTrace();
             ctx.setVariable("loginErrorMsg", e.getMessage());
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing credential value");
             return;

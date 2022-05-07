@@ -38,7 +38,8 @@ public class ServicesService {
 
 
     public Boolean internetServiceAlreadyExists(String name){
-        List<InternetService> internetServices = em.createNamedQuery("InternetService.findInternetServiceById", InternetService.class).setParameter(1, name).getResultList();
+        List<InternetService> internetServices = null;
+        em.createNamedQuery("InternetService.findInternetServiceById", InternetService.class).setParameter(1, name).getResultList();
         if (internetServices.isEmpty()) return false;
         else return true;
     }
