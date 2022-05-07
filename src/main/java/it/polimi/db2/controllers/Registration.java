@@ -57,7 +57,9 @@ public class Registration extends HttpServlet {
             ctx.setVariable("email", usrn);
 
         // session not exist - user is in index.html
-        if (request.getSession(false).getAttribute("loggedCustomer") == null && email != null) {
+        //rcaso in cui ho già creato sessione con eomployee-> entro perchè non c'è un loggedCustomer
+        // caso in cui logged customer non c'è e non c'è neanche la sessione
+        if (((request.getSession(false ) == null) || (request.getSession(false).getAttribute("loggedCustomer") == null) && email != null)) {
             userService.registerUser(email, usrn, pwd);
             ctx.setVariable("registrationMsg", "Registration completed, now log in");
             ctx.setVariable("username", "");
