@@ -31,7 +31,7 @@ CREATE TABLE `ActivationSchedule` (
   UNIQUE KEY `idActivationSchedule_UNIQUE` (`idActivationSchedule`),
   KEY `orderId_idx` (`orderId`),
   CONSTRAINT `orderId` FOREIGN KEY (`orderId`) REFERENCES `Orders` (`orderId`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=71 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -51,7 +51,7 @@ CREATE TABLE `AuditingTable` (
   UNIQUE KEY `auditingTableId_UNIQUE` (`auditingTableId`),
   KEY `username_idx` (`username`),
   CONSTRAINT `customerUsername` FOREIGN KEY (`username`) REFERENCES `UserCustomer` (`username`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -70,8 +70,9 @@ CREATE TABLE `FailedPayment` (
   PRIMARY KEY (`idFailedPayment`),
   UNIQUE KEY `idFailedPayment_UNIQUE` (`idFailedPayment`),
   KEY `username_idx` (`failedUser`),
-  KEY `orderIdFailed_idx` (`orderIdFailed`)
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `orderIdFailed_idx` (`orderIdFailed`),
+  CONSTRAINT `idOrder` FOREIGN KEY (`orderIdFailed`) REFERENCES `Orders` (`orderId`) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=66 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -123,7 +124,7 @@ CREATE TABLE `MontlyFee` (
   `36MonthPrice` decimal(7,3) NOT NULL,
   PRIMARY KEY (`IdMontlyFee`),
   UNIQUE KEY `IdMontlyFee_UNIQUE` (`IdMontlyFee`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -178,9 +179,9 @@ CREATE TABLE `Orders` (
   UNIQUE KEY `OrderId_UNIQUE` (`orderId`),
   KEY `userOrder_idx` (`userOrder`),
   KEY `orderedService_idx` (`orderedService`),
-  CONSTRAINT `orderedService` FOREIGN KEY (`orderedService`) REFERENCES `ServicePackage` (`PackageName`) ON UPDATE CASCADE ON DELETE RESTRICT ,
-  CONSTRAINT `userOrder` FOREIGN KEY (`userOrder`) REFERENCES `UserCustomer` (`username`) ON UPDATE CASCADE ON DELETE RESTRICT
-) ENGINE=InnoDB AUTO_INCREMENT=155 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  CONSTRAINT `orderedService` FOREIGN KEY (`orderedService`) REFERENCES `ServicePackage` (`PackageName`) ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT `userOrder` FOREIGN KEY (`userOrder`) REFERENCES `UserCustomer` (`username`) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=178 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -195,8 +196,8 @@ CREATE TABLE `PkgServiceInternet` (
   `internetService` varchar(45) NOT NULL,
   PRIMARY KEY (`packageService`,`internetService`),
   KEY `internetService_idx` (`internetService`),
-  CONSTRAINT `internetService` FOREIGN KEY (`internetService`) REFERENCES `InternetService` (`name`) ON UPDATE CASCADE ON DELETE RESTRICT ,
-  CONSTRAINT `packageService` FOREIGN KEY (`packageService`) REFERENCES `ServicePackage` (`PackageName`) ON UPDATE CASCADE ON DELETE CASCADE
+  CONSTRAINT `internetService` FOREIGN KEY (`internetService`) REFERENCES `InternetService` (`name`) ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT `packageService` FOREIGN KEY (`packageService`) REFERENCES `ServicePackage` (`PackageName`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -212,8 +213,8 @@ CREATE TABLE `PkgServicePhone` (
   `mobilePhone` varchar(45) NOT NULL,
   PRIMARY KEY (`servicePackage`,`mobilePhone`),
   KEY `mobPhone_idx` (`mobilePhone`),
-  CONSTRAINT `mobPhone` FOREIGN KEY (`mobilePhone`) REFERENCES `MobilePhoneService` (`name`) ON UPDATE CASCADE ON DELETE RESTRICT,
-  CONSTRAINT `servicePkg` FOREIGN KEY (`servicePackage`) REFERENCES `ServicePackage` (`PackageName`) ON UPDATE CASCADE ON DELETE CASCADE
+  CONSTRAINT `mobPhone` FOREIGN KEY (`mobilePhone`) REFERENCES `MobilePhoneService` (`name`) ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT `servicePkg` FOREIGN KEY (`servicePackage`) REFERENCES `ServicePackage` (`PackageName`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -231,7 +232,7 @@ CREATE TABLE `ServicePackage` (
   PRIMARY KEY (`PackageName`),
   UNIQUE KEY `Name_UNIQUE` (`PackageName`),
   KEY `packageFees_idx` (`packageFees`),
-  CONSTRAINT `packageFees` FOREIGN KEY (`packageFees`) REFERENCES `MontlyFee` (`IdMontlyFee`) ON UPDATE CASCADE ON DELETE RESTRICT
+  CONSTRAINT `packageFees` FOREIGN KEY (`packageFees`) REFERENCES `MontlyFee` (`IdMontlyFee`) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -247,8 +248,8 @@ CREATE TABLE `ServicePackageOptional` (
   `servicePackage` varchar(45) NOT NULL,
   PRIMARY KEY (`optionalProduct`,`servicePackage`),
   KEY `servicePackage_idx` (`servicePackage`),
-  CONSTRAINT `optionalProd` FOREIGN KEY (`optionalProduct`) REFERENCES `OptionalProduct` (`name`) ON UPDATE CASCADE ON DELETE RESTRICT ,
-  CONSTRAINT `servicePackage` FOREIGN KEY (`servicePackage`) REFERENCES `ServicePackage` (`PackageName`) ON UPDATE CASCADE ON DELETE CASCADE
+  CONSTRAINT `optionalProd` FOREIGN KEY (`optionalProduct`) REFERENCES `OptionalProduct` (`name`) ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT `servicePackage` FOREIGN KEY (`servicePackage`) REFERENCES `ServicePackage` (`PackageName`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -341,4 +342,4 @@ CREATE TABLE `UserEmployee` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-05-07  2:12:46
+-- Dump completed on 2022-05-07 19:33:01
