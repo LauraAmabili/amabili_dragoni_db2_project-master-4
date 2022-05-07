@@ -89,58 +89,30 @@
                     </li>
                 </tr>
             </ul>
-     
 
 
+            <h3><strong><span style="color: #0000ff;">List of insolvent users, suspended orders and alerts </span></strong></h3>
 
+            <li th:if="${insolventAlert != null}"th:each="ia : ${insolventAlert}">
+                <strong><span style="text-decoration: underline;" th:text="${ia.getKey().username}"> </span></strong>
+                    <span th:if="${ia.getValue() == 1}" style="color: #ff0000;">HA ALERT</span>
+                    <span th:if="${ia.getValue() == 0}" style="color: #00ff00;">NON HA ALERT</span>
 
+                <p><span style="text-decoration: underline;">SUSPENDED ORDERS:</span></p>
 
-
-
-
+                <ul th:if="${userSuspendedOrders != null}"th:each="uso : ${userSuspendedOrders}" >
+                    <li th:if="${uso.getKey().username == ia.getKey().username}" th:each="fp : ${uso.getValue()}">
+                        <strong>
+                            <span th:text="'Order ' + ${fp.order.orderId}"> </span>
+                        </strong>
+                        :
+                        <span th:text="'Amount of the order: '${fp.amount}+ ' &euro;'"> </span>
+                        <span th:text="'Date of the order: ' + ${fp.dateTime}"> </span>
+                    </li>
+                </ul>
+            </li>
         </div>
     </div>
 </div>
-
-
-</ul>
-
-
-
-
-
-
-
-
-<!--                <li>-->
-<!--                    <h3><strong><span style="color: #0000ff;">Average number of optional products sold together with each service package </span></strong></h3>-->
-<!--                    <ul>-->
-<!--                        <tr th:each="avg : ${avgOptionalSalesPerPackage}">-->
-<!--                            <li>-->
-<!--                                <b><span style="color: #000000;"><span style="text-decoration: underline;" th:text="${avg.getKey()}"> </span></span></b>-->
-<!--                                :-->
-<!--                                <span style="color: #000000;"><span th:text="${avg.getValue()}"> </span></span>-->
-<!--                                sales-->
-<!--                            </li>-->
-<!--                    </ul>-->
-<!--                </li>-->
-
-
-<!--                <li>-->
-<!--                    <h3><strong><span style="color: #0000ff;">List of insolvent users, suspended orders and alerts</span></strong></h3>-->
-<!--                    <ul>-->
-<!--                        <li><u>usr1</u></li>-->
-<!--                        <li><u>usr2</u></li>-->
-<!--                    </ul>-->
-<!--                </li>-->
-
-
-<!--            </ul>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
-<!--<p style="text-align: left;">&nbsp;</p>-->
-<!--</form>-->
-
 </body>
 </html>

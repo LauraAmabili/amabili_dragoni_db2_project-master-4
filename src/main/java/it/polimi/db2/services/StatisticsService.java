@@ -1,5 +1,9 @@
 package it.polimi.db2.services;
 
+import it.polimi.db2.entities.AuditingTable;
+import it.polimi.db2.entities.FailedPayment;
+import it.polimi.db2.entities.UserCustomer;
+import it.polimi.db2.entities.UserEmployee;
 import it.polimi.db2.materializedViews.*;
 
 import javax.ejb.Stateless;
@@ -66,4 +70,36 @@ public class StatisticsService {
         return averagePackageOptionalProducts;
     }
 
+    public List<UserCustomer> getInsolventUsers(){
+        List<UserCustomer> users = null;
+        try {
+            users = em.createNamedQuery("UserCustomer.findAllInsovent", UserCustomer.class).getResultList();
+        } catch (PersistenceException e) {
+            throw new PersistenceException("Cannot load Best Optional");
+        }
+        return users;
+    }
+
+    public int userHasAlert(UserCustomer user){
+        int alert = 0;
+        try {
+            List<AuditingTable> at = em.createNamedQuery("AuditingTable.findAuditingTableByUser", AuditingTable.class).setParameter("username", user).getResultList();
+            if(at.size() != 0) alert = 1;
+        } catch (PersistenceException e) {
+            throw new PersistenceException("Cannot load alerts");
+        }
+        return alert;
+    }
+
+    public List<FailedPayment> getUsersFailedPayment(UserCustomer userCustomer) {
+        List<FailedPayment> failedPayments = null;
+        try {
+            failedPayments = em.createNamedQuery("FailedPayment.getFailedPaymentsOfUser", FailedPayment.class)
+                    .setParameter("name", userCustomer)
+                    .getResultList();
+        } catch  (PersistenceException e) {
+            throw new PersistenceException("Cannot load failed payments");
+        }
+        return failedPayments;
+    }
 }

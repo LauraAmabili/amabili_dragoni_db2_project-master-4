@@ -30,6 +30,16 @@ public class UserCustomerService {
 
     }
 
+    public List<UserCustomer> getAllCustomers() throws CredentialsException {
+        List<UserCustomer> users = null;
+        try {
+            users = em.createNamedQuery("UserCustomer.findAllCustomers", UserCustomer.class).getResultList();
+        } catch (PersistenceException var5) {
+            throw new CredentialsException("Could not find customers");
+        }
+        return users;
+    }
+
     public void registerUser(String email, String username, String password){
         UserCustomer user = new UserCustomer();
         user.setUsername(username);
