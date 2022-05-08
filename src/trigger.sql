@@ -11,8 +11,6 @@ drop trigger if exists updateTotalPackageSalesWithoutOp;
 drop trigger if exists updateBestOptional;
 drop trigger if exists insertOptionalProduct;
 drop trigger if exists insertServicePackage;
-# drop trigger if exists updateAveragePackageOptionalProducts1;
-# drop trigger if exists updateAveragePackageOptionalProducts;
 drop trigger if exists updateProva;
 
 
@@ -143,14 +141,6 @@ create trigger updateOptionalProductsPerOrder
         where new.orderId = o.orderId and oppo.servicePackage = o.orderedService)
     where servicePackage = (SELECT sp.PackageName from ServicePackage as sp, Orders as o
         WHERE new.orderId = o.orderId and o.orderedService = sp.PackageName);
-/*
-create view optionalProductsPerOrder as (
-select actSched.orderId as orderId, servPkg.PackageName as servicePackage, count(oo.orderId) as numOrder
-from ActivationSchedule as actSched left join OptionalOrdered as oo on actSched.orderId = oo.orderId, ServicePackage as servPkg,  Orders as o
-where actSched.orderId = oo.orderId and oo.orderId = o.orderId and o.orderedService = servPkg.PackageName
-group by orderId);
-
-*/
 
 /*best seller optional products*/
 /*in the table are not ordered*/
