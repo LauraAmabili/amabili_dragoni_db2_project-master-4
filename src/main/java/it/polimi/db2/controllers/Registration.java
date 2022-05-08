@@ -72,7 +72,7 @@ public class Registration extends HttpServlet {
             //register user ritorna true se non esiste
             ctx.setVariable("registrationMsg", "Registration completed, now log in");
             ctx.setVariable("userNotAlreadyExists", userNotAlreadyExists);
-            ctx.setVariable("userAlreadyExistsMessage", "User already exists, please log in!");
+            ctx.setVariable("userAlreadyExistsMessage", "User or email already exists, please log in or try with another one!");
 
             ctx.setVariable("username", "");
             ctx.setVariable("email", "");

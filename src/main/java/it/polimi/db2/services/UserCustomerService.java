@@ -29,13 +29,30 @@ public class UserCustomerService {
         return usrs.get(0);
     }
 
+    public boolean findCustomerByName(String username) {
+        List<UserCustomer> usrs = em.createNamedQuery("UserCustomer.findCustomerById", UserCustomer.class).setParameter(1, username).getResultList();
+        if(usrs.isEmpty()){
+            return true;
+        }
+        return false;
+    }
+
+    public boolean findCustomerByEmail(String email) {
+        List<UserCustomer> usrs = em.createNamedQuery("UserCustomer.findCustomerByMail", UserCustomer.class).setParameter(1, email).getResultList();
+        if(usrs.isEmpty()){
+            return true;
+        }
+        return false;
+    }
+
     public List<UserCustomer> getAllCustomers() throws CredentialsException {
         List<UserCustomer> users = em.createNamedQuery("UserCustomer.findAllCustomers", UserCustomer.class).getResultList();
         return users;
     }
 
     public boolean registerUser(String email, String username, String password) throws CredentialsException {
-        if(checkCredentials(username, password) != null){
+
+        if(!findCustomerByName(username) || !findCustomerByEmail(email)){
             return false;
         } else {
             UserCustomer user = new UserCustomer();
