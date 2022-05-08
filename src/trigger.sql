@@ -87,7 +87,7 @@ create trigger updateTotalPackageSalesWithOp
     for each row
     update TotalPackageSales
         set totSalesWithOp = totSalesWithOp + (select o.TotalCost from Orders as o where new.orderId = o.orderId)
-    where servicePackage = (select o.orderedService from Orders o where o.orderId = new.orderId);
+    where servicePackage = (select o.orderedService from Orders as o where o.orderId = new.orderId);
 
 delimiter $$
 create trigger updateTotalPackageSalesWithoutOp
@@ -133,7 +133,7 @@ from ActivationSchedule as actSched left join OptionalOrdered as oo on actSched.
 where o.orderId = actSched.orderId and sp.PackageName = o.orderedService
 group by actSched.orderId );
 
-create trigger updateOptionalProductsPerOrder
+create trigger updateAveragePackageOptionalProducts
     after insert on ActivationSchedule
     for each row
     update AveragePackageOptionalProducts
