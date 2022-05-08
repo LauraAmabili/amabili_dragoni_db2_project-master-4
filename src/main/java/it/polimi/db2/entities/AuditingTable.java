@@ -12,10 +12,14 @@ public class AuditingTable  implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
+    @Column(name="username")
+    private String customerId;
+
+
     @OneToOne
-    @JoinColumns({
-            @JoinColumn(name = "username", referencedColumnName = "username"),
-            @JoinColumn(name = "email", referencedColumnName = "email")
+    @PrimaryKeyJoinColumns({
+            @PrimaryKeyJoinColumn(name = "username", referencedColumnName = "username"),
+            @PrimaryKeyJoinColumn(name = "email", referencedColumnName = "email")
     })
     private UserCustomer customer;
 
@@ -61,5 +65,7 @@ public class AuditingTable  implements Serializable {
 
     public void setCustomer(UserCustomer customer) {
         this.customer = customer;
+        this.customerId = customer.getUsername();
+
     }
 }

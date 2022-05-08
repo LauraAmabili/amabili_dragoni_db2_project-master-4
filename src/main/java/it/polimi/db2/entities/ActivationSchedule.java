@@ -12,8 +12,11 @@ public class ActivationSchedule implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
+    @Column(name = "orderId")
+    private int orderID;
+
     @OneToOne
-    @JoinColumn(name = "orderId")
+    @PrimaryKeyJoinColumn(name = "orderId", referencedColumnName = "orderID")
     private Orders order;
 
     @Column(name = "DateStart")
@@ -57,6 +60,7 @@ public class ActivationSchedule implements Serializable {
 
     public void setOrder(Orders order) {
         this.order = order;
+        this.orderID = order.getOrderId();
     }
 
 }
