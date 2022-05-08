@@ -99,10 +99,8 @@
             <input type="submit" th:name="orderIdForRejectedPayment" th:value="${rj.orderId}" >
             </form>
         </td>
-
     </tr>
     </tbody>
-
 </table>
     </div>
 
@@ -111,15 +109,8 @@
     <form action="Logout" method="POST">
         <input type="submit" value="Logout">
     </form>
+    <td th:if="${alert}" th:text="'Alert! you have already three insolved payments!'"></td>
 
 </div>
-
-
-
 </body>
-
-
-
-
-
 </html>

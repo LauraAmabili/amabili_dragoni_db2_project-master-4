@@ -6,6 +6,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "ActivationSchedule", schema = "database2")
+@NamedQuery(name = "ActivationSchedule.getAllActivationSchedule", query= "SELECT act from ActivationSchedule act")
 public class ActivationSchedule implements Serializable {
 
     private static final long serialVersionUID = 1L;
