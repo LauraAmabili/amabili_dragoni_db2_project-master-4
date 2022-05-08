@@ -88,7 +88,8 @@ create trigger updateTotalPackageSalesWithOp
     after insert on ActivationSchedule
     for each row
     update TotalPackageSales
-        set totSalesWithOp = totSalesWithOp + (select o.TotalCost from Orders as o where new.orderId = o.orderId);
+        set totSalesWithOp = totSalesWithOp + (select o.TotalCost from Orders as o where new.orderId = o.orderId)
+    where servicePackage = (select o.orderedService from Orders o where o.orderId = new.orderId);
 
 delimiter $$
 create trigger updateTotalPackageSalesWithoutOp
@@ -99,17 +100,21 @@ create trigger updateTotalPackageSalesWithoutOp
         IF ( 12 = (select o.ValidityPeriodMonth from Orders as o where new.orderId = o.orderId)) THEN
             update TotalPackageSales
             set totSalesWithoutOP = totSalesWithoutOP + ((Select mf.12MonthPrice from MontlyFee as mf, ServicePackage as sp, Orders as o
-                                                         where mf.idMontlyFee = sp.packageFees and new.orderId = o.orderId and o.orderedService = sp.packageName) * 12);
+                                                         where mf.idMontlyFee = sp.packageFees and new.orderId = o.orderId and o.orderedService = sp.packageName) * 12)
+            where servicePackage = (select o.orderedService from Orders o where o.orderId = new.orderId);
 
         ELSEIF ( 24 = (select o.ValidityPeriodMonth from Orders as o where new.orderId = o.orderId)) THEN
             update TotalPackageSales
             set totSalesWithoutOP = totSalesWithoutOP + ((Select mf.24MonthPrice from MontlyFee as mf, ServicePackage as sp, Orders as o
-                                                         where mf.idMontlyFee = sp.packageFees and new.orderId = o.orderId and o.orderedService = sp.packageName)*24);
+                                                         where mf.idMontlyFee = sp.packageFees and new.orderId = o.orderId and o.orderedService = sp.packageName)*24)
+            where servicePackage = (select o.orderedService from Orders o where o.orderId = new.orderId);
 
         ELSEIF ( 36 = (select o.ValidityPeriodMonth from Orders as o where new.orderId = o.orderId)) THEN
             update TotalPackageSales
             set totSalesWithoutOP = totSalesWithoutOP + ((Select mf.36MonthPrice from MontlyFee as mf, ServicePackage as sp, Orders as o
-                                                         where mf.idMontlyFee = sp.packageFees and new.orderId = o.orderId and o.orderedService = sp.packageName)*36);
+                                                         where mf.idMontlyFee = sp.packageFees and new.orderId = o.orderId and o.orderedService = sp.packageName)*36)
+            where servicePackage = (select o.orderedService from Orders o where o.orderId = new.orderId);
+
         END IF;
     end $$
 
