@@ -101,19 +101,23 @@ public class CheckLoginEmployee extends HttpServlet {
             path = "/index.html";
             templateEngine.process(path, ctx, response.getWriter());
         } else {
-            List<InternetService> fixedInternetServices = sService.getAllFixedInternetServices();
-            ctx.setVariable("fixedInternetServices", fixedInternetServices);
-            List<InternetService> mobileInternetServices = sService.getAllMobileInternetServices();
-            ctx.setVariable("mobileInternetServices", mobileInternetServices);
-            List<MobilePhoneService> mobilePhoneServices = sService.getAllMobilePhoneServices();
-            ctx.setVariable("mobilePhoneServices", mobilePhoneServices);
-            List<OptionalProduct> optionalProducts = opService.getAllOptionalProducts();
-            ctx.setVariable("optionalProducts", optionalProducts);
-            ctx.setVariable("loggedEmp", user);
             request.getSession().setAttribute("employee", user);
-            List<ActivationSchedule> listActivation = asService.getActivationSchedule();
-            ctx.setVariable("listActivation", listActivation);
-            templateEngine.process("/WEB-INF/HomePageEmployee.html", ctx, response.getWriter());
+            path = getServletContext().getContextPath() + "/home-page-employee";
+            response.sendRedirect(path);
+
+//            List<InternetService> fixedInternetServices = sService.getAllFixedInternetServices();
+//            ctx.setVariable("fixedInternetServices", fixedInternetServices);
+//            List<InternetService> mobileInternetServices = sService.getAllMobileInternetServices();
+//            ctx.setVariable("mobileInternetServices", mobileInternetServices);
+//            List<MobilePhoneService> mobilePhoneServices = sService.getAllMobilePhoneServices();
+//            ctx.setVariable("mobilePhoneServices", mobilePhoneServices);
+//            List<OptionalProduct> optionalProducts = opService.getAllOptionalProducts();
+//            ctx.setVariable("optionalProducts", optionalProducts);
+//            ctx.setVariable("loggedEmp", user);
+//            request.getSession().setAttribute("employee", user);
+//            List<ActivationSchedule> listActivation = asService.getActivationSchedule();
+//            ctx.setVariable("listActivation", listActivation);
+//            templateEngine.process("/WEB-INF/HomePageEmployee.html", ctx, response.getWriter());
         }
     }
     @Override
