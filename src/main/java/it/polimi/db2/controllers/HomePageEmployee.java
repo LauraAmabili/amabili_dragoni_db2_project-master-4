@@ -1,5 +1,7 @@
 package it.polimi.db2.controllers;
 
+import it.polimi.db2.entities.ActivationSchedule;
+import it.polimi.db2.services.ActivationScheduleService;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -58,8 +60,12 @@ public class HomePageEmployee extends HttpServlet {
             //update of object user to make sure is the current one
             UserEmployee employee = usrEmpService.findUserById((UserEmployee) req.getSession().getAttribute("user"));
             req.getSession(false).setAttribute("employee", employee);
+
             ctx.setVariable("loggedEmp", employee);
+
+
         }
+
 
         ctx.setVariable("packageList", sp);
 

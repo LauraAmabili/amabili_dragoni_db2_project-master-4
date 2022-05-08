@@ -4,6 +4,7 @@ package it.polimi.db2.controllers;
 import it.polimi.db2.entities.*;
 import it.polimi.db2.exceptions.CredentialsException;
 import it.polimi.db2.services.OrderService;
+import it.polimi.db2.services.PaymentService;
 import it.polimi.db2.services.ServicePackageService;
 import it.polimi.db2.services.UserCustomerService;
 import org.thymeleaf.TemplateEngine;
@@ -36,6 +37,8 @@ public class HomePageCustomer extends HttpServlet {
     private UserCustomerService userCustomerService;
     @EJB(name = "services/OrderService")
     private OrderService orderService;
+    @EJB(name = "services/PaymentService")
+    private PaymentService paymentService;
 
     public void init() throws ServletException {
         ServletContext servletContext = getServletContext();
@@ -64,7 +67,10 @@ public class HomePageCustomer extends HttpServlet {
                 ctx.setVariable("rejectedOrders", rejectedOrders);
             }
 
+
+            boolean alert = paymentService.checkAuditingTable(customer);
             req.getSession(false).setAttribute("loggedCustomer", customer);
+            ctx.setVariable("alert", alert);
             ctx.setVariable("loggedCustomer", customer);
 
 

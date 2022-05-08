@@ -235,7 +235,21 @@
     <button type="submit">See Statistics</button>
 </form>
 
+
 </body>
+
+<span th:if="${listActivation != null}">
+    <p>&nbsp;</p>
+    <span style="background-color: #ff0000;"><strong style="padding: 0px 5px; color: #ffffff;">Activation Schedule
+    </strong></span>
+    <p>&nbsp;</p>
+</span>
+<tr th:each="la: ${listActivation}">
+    <td th:text="'number of order: '+ ${la.order.orderId}"></td>
+    <td th:text="'user customer: '+ ${la.order.userOrder.getUsername()}"></td>
+    <td th:text="'amount: '+ ${la.order.totalCost}"></td>
+    <p> </p>
+</tr>
 
 <div style="position: absolute; top: 0; right: 0; width: 100px; text-align:right;">
     <form action="Logout" method="POST">

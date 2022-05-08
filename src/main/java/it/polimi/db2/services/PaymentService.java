@@ -2,6 +2,7 @@ package it.polimi.db2.services;
 
 import it.polimi.db2.entities.*;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -13,6 +14,9 @@ public class PaymentService {
 
     @PersistenceContext( unitName = "databaseEJB" )
     private EntityManager em;
+
+    @EJB(name = "services/OrderService")
+    private OrderService orderService;
 
     public PaymentService(){}
 
@@ -64,10 +68,10 @@ public class PaymentService {
             if (accepted) {
                 auditingTable.get(0).setAmount(oldAmount - TotalCost);
             } else {
-                List<FailedPayment> failedPayments = getFailedPaymentsOfUser(user);
+                List<Orders> orders = orderService.getNotValidOrdersOfUser(user);
                 float total = 0;
-                for(FailedPayment fp : failedPayments){
-                    total = fp.getAmount();
+                for(Orders or : orders){
+                    total = or.getTotalCost();
                 }
                 auditingTable.get(0).setAmount(total);
             }
@@ -83,6 +87,13 @@ public class PaymentService {
             em.remove(userAuditingTable.get(0));
         }
     }
+    public boolean checkAuditingTable(UserCustomer user){
+        List<AuditingTable> auditingTable = em.createNamedQuery("AuditingTable.findAuditingTableByUser", AuditingTable.class).setParameter("username", user).getResultList();
+        if(auditingTable.size() == 0){
+            return false;
+        } else return true;
+    }
+
 
 
 }

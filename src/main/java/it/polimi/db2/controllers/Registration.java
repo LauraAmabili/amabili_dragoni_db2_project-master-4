@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import it.polimi.db2.entities.ServicePackage;
 import it.polimi.db2.entities.UserCustomer;
+import it.polimi.db2.exceptions.CredentialsException;
 import it.polimi.db2.services.UserCustomerService;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.thymeleaf.TemplateEngine;
@@ -60,15 +61,26 @@ public class Registration extends HttpServlet {
         //rcaso in cui ho già creato sessione con eomployee-> entro perchè non c'è un loggedCustomer
         // caso in cui logged customer non c'è e non c'è neanche la sessione
         if (((request.getSession(false ) == null) || (request.getSession(false).getAttribute("loggedCustomer") == null) && email != null)) {
-            userService.registerUser(email, usrn, pwd);
+            boolean userNotAlreadyExists = true;
+            try {
+                userNotAlreadyExists = userService.registerUser(email, usrn, pwd);
+            } catch (CredentialsException e) {
+                e.printStackTrace();
+            }
+            // TODO registrazione di uno che già esiste
+
+            // registerUser ritorna false se l'utente esiste
+            //register user ritorna true se non esiste
             ctx.setVariable("registrationMsg", "Registration completed, now log in");
+            ctx.setVariable("userNotAlreadyExists", userNotAlreadyExists);
+            ctx.setVariable("userAlreadyExistsMessage", "User already exists, please log in!");
+
             ctx.setVariable("username", "");
             ctx.setVariable("email", "");
             templateEngine.process("/index.html", ctx, response.getWriter());
             return;
         }
 
-        Object session = request.getSession();
         if(request.getParameter("servicePackageChosenCTX") != null) {
 
             request.getSession(false).setAttribute("chosenValidityPeriod", request.getSession(false).getAttribute("chosenValidityPeriod"));

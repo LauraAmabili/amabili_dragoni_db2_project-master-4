@@ -27,7 +27,6 @@ public class UserCustomerService {
         String username = customer.getUsername();
         List<UserCustomer> usrs = em.createNamedQuery("UserCustomer.findCustomerById", UserCustomer.class).setParameter(1, username).getResultList();
         return usrs.get(0);
-
     }
 
     public List<UserCustomer> getAllCustomers() throws CredentialsException {
@@ -35,13 +34,18 @@ public class UserCustomerService {
         return users;
     }
 
-    public void registerUser(String email, String username, String password){
-        UserCustomer user = new UserCustomer();
-        user.setUsername(username);
-        user.setEmail(email);
-        user.setPassword(password);
-        user.setSolvent(1);
-        em.persist(user);
+    public boolean registerUser(String email, String username, String password) throws CredentialsException {
+        if(checkCredentials(username, password) != null){
+            return false;
+        } else {
+            UserCustomer user = new UserCustomer();
+            user.setUsername(username);
+            user.setEmail(email);
+            user.setPassword(password);
+            user.setSolvent(1);
+            em.persist(user);
+            return true;
+        }
     }
 
     public UserCustomer checkCredentials(String usrn, String pwd) throws CredentialsException, NonUniqueResultException {

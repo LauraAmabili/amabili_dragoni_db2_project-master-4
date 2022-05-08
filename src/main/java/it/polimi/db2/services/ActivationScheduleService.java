@@ -6,8 +6,10 @@ import it.polimi.db2.entities.Orders;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NamedQuery;
 import javax.persistence.PersistenceContext;
 import java.util.Date;
+import java.util.List;
 
 @Stateless
 public class ActivationScheduleService {
@@ -27,5 +29,10 @@ public class ActivationScheduleService {
         AS.setDateEnd(dateEnd);
         AS.setOrder(order);
         em.persist(AS);
+    }
+
+    public List<ActivationSchedule> getActivationSchedule(){
+        List<ActivationSchedule> activationScheduleList =  em.createNamedQuery("ActivationSchedule.getAllActivationSchedule", ActivationSchedule.class).getResultList();
+        return activationScheduleList;
     }
 }

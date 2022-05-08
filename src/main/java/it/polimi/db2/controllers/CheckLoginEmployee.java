@@ -10,14 +10,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import it.polimi.db2.entities.InternetService;
-import it.polimi.db2.entities.MobilePhoneService;
-import it.polimi.db2.entities.OptionalProduct;
+import it.polimi.db2.entities.*;
+import it.polimi.db2.services.ActivationScheduleService;
 import it.polimi.db2.services.OptionalProductService;
 import it.polimi.db2.services.ServicesService;
 import org.apache.commons.lang.StringEscapeUtils;
 
-import it.polimi.db2.entities.UserEmployee;
 import it.polimi.db2.exceptions.CredentialsException;
 import it.polimi.db2.services.UserEmployeeService;
 import org.thymeleaf.TemplateEngine;
@@ -43,6 +41,10 @@ public class CheckLoginEmployee extends HttpServlet {
 
     @EJB(name = "it.polimi.db2.services/UserEmployeeService")
     private UserEmployeeService usrEmpService;
+
+    @EJB(name = "services/ActivationScheduleService")
+    private ActivationScheduleService asService;
+
 
 
     public CheckLoginEmployee(){
@@ -109,6 +111,8 @@ public class CheckLoginEmployee extends HttpServlet {
             ctx.setVariable("optionalProducts", optionalProducts);
             ctx.setVariable("loggedEmp", user);
             request.getSession().setAttribute("employee", user);
+            List<ActivationSchedule> listActivation = asService.getActivationSchedule();
+            ctx.setVariable("listActivation", listActivation);
             templateEngine.process("/WEB-INF/HomePageEmployee.html", ctx, response.getWriter());
         }
     }
