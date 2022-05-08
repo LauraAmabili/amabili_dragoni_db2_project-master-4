@@ -12,7 +12,6 @@ import java.util.List;
 @Table(name = "Montlyfee", schema = "database2")
 @NamedQuery (name = "MonthlyFee.findMonthlyFeeId",
         query = "SELECT m FROM MonthlyFee m WHERE m.TwelveMonthPrice = :price12 and m.TwentyFourMonthPrice = :price24 and m.ThirtySixMonthPrice = :price36")
-
 public class MonthlyFee implements Serializable {
 
     private static final long serialVersionUID = 1L;

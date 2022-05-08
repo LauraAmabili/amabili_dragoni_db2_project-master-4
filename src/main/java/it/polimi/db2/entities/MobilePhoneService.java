@@ -10,7 +10,6 @@ import java.util.List;
 @Table(name = "MobilePhoneService", schema = "database2")
 @NamedQuery( name = "MobilePhoneService.findMobilePhoneServiceById",  query = "SELECT t FROM MobilePhoneService t  WHERE t.name = ?1" )
 @NamedQuery( name = "MobilePhoneService.getAllMobilePhoneServices",  query = "SELECT t FROM MobilePhoneService t" )
-
 public class MobilePhoneService implements Serializable {
     private static final long serialVersionUID = 1L;
 

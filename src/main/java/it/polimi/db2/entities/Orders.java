@@ -11,7 +11,6 @@ import java.util.List;
 @Entity
 @Table(name = "Orders", schema = "database2")
 @NamedQuery(name = "Order.getAllOrders", query = "SELECT order from Orders order")
-
 // query that selects the orders of a given service package
 @NamedQuery(name = "Order.getServicePkgOrders", query = "SELECT o from Orders o where o.orderedService = :servicePkg")
 // query that selects the orders with a given of a given service package
