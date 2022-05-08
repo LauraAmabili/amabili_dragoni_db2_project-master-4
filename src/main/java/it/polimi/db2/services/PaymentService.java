@@ -55,13 +55,12 @@ public class PaymentService {
         }
         auditingTable.setAmount(total);
         auditingTable.setDate(dateLastRejection);
-        auditingTable.setEmail(email);
-        auditingTable.setUsername(user);
+        auditingTable.setCustomer(user);
         em.persist(auditingTable);
 
     }
     public void updateAuditingTable(UserCustomer user, String email, float TotalCost, Date dateLastRejection, boolean accepted) {
-        List<AuditingTable> auditingTable = em.createNamedQuery("AuditingTable.findAuditingTableByUser", AuditingTable.class).setParameter("username", user).getResultList();
+        List<AuditingTable> auditingTable = em.createNamedQuery("AuditingTable.findAuditingTableByUser", AuditingTable.class).setParameter("customer", user).getResultList();
 
         if (auditingTable.size() != 0) {
             float oldAmount = auditingTable.get(0).getAmount();
@@ -81,14 +80,14 @@ public class PaymentService {
 
 
     public void deleteAlert(UserCustomer user){
-       List<AuditingTable> userAuditingTable = em.createNamedQuery(  "AuditingTable.findAuditingTableByUser" ,AuditingTable.class).setParameter("username", user).getResultList();
+       List<AuditingTable> userAuditingTable = em.createNamedQuery(  "AuditingTable.findAuditingTableByUser" ,AuditingTable.class).setParameter("customer", user).getResultList();
         if(userAuditingTable.size() != 0 ){
             userAuditingTable.forEach(ua -> em.remove(ua));
             em.remove(userAuditingTable.get(0));
         }
     }
     public boolean checkAuditingTable(UserCustomer user){
-        List<AuditingTable> auditingTable = em.createNamedQuery("AuditingTable.findAuditingTableByUser", AuditingTable.class).setParameter("username", user).getResultList();
+        List<AuditingTable> auditingTable = em.createNamedQuery("AuditingTable.findAuditingTableByUser", AuditingTable.class).setParameter("customer", user).getResultList();
         if(auditingTable.size() == 0){
             return false;
         } else return true;
