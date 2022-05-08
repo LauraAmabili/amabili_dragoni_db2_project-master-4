@@ -31,6 +31,7 @@ public class ActivationSchedule implements Serializable {
         this.dateStart = dateStart;
         this.dateEnd = dateEnd;
         this.order = order;
+        this.orderID = order.getOrderId();
     }
 
     public ActivationSchedule() {

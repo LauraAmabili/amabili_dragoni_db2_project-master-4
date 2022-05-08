@@ -15,13 +15,12 @@ public class AuditingTable  implements Serializable {
     @Column(name="username")
     private String customerId;
 
-
     @OneToOne
-    @PrimaryKeyJoinColumns({
-            @PrimaryKeyJoinColumn(name = "username", referencedColumnName = "username"),
-            @PrimaryKeyJoinColumn(name = "email", referencedColumnName = "email")
-    })
+    @PrimaryKeyJoinColumn(name = "username", referencedColumnName = "username")
     private UserCustomer customer;
+
+    @Column (name = "email")
+    private String email;
 
     @Column(name = "amount")
     private float amount;
@@ -34,6 +33,7 @@ public class AuditingTable  implements Serializable {
         this.customer = userCustomer;
         this.amount = amount;
         this.date = date;
+        this.email = customer.getEmail();
     }
 
     public AuditingTable() {
@@ -66,6 +66,7 @@ public class AuditingTable  implements Serializable {
     public void setCustomer(UserCustomer customer) {
         this.customer = customer;
         this.customerId = customer.getUsername();
+        this.email = customer.getEmail();
 
     }
 }
