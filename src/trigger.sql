@@ -11,8 +11,6 @@ drop trigger if exists updateTotalPackageSalesWithoutOp;
 drop trigger if exists updateBestOptional;
 drop trigger if exists insertOptionalProduct;
 drop trigger if exists insertServicePackage;
-# drop trigger if exists updateAveragePackageOptionalProducts1;
-# drop trigger if exists updateAveragePackageOptionalProducts;
 drop trigger if exists updateProva;
 
 
@@ -88,7 +86,8 @@ create trigger updateTotalPackageSalesWithOp
     after insert on ActivationSchedule
     for each row
     update TotalPackageSales
-        set totSalesWithOp = totSalesWithOp + (select o.TotalCost from Orders as o where new.orderId = o.orderId);
+        set totSalesWithOp = totSalesWithOp + (select o.TotalCost from Orders as o where new.orderId = o.orderId)
+    where servicePackage = (select o.orderedService from Orders o where o.orderId = new.orderId);
 
 delimiter $$
 create trigger updateTotalPackageSalesWithoutOp
@@ -99,17 +98,21 @@ create trigger updateTotalPackageSalesWithoutOp
         IF ( 12 = (select o.ValidityPeriodMonth from Orders as o where new.orderId = o.orderId)) THEN
             update TotalPackageSales
             set totSalesWithoutOP = totSalesWithoutOP + ((Select mf.12MonthPrice from MontlyFee as mf, ServicePackage as sp, Orders as o
-                                                         where mf.idMontlyFee = sp.packageFees and new.orderId = o.orderId and o.orderedService = sp.packageName) * 12);
+                                                         where mf.idMontlyFee = sp.packageFees and new.orderId = o.orderId and o.orderedService = sp.packageName) * 12)
+            where servicePackage = (select o.orderedService from Orders o where o.orderId = new.orderId);
 
         ELSEIF ( 24 = (select o.ValidityPeriodMonth from Orders as o where new.orderId = o.orderId)) THEN
             update TotalPackageSales
             set totSalesWithoutOP = totSalesWithoutOP + ((Select mf.24MonthPrice from MontlyFee as mf, ServicePackage as sp, Orders as o
-                                                         where mf.idMontlyFee = sp.packageFees and new.orderId = o.orderId and o.orderedService = sp.packageName)*24);
+                                                         where mf.idMontlyFee = sp.packageFees and new.orderId = o.orderId and o.orderedService = sp.packageName)*24)
+            where servicePackage = (select o.orderedService from Orders o where o.orderId = new.orderId);
 
         ELSEIF ( 36 = (select o.ValidityPeriodMonth from Orders as o where new.orderId = o.orderId)) THEN
             update TotalPackageSales
             set totSalesWithoutOP = totSalesWithoutOP + ((Select mf.36MonthPrice from MontlyFee as mf, ServicePackage as sp, Orders as o
-                                                         where mf.idMontlyFee = sp.packageFees and new.orderId = o.orderId and o.orderedService = sp.packageName)*36);
+                                                         where mf.idMontlyFee = sp.packageFees and new.orderId = o.orderId and o.orderedService = sp.packageName)*36)
+            where servicePackage = (select o.orderedService from Orders o where o.orderId = new.orderId);
+
         END IF;
     end $$
 
@@ -138,14 +141,6 @@ create trigger updateOptionalProductsPerOrder
         where new.orderId = o.orderId and oppo.servicePackage = o.orderedService)
     where servicePackage = (SELECT sp.PackageName from ServicePackage as sp, Orders as o
         WHERE new.orderId = o.orderId and o.orderedService = sp.PackageName);
-/*
-create view optionalProductsPerOrder as (
-select actSched.orderId as orderId, servPkg.PackageName as servicePackage, count(oo.orderId) as numOrder
-from ActivationSchedule as actSched left join OptionalOrdered as oo on actSched.orderId = oo.orderId, ServicePackage as servPkg,  Orders as o
-where actSched.orderId = oo.orderId and oo.orderId = o.orderId and o.orderedService = servPkg.PackageName
-group by orderId);
-
-*/
 
 /*best seller optional products*/
 /*in the table are not ordered*/

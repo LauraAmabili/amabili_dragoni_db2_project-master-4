@@ -12,9 +12,9 @@ public class ActivationSchedule implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idActivationSchedule")
-    private int idActivationSchedule;
+    @OneToOne
+    @JoinColumn(name = "orderId")
+    private Orders order;
 
     @Column(name = "DateStart")
     private Date dateStart;
@@ -22,9 +22,7 @@ public class ActivationSchedule implements Serializable {
     @Column(name = "DateEnd")
     private Date dateEnd;
 
-    @OneToOne
-    @JoinColumn(name = "orderId")
-    private Orders order;
+
 
     public ActivationSchedule( Date dateStart, Date dateEnd, Orders order) {
         this.dateStart = dateStart;
@@ -61,11 +59,4 @@ public class ActivationSchedule implements Serializable {
         this.order = order;
     }
 
-    public int getIdActivationSchedule() {
-        return idActivationSchedule;
-    }
-
-    public void setIdActivationSchedule(int idActivationSchedule) {
-        this.idActivationSchedule = idActivationSchedule;
-    }
 }
