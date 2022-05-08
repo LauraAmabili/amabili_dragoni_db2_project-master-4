@@ -67,7 +67,6 @@ public class Registration extends HttpServlet {
             } catch (CredentialsException e) {
                 e.printStackTrace();
             }
-            // TODO registrazione di uno che già esiste
 
             // registerUser ritorna false se l'utente esiste
             //register user ritorna true se non esiste

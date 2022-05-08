@@ -46,7 +46,7 @@
         Email: <input type="email"  name="email" required>
         Username: <input type="text" name="username" required>
         Password: <input type="text" name="password" required>
-        <input type="submit" value="Login">
+        <input type="submit" value="Register">
     </form>
     <p th:if="${!userNotAlreadyExists}" th:text="${userAlreadyExistsMessage}"style="color: #ff0000;"></p>
     <p th:if="${userNotAlreadyExists}" th:text=" ${registrationMsg}"></p>
