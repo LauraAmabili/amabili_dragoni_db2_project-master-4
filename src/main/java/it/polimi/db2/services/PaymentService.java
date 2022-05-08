@@ -46,7 +46,7 @@ public class PaymentService {
         }
 
     }
-    public void addAuditingTable(UserCustomer user, String email, float TotalCost, Date dateLastRejection){
+    public void addAuditingTable(UserCustomer user, Date dateLastRejection){
         AuditingTable auditingTable = new AuditingTable();
         List<FailedPayment> failedPayments = getFailedPaymentsOfUser(user);
         float total = 0;
@@ -59,7 +59,7 @@ public class PaymentService {
         em.persist(auditingTable);
 
     }
-    public void updateAuditingTable(UserCustomer user, String email, float TotalCost, Date dateLastRejection, boolean accepted) {
+    public void updateAuditingTable(UserCustomer user, float TotalCost, Date dateLastRejection, boolean accepted) {
         List<AuditingTable> auditingTable = em.createNamedQuery("AuditingTable.findAuditingTableByUser", AuditingTable.class).setParameter("customer", user).getResultList();
 
         if (auditingTable.size() != 0) {

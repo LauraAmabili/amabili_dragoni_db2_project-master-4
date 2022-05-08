@@ -116,7 +116,7 @@ public class Payment extends HttpServlet {
         if (successfulPayment && order != null) {
             order = orderService.setValid(order, 1);
             asService.addNewActivationRecord(dateStart, dateEnd, order);
-            paymentService.updateAuditingTable(user, user.getEmail(), order.getTotalCost(), dateFailed, successfulPayment);
+            paymentService.updateAuditingTable(user, order.getTotalCost(), dateFailed, successfulPayment);
             paymentService.updateFailedPayments(user, order);
             if( paymentService.getFailedPaymentsOfUser(user) != null && paymentService.getFailedPaymentsOfUser(user).size() < 3 ){
                 paymentService.deleteAlert(user);
@@ -132,9 +132,9 @@ public class Payment extends HttpServlet {
             FailedPayment fp = new FailedPayment();
             fp = paymentService.addFailedPayment(dateFailed, totalCost, user, order);
             if(paymentService.getFailedPaymentsOfUser(user).size()  ==  3 ){
-                paymentService.addAuditingTable(user, user.getEmail(), order.getTotalCost(), dateFailed);
+                paymentService.addAuditingTable(user, dateFailed);
             } else if(paymentService.getFailedPaymentsOfUser(user).size() > 3){
-                paymentService.updateAuditingTable(user, user.getEmail(), order.getTotalCost(), dateFailed, successfulPayment);
+                paymentService.updateAuditingTable(user,  order.getTotalCost(), dateFailed, successfulPayment);
             }
 
         }

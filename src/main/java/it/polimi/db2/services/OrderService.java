@@ -96,10 +96,8 @@ public class OrderService {
     }
 
     public Orders getOrder(int orderId){
-
         Orders order = em.find(Orders.class, orderId);
         return order;
-
     }
 
     public Orders setValid(Orders order, int valid){
