@@ -82,7 +82,7 @@ public class GoToStatisticsPage extends HttpServlet {
             if(users!= null) {
                 users.forEach(u -> {
                     List<FailedPayment> failedPayments = statisticsService.getUsersFailedPayment(u);
-                    if(failedPayments != null) userSuspendedOrders.put(u, failedPayments);
+                    if(failedPayments.size() != 0) userSuspendedOrders.put(u, failedPayments);
                 });
             }
 
