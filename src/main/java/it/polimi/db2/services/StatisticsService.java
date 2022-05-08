@@ -54,7 +54,7 @@ public class StatisticsService {
 
     public int userHasAlert(UserCustomer user){
         int alert = 0;
-        List<AuditingTable> at = em.createNamedQuery("AuditingTable.findAuditingTableByUser", AuditingTable.class).setParameter("username", user)
+        List<AuditingTable> at = em.createNamedQuery("AuditingTable.findAuditingTableByUser", AuditingTable.class).setParameter("customer", user)
                 .getResultList();
         if(at.size() != 0)
             alert = 1;
