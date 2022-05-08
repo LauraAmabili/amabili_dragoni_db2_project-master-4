@@ -87,7 +87,6 @@ public class OrderService {
                 .setParameter("userOrderId", customer)
                 .setParameter("orderDT", dateTime)
                 .getResultList();
-        List<Orders> o2 = order;
         return order.get(0);
     }
 

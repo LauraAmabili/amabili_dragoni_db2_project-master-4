@@ -45,8 +45,6 @@ public class OptionalProductService {
     }
 
 
-
-
     public List<String> showServicePackageOptionalProducts(ServicePackage servicePackage) throws CredentialsException, NonUniqueResultException {
         List<String> optionalProductsIds = new ArrayList<>();
         List<OptionalProduct>optionalProducts = servicePackage.getOptionalProducts();

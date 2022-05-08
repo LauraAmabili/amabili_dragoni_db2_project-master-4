@@ -44,7 +44,7 @@ public class Orders implements Serializable {
     @Column(name = "TotalCost")
     private float totalCost;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     @JoinColumn(name="userOrder", referencedColumnName="username")
     private UserCustomer userOrder;
 
