@@ -59,7 +59,7 @@ public class OptionalProductService {
     public float totAmountOptionalProduct(List<OptionalProduct> optionalProducts){
         float total = 0;
         for(OptionalProduct product : optionalProducts){
-            total = product.getMonthlyFee();
+            total = total + product.getMonthlyFee();
         }
         return total;
     }
