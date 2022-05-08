@@ -11,7 +11,9 @@ drop trigger if exists updateTotalPackageSalesWithoutOp;
 drop trigger if exists updateBestOptional;
 drop trigger if exists insertOptionalProduct;
 drop trigger if exists insertServicePackage;
-drop trigger if exists updateAveragePackageOptionalProducts;
+# drop trigger if exists updateAveragePackageOptionalProducts1;
+# drop trigger if exists updateAveragePackageOptionalProducts;
+drop trigger if exists updateProva;
 
 
 drop table if exists TotalPurchasesPerPacket;
@@ -19,6 +21,7 @@ drop table if exists TotalPurchasesPerPacketValidityPeriod;
 drop table if exists TotalPackageSales;
 drop table if exists BestOptional;
 drop table if exists AveragePackageOptionalProducts;
+drop view if exists optionalProductsPerOrder;
 
 
 
@@ -113,25 +116,36 @@ create trigger updateTotalPackageSalesWithoutOp
 delimiter ;
 
 /*Average number of optional products sold together with each service package*/
-create table AveragePackageOptionalProducts(
+create table AveragePackageOptionalProducts
+(
     servicePackage varchar(45) not null,
-    average decimal(10,2) not null default 0.00,
+    average decimal(10,2) default 0.00,
     foreign key (servicePackage) references ServicePackage(PackageName) on delete cascade on update cascade,
-    primary key (servicePackage));
+    primary key (servicePackage)
+);
 
-create trigger updateAveragePackageOptionalProducts
+create view optionalProductsPerOrder as (
+select actSched.orderId as orderId, sp.PackageName as servicePackage, count(oo.orderId) as numOrdered
+from ActivationSchedule as actSched left join OptionalOrdered as oo on actSched.orderId = oo.orderId, Orders as o, ServicePackage as sp
+where o.orderId = actSched.orderId and sp.PackageName = o.orderedService
+group by actSched.orderId );
+
+create trigger updateOptionalProductsPerOrder
     after insert on ActivationSchedule
     for each row
     update AveragePackageOptionalProducts
-    set average = (select count(*) from OptionalOrdered as oo where new.orderId = oo.orderId) /
-                  (select count(*) from ServicePackageOptional as spo, Orders as o
-                  where new.orderId = o.orderId and spo.servicePackage =o.orderedService)
-    where servicePackage = (select o.orderedService from Orders as o where o.orderId = new.orderId);
+    set average = (SELECT avg(oppo.numOrdered) from optionalProductsPerOrder oppo,Orders as o
+        where new.orderId = o.orderId and oppo.servicePackage = o.orderedService)
+    where servicePackage = (SELECT sp.PackageName from ServicePackage as sp, Orders as o
+        WHERE new.orderId = o.orderId and o.orderedService = sp.PackageName);
+/*
+create view optionalProductsPerOrder as (
+select actSched.orderId as orderId, servPkg.PackageName as servicePackage, count(oo.orderId) as numOrder
+from ActivationSchedule as actSched left join OptionalOrdered as oo on actSched.orderId = oo.orderId, ServicePackage as servPkg,  Orders as o
+where actSched.orderId = oo.orderId and oo.orderId = o.orderId and o.orderedService = servPkg.PackageName
+group by orderId);
 
-
-    /*tutte le volte che vendo un pacchetto vado in optional ordered e mi calcolo la media */
-/*TODO List of insolvent users, suspended orders and alerts*/
-
+*/
 
 /*best seller optional products*/
 /*in the table are not ordered*/

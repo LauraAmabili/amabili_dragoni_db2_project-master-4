@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "AveragePackageOptionalProducts", schema = "database2")
-@NamedQuery(name = "AveragePackageOptionalProducts.findAllOrdered", query = "SELECT apop from AveragePackageOptionalProducts apop ")
+@NamedQuery(name = "AveragePackageOptionalProducts.findAll", query = "SELECT apop from AveragePackageOptionalProducts apop ")
 
 
 public class AveragePackageOptionalProducts implements Serializable {

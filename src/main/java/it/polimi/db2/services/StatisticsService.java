@@ -41,7 +41,7 @@ public class StatisticsService {
     }
 
     public List<AveragePackageOptionalProducts> getAllAveragePackageOptionalProducts() {
-        List<AveragePackageOptionalProducts>  averagePackageOptionalProducts = em.createNamedQuery("AveragePackageOptionalProducts.findAllOrdered", AveragePackageOptionalProducts.class)
+        List<AveragePackageOptionalProducts>  averagePackageOptionalProducts = em.createNamedQuery("AveragePackageOptionalProducts.findAll", AveragePackageOptionalProducts.class)
                 .getResultList();
         return averagePackageOptionalProducts;
     }

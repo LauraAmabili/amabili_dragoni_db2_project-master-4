@@ -84,8 +84,9 @@
                     <li>
                         <b> <span style="color: #000000;"> <span style="text-decoration: underline;" th:text="${avg.servicePackage.name}"> </span></span></b>
                         :
-                        <span style="color: #000000;"><span th:text="${avg.average}"> </span></span>
-                        sales on average
+                        <span style="color: #000000;"><span th:if="${avg.average != 0.0}" th:text="${avg.average} + ' average optional products purchased with the service package'"> </span></span>
+                        <span style="color: #000000;"><span th:if="${avg.average == 0.0}" > No optional products purchased with this package </span></span>
+
                     </li>
                 </tr>
             </ul>
