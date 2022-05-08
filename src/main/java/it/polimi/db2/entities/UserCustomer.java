@@ -10,6 +10,7 @@ import java.util.Collection;
 @Table(name = "UserCustomer", schema = "database2")
 @NamedQuery( name = "UserCustomer.checkCredentials",  query = "SELECT t FROM UserCustomer t  WHERE t.username = ?1 and t.password = ?2" )
 @NamedQuery( name = "UserCustomer.findCustomerById",  query = "SELECT t FROM UserCustomer t  WHERE t.username = ?1" )
+@NamedQuery( name = "UserCustomer.findCustomerByMail",  query = "SELECT t FROM UserCustomer t  WHERE t.email = ?1" )
 @NamedQuery(name = "UserCustomer.findAllInsovent", query = "SELECT c FROM UserCustomer as c WHERE c.solvent = 0")
 @NamedQuery( name = "UserCustomer.findAllCustomers",  query = "SELECT t FROM UserCustomer t" )
 
