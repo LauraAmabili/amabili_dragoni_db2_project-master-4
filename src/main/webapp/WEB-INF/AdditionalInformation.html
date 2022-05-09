@@ -32,7 +32,7 @@
         <span th:if="${optionalProductsObjects.size() != 0}">
         <label>Choose an optional product:</label>
             <label>
-                <input type="checkbox" name="optionalProducts" th:each="op : ${optionalProductsObjects}" th:value="${op.name}" th:text="${op.name}">
+                <input type="checkbox" name="optionalProducts" th:each="op : ${optionalProductsObjects}" th:value="${op.name}" th:text="${op.name} + 'with a cost of '+${op.getMonthlyFee()}+' per month'">
             </label>
 </span>
         <p>
