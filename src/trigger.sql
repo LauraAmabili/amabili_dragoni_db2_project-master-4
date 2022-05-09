@@ -9,9 +9,10 @@ drop trigger if exists updateTotalPackageSales;
 drop trigger if exists updateTotalPackageSalesWithOp;
 drop trigger if exists updateTotalPackageSalesWithoutOp;
 drop trigger if exists updateBestOptional;
+drop trigger if exists updateAveragePackageOptionalProducts;
 drop trigger if exists insertOptionalProduct;
 drop trigger if exists insertServicePackage;
-drop trigger if exists updateProva;
+
 
 
 drop table if exists TotalPurchasesPerPacket;
