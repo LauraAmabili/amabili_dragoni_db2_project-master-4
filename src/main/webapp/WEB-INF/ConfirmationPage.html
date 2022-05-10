@@ -40,7 +40,7 @@
     <div th:if="${loggedCustomer == null}">
         <form method="POST" action = "Registration">
             <input type="submit" th:if="${servicePackageChosenCTX != null}"  th:name="servicePackageChosenCTX" th:value="${servicePackageChosenCTX.packageName}">
-                    Go to login
+                    LOGIN OR REGISTER TO BUY THIS PACKET!!
             </input>
             <c:set var="validityPeriodChosen" th:value="${chosenValidityPeriod}" target="Integer" scope="session">
             </c:set>
